@@ -1,0 +1,2472 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#040907] text-slate-100 antialiased selection:bg-amber-400 selection:text-emerald-950">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>St Pat's Hurling — High Performance Portal</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            pats: {
+              black: '#040907',
+              dark: '#07130E',
+              card: '#0C1E17',
+              border: '#163629',
+              borderLight: '#214F3D',
+              accent: '#10B981',
+              accentHover: '#059669',
+              gold: '#F5C544',
+              goldHover: '#E0B034',
+              goldMuted: '#997B28',
+              muted: '#718C80'
+            }
+          },
+          boxShadow: {
+            'glow-sm': '0 0 15px -3px rgba(16, 185, 129, 0.15)',
+            'glow-gold': '0 0 18px -3px rgba(245, 197, 68, 0.25)',
+            'inner-subtle': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.05)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #040907; }
+    ::-webkit-scrollbar-thumb { background: #163629; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #214F3D; }
+    .panel-glass {
+      background: linear-gradient(180deg, rgba(12, 30, 23, 0.94) 0%, rgba(7, 19, 14, 0.98) 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .tactile-btn:active { transform: scale(0.96); }
+    select option { background-color: #07130E; color: #ffffff; }
+  </style>
+</head>
+<body class="min-h-full flex flex-col font-sans bg-[#040907] text-slate-100">
+
+  <!-- TOP HEADER & NAVIGATION -->
+  <header class="sticky top-0 z-40 border-b border-pats-border/80 bg-pats-black/95 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20 gap-2">
+        
+        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-pats-gold to-amber-600 flex items-center justify-center shadow-glow-gold border border-amber-300/40 shrink-0">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-pats-black" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm0 3.18l6 3.33v4.49c0 4.25-2.88 8.24-6 9.38-3.12-1.14-6-5.13-6-9.38V8.51l6-3.33zM11 11h2v5h-2zm0-4h2v2h-2z"/>
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="text-[10px] sm:text-xs font-black tracking-widest text-pats-gold uppercase">St Pat's GAA</span>
+              <span class="inline-flex items-center px-1.5 py-0.2 rounded-full text-[9px] sm:text-[10px] font-bold bg-pats-border text-pats-accent border border-pats-borderLight">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1 animate-pulse"></span>Junior Hurling
+              </span>
+            </div>
+            <h1 class="text-xs sm:text-sm md:text-base font-extrabold tracking-tight text-white leading-none mt-0.5 truncate">Annual Periodization & S&amp;C Engine</h1>
+          </div>
+        </div>
+
+        <div class="flex items-center bg-pats-dark/95 p-1 rounded-xl border border-pats-border shadow-inner-subtle shrink-0">
+          <button id="nav-btn-player" onclick="switchAppMode('player')" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all uppercase tracking-wider bg-pats-gold text-pats-black shadow-sm">
+            Player Floor
+          </button>
+          <button id="nav-btn-fuel" onclick="switchAppMode('fuel')" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all uppercase tracking-wider text-slate-400 hover:text-white">
+            Fuel &amp; Diet
+          </button>
+          <button id="nav-btn-match" onclick="switchAppMode('match')" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all uppercase tracking-wider text-slate-400 hover:text-white">
+            Match Day
+          </button>
+          <button id="nav-btn-coach" onclick="switchAppMode('coach')" class="px-2.5 sm:px-3.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all uppercase tracking-wider text-slate-400 hover:text-white flex items-center gap-1">
+            <svg class="w-3.5 h-3.5 opacity-70 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span class="hidden sm:inline">Coach Desk</span>
+            <span class="sm:hidden">Coach</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 pointer-events-none"></div>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-5">
+
+    <!-- ==================== VIEW 1: PLAYER FLOOR ==================== -->
+    <div id="view-player" class="space-y-5">
+
+      <!-- ANNUAL PERIODIZATION ROADMAP BANNER -->
+      <div class="panel-glass rounded-2xl border-2 border-pats-gold/50 p-4 sm:p-5 shadow-2xl relative overflow-hidden">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-pats-border">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2 py-0.5 rounded bg-pats-gold text-pats-black font-black text-[10px] uppercase tracking-wider">Annual Macrocycle</span>
+              <h2 class="text-sm sm:text-base font-black uppercase text-white tracking-wide">St Pat's Annual Championship Roadmap</h2>
+            </div>
+            <p class="text-xs text-pats-muted mt-0.5">Kickoff: Late Oct &bull; Block 1 (8-Wk Preseason) &rarr; Deload &rarr; Block 2 (6-Wk League Peak) &rarr; Deload &rarr; Block 3 (Championship Peak)</p>
+          </div>
+          <div class="flex items-center gap-2 self-start lg:self-auto">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="active-season-phase-tag" class="text-xs font-mono font-bold text-emerald-300">Active: Block 1 Preseason Loading</span>
+          </div>
+        </div>
+
+        <!-- 8-Step Annual Progression Timeline -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 pt-3 text-[11px]">
+          <div class="bg-pats-black/60 border border-pats-border rounded-xl p-2.5 flex flex-col justify-between">
+            <span class="text-[9px] font-mono font-bold text-pats-gold uppercase">Late Oct</span>
+            <strong class="text-white text-xs mt-1">1. Baseline Tests</strong>
+            <span class="text-slate-400 text-[10px] mt-0.5">Bronco, 20m, Squat &amp; Deadlift</span>
+          </div>
+
+          <div class="bg-emerald-950/40 border-2 border-pats-accent rounded-xl p-2.5 flex flex-col justify-between shadow-glow-sm">
+            <span class="text-[9px] font-mono font-bold text-pats-accent uppercase">Nov – Dec</span>
+            <strong class="text-white text-xs mt-1">2. Block 1: Preseason</strong>
+            <span class="text-slate-300 text-[10px] mt-0.5">8 Wks &bull; 3 Progression Phases</span>
+          </div>
+
+          <div class="bg-pats-black/60 border border-pats-border rounded-xl p-2.5 flex flex-col justify-between">
+            <span class="text-[9px] font-mono font-bold text-amber-300 uppercase">Post-W8</span>
+            <strong class="text-white text-xs mt-1">3. Retest Week</strong>
+            <span class="text-slate-400 text-[10px] mt-0.5">Progress Delta Audit</span>
+          </div>
+
+          <div class="bg-pats-black/60 border border-pats-border rounded-xl p-2.5 flex flex-col justify-between">
+            <span class="text-[9px] font-mono font-bold text-slate-400 uppercase">Early Jan</span>
+            <strong class="text-white text-xs mt-1">4. Deload Week</strong>
+            <span class="text-slate-400 text-[10px] mt-0.5">-40% Volume (Neural Recovery)</span>
+          </div>
+
+          <div class="bg-amber-500/10 border border-amber-500/40 rounded-xl p-2.5 flex flex-col justify-between">
+            <span class="text-[9px] font-mono font-bold text-pats-gold uppercase">Jan – Feb</span>
+            <strong class="text-white text-xs mt-1">5. Block 2: League</strong>
+            <span class="text-slate-300 text-[10px] mt-0.5">6 Wks &bull; 3 Progression Phases</span>
+          </div>
+
+          <div class="bg-pats-black/60 border border-pats-border rounded-xl p-2.5 flex flex-col justify-between">
+            <span class="text-[9px] font-mono font-bold text-slate-400 uppercase">Mid-Feb</span>
+            <strong class="text-white text-xs mt-1">6. Deload &amp; Peak</strong>
+            <span class="text-slate-400 text-[10px] mt-0.5">Early March League Campaign</span>
+          </div>
+
+          <div class="bg-emerald-500/10 border border-emerald-500/40 rounded-xl p-2.5 flex flex-col justify-between">
+            <span class="text-[9px] font-mono font-bold text-emerald-400 uppercase">Apr – May</span>
+            <strong class="text-white text-xs mt-1">7. Block 3: Champ</strong>
+            <span class="text-slate-300 text-[10px] mt-0.5">6 Wks &bull; 3 Progression Phases</span>
+          </div>
+
+          <div class="bg-pats-black/60 border border-pats-border rounded-xl p-2.5 flex flex-col justify-between">
+            <span class="text-[9px] font-mono font-bold text-pats-gold uppercase">June 2027</span>
+            <strong class="text-white text-xs mt-1">8. Champ Peak</strong>
+            <span class="text-slate-300 text-[10px] mt-0.5">Championship Taper &amp; Peak</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hurler Profile & Periodization Controller -->
+      <div class="panel-glass rounded-2xl border border-pats-border p-4 sm:p-5 shadow-2xl relative overflow-hidden">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
+          
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-pats-border/80 border border-pats-borderLight flex items-center justify-center text-pats-gold font-mono font-black text-base sm:text-lg shadow-inner shrink-0">
+              <span id="player-jersey-display">#1</span>
+            </div>
+            <div class="min-w-0">
+              <span class="text-[10px] sm:text-[11px] font-bold text-pats-muted uppercase tracking-wider block">Logged Hurler</span>
+              <div class="flex flex-wrap items-center gap-2 mt-0.5">
+                <select id="player-select" onchange="onSelectPlayer(this.value)" class="bg-[#07130E] border border-pats-border rounded-lg px-2.5 py-1.5 text-xs sm:text-sm font-bold text-white focus:outline-none focus:border-pats-gold transition cursor-pointer min-w-[180px] max-w-[260px] sm:max-w-none">
+                </select>
+                <span id="player-vet-tag" class="hidden text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md">
+                  Vet Shield (32–40)
+                </span>
+                <span id="player-injury-tag" class="hidden text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-red-950/80 text-red-300 border border-red-700 px-2 py-0.5 rounded-md flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span>
+                  <span id="player-injury-tag-text">Injured</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex-1 max-w-xl bg-pats-black/60 border border-pats-border/90 rounded-xl p-3 flex items-start gap-2.5">
+            <span class="w-2 h-2 rounded-full bg-pats-gold mt-1.5 shrink-0 shadow-glow-gold"></span>
+            <div class="min-w-0">
+              <span class="text-[10px] font-black text-pats-gold uppercase tracking-wider">Staff Directive</span>
+              <p id="live-directive-text" class="text-xs text-slate-300 mt-0.5 leading-snug">
+                Block 1 Preseason (8 Weeks): Follow the 3 escalation phases. Tick off each exercise on the app upon completion and log your 4 Durability Pillars before pitch running.
+              </p>
+            </div>
+          </div>
+
+          <!-- Interval Timer Module -->
+          <div class="flex items-center gap-2 bg-[#06110D] border border-pats-border rounded-xl p-2 sm:p-2.5 self-start lg:self-center shrink-0">
+            <div class="px-2 text-center">
+              <span class="text-[9px] uppercase tracking-wider text-pats-muted font-bold block">Interval Timer</span>
+              <span id="timer-display" class="text-base sm:text-lg font-mono font-black text-pats-accent">00:00</span>
+            </div>
+            <div class="flex items-center gap-1 border-l border-pats-border pl-2">
+              <button onclick="startRestTimer(15)" class="tactile-btn px-2 py-1 bg-pats-border hover:bg-pats-borderLight text-xs font-mono font-bold rounded text-slate-200">15s</button>
+              <button onclick="startRestTimer(30)" class="tactile-btn px-2 py-1 bg-pats-border hover:bg-pats-borderLight text-xs font-mono font-bold rounded text-slate-200">30s</button>
+              <button onclick="startRestTimer(60)" class="tactile-btn px-2 py-1 bg-pats-border hover:bg-pats-borderLight text-xs font-mono font-bold rounded text-slate-200">60s</button>
+              <button onclick="startRestTimer(90)" class="tactile-btn px-2 py-1 bg-pats-border hover:bg-pats-borderLight text-xs font-mono font-bold rounded text-slate-200">90s</button>
+              <button onclick="resetRestTimer()" class="tactile-btn p-1 text-slate-500 hover:text-red-400" title="Reset Timer">✕</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Block, Progression Phase & Day Selection Controls -->
+        <div class="mt-4 pt-3.5 border-t border-pats-border/80 space-y-3">
+          
+          <!-- Level 1: Block Selector -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <span class="text-[10px] font-black uppercase text-pats-gold tracking-wider">Training Block:</span>
+            <div class="flex items-center bg-[#06110D] p-1 rounded-xl border border-pats-border flex-wrap gap-1">
+              <button id="block-btn-1" onclick="switchBlock(1)" class="px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-pats-gold text-pats-black shadow-glow-gold">
+                Block 1: Preseason <span class="opacity-80 text-[10px] font-normal hidden sm:inline">(8 Wks)</span>
+              </button>
+              <button id="block-btn-2" onclick="switchBlock(2)" class="px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition text-slate-400 hover:text-white">
+                Block 2: League Peak <span class="opacity-80 text-[10px] font-normal hidden sm:inline">(6 Wks)</span>
+              </button>
+              <button id="block-btn-3" onclick="switchBlock(3)" class="px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition text-slate-400 hover:text-white">
+                Block 3: Champ Peak <span class="opacity-80 text-[10px] font-normal hidden sm:inline">(6 Wks)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Level 2: Progression Phase Selector (3 Phases within each block) -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-pats-border/50">
+            <span class="text-[10px] font-black uppercase text-emerald-400 tracking-wider">Progression Phase:</span>
+            <div id="progression-phase-container" class="flex items-center bg-[#07130E] p-1 rounded-xl border border-pats-border flex-wrap gap-1">
+            </div>
+          </div>
+
+          <!-- Level 3: 3-Day Microcycle Selector -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-pats-border/50">
+            <span class="text-[10px] font-black uppercase text-slate-300 tracking-wider">Weekly Training Day:</span>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <button id="day-btn-1" onclick="switchDay(1)" class="px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-pats-accent text-pats-black shadow-glow-sm flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-950"></span>
+                Day 1 (Aerobic Pitch)
+              </button>
+              <button id="day-btn-2" onclick="switchDay(2)" class="px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-pats-border hover:bg-pats-borderLight text-slate-300 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                Day 2 (Anaerobic Pitch)
+              </button>
+              <button id="day-btn-3" onclick="switchDay(3)" class="px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-pats-border hover:bg-pats-borderLight text-slate-300 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+                Day 3 (Gym S&amp;C)
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 4 Durability Pillars Tracker -->
+      <div class="panel-glass rounded-2xl border border-pats-gold/30 p-4 sm:p-5 shadow-2xl relative overflow-hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-pats-border gap-2">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-pats-gold shadow-glow-gold shrink-0"></span>
+              <h3 class="text-xs sm:text-sm font-black uppercase tracking-wider text-white">4 Durability Pillars — Hurling Tissue Insurance</h3>
+            </div>
+            <p class="text-[11px] sm:text-xs text-pats-muted mt-0.5">Non-negotiable weekly prehab. Log before pitch running to protect hamstrings &amp; groin.</p>
+          </div>
+          <div class="flex items-center gap-2 self-start sm:self-auto shrink-0">
+            <span class="text-xs font-bold text-slate-400">Pillar Score:</span>
+            <div class="px-2.5 py-1 rounded-md bg-pats-dark border border-pats-border font-mono text-xs font-black text-pats-accent" id="durability-pct-badge">
+              0%
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+          <div class="bg-pats-black/60 border border-pats-border rounded-xl p-3 flex flex-col justify-between gap-2.5">
+            <div>
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-xs font-bold text-white">1. Nordics</span>
+                <span class="text-[10px] text-pats-gold font-mono shrink-0">3x5 Reps</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1 leading-snug">Biceps femoris fascicle length against sprint tears.</p>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-pats-border/50 text-xs">
+              <label class="flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                <input type="checkbox" id="prehab-nordic-1" onchange="toggleDurabilityPillar('nordic', 1, this.checked)" class="w-4 h-4 rounded bg-pats-dark border-pats-borderLight text-pats-gold focus:ring-0 cursor-pointer">
+                <span>Log 1</span>
+              </label>
+              <label class="flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                <input type="checkbox" id="prehab-nordic-2" onchange="toggleDurabilityPillar('nordic', 2, this.checked)" class="w-4 h-4 rounded bg-pats-dark border-pats-borderLight text-pats-gold focus:ring-0 cursor-pointer">
+                <span>Log 2</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="bg-pats-black/60 border border-pats-border rounded-xl p-3 flex flex-col justify-between gap-2.5">
+            <div>
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-xs font-bold text-white">2. Copenhagens</span>
+                <span class="text-[10px] text-pats-gold font-mono shrink-0">3x20s / leg</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1 leading-snug">Adductor longus tensile shield against groin hernia.</p>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-pats-border/50 text-xs">
+              <label class="flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                <input type="checkbox" id="prehab-copenhagen-1" onchange="toggleDurabilityPillar('copenhagen', 1, this.checked)" class="w-4 h-4 rounded bg-pats-dark border-pats-borderLight text-pats-gold focus:ring-0 cursor-pointer">
+                <span>Log 1</span>
+              </label>
+              <label class="flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                <input type="checkbox" id="prehab-copenhagen-2" onchange="toggleDurabilityPillar('copenhagen', 2, this.checked)" class="w-4 h-4 rounded bg-pats-dark border-pats-borderLight text-pats-gold focus:ring-0 cursor-pointer">
+                <span>Log 2</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="bg-pats-black/60 border border-pats-border rounded-xl p-3 flex flex-col justify-between gap-2.5">
+            <div>
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-xs font-bold text-white">3. Max Sprint</span>
+                <span class="text-[10px] text-pats-gold font-mono shrink-0">3x25m @ 100%</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1 leading-snug">Swing-phase speed vaccine for match breakaways.</p>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-pats-border/50 text-xs">
+              <label class="flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                <input type="checkbox" id="prehab-sprint-1" onchange="toggleDurabilityPillar('sprint', 1, this.checked)" class="w-4 h-4 rounded bg-pats-dark border-pats-borderLight text-pats-gold focus:ring-0 cursor-pointer">
+                <span>Log 1</span>
+              </label>
+              <label class="flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                <input type="checkbox" id="prehab-sprint-2" onchange="toggleDurabilityPillar('sprint', 2, this.checked)" class="w-4 h-4 rounded bg-pats-dark border-pats-borderLight text-pats-gold focus:ring-0 cursor-pointer">
+                <span>Log 2</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="bg-pats-black/60 border border-pats-border rounded-xl p-3 flex flex-col justify-between gap-2.5">
+            <div>
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-xs font-bold text-white">4. Rear Cuff</span>
+                <span class="text-[10px] text-pats-gold font-mono shrink-0">3x12 Reps</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1 leading-snug">Brakes striking follow-through &amp; collision impact.</p>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-pats-border/50 text-xs">
+              <label class="flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                <input type="checkbox" id="prehab-cuff-1" onchange="toggleDurabilityPillar('cuff', 1, this.checked)" class="w-4 h-4 rounded bg-pats-dark border-pats-borderLight text-pats-gold focus:ring-0 cursor-pointer">
+                <span>Log 1</span>
+              </label>
+              <label class="flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                <input type="checkbox" id="prehab-cuff-2" onchange="toggleDurabilityPillar('cuff', 2, this.checked)" class="w-4 h-4 rounded bg-pats-dark border-pats-borderLight text-pats-gold focus:ring-0 cursor-pointer">
+                <span>Log 2</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Workout Exercise Grid & Session Header -->
+      <div id="workout-card-container" class="space-y-4">
+      </div>
+
+      <div class="panel-glass rounded-2xl border border-pats-border p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="min-w-0">
+          <span class="text-xs font-bold text-slate-200 uppercase">Finished Today's Training?</span>
+          <p class="text-[11px] sm:text-xs text-pats-muted">Your checked runs, logged weights, and RIR will be recorded and audited in the Coach Desk.</p>
+        </div>
+        <button onclick="submitWorkoutSession()" class="tactile-btn w-full sm:w-auto px-6 py-2.5 rounded-xl bg-pats-accent hover:bg-pats-accentHover text-pats-black font-extrabold text-xs uppercase tracking-wider transition shadow-glow-sm flex items-center justify-center gap-2 shrink-0">
+          Record Completed Session
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ==================== VIEW 2: FUEL & DIET PORTAL ==================== -->
+    <div id="view-fuel" class="hidden space-y-5">
+      
+      <!-- TOP BANNER -->
+      <div class="panel-glass rounded-2xl border-2 border-pats-gold/40 p-4 sm:p-5 shadow-2xl relative overflow-hidden">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2 py-0.5 rounded bg-pats-gold text-pats-black font-black text-[10px] uppercase tracking-wider">Dynamic Fueling Engine</span>
+              <h2 class="text-sm sm:text-base font-black uppercase text-white tracking-wide">Hurler Nutrition &amp; Automated Fueling Blueprint</h2>
+            </div>
+            <p class="text-xs text-pats-muted mt-1 max-w-2xl leading-relaxed">
+              Input your scheduled training start time and expected duration. The engine automatically adapts carbohydrate periodization, Keith Baar tendon timing, meal intervals, and hydration targets.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 bg-[#06110D] border border-pats-border p-2.5 rounded-xl self-start lg:self-auto shrink-0">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-xs font-mono font-bold text-emerald-300">Live Fuel Adaptation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DYNAMIC TRAINING SCHEDULE & DEMANDS CONTROLLER -->
+      <div class="panel-glass rounded-2xl border-2 border-pats-accent/50 p-4 sm:p-5 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-pats-border gap-2">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-pats-accent shadow-glow-sm"></span>
+              <h3 class="text-xs sm:text-sm font-black uppercase text-white tracking-wide">Training Session Schedule &amp; Demands</h3>
+            </div>
+            <p class="text-[11px] text-pats-muted mt-0.5">Changing your start time or duration updates the fuel quantities and the entire daily meal clock instantly.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="session-intensity-badge" class="px-2.5 py-1 rounded-md bg-pats-dark border border-pats-border text-[10px] font-mono font-bold text-pats-gold uppercase">
+              Normal Glycogen Demand
+            </span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+          <!-- Start Time Picker -->
+          <div class="bg-[#07130E] border border-pats-border p-3.5 rounded-xl space-y-2">
+            <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Scheduled Training Start Time:</label>
+            <div class="flex items-center gap-2">
+              <input type="time" id="fuel-sched-time" value="19:30" onchange="onFuelSettingsChanged()" class="bg-pats-black border border-pats-border focus:border-pats-gold text-white font-mono font-bold text-sm px-3 py-1.5 rounded-lg w-full">
+            </div>
+            <!-- Quick Presets -->
+            <div class="flex items-center gap-1 flex-wrap pt-1">
+              <button onclick="setQuickFuelTime('19:30')" class="tactile-btn text-[10px] bg-pats-dark hover:bg-pats-border px-2 py-0.5 rounded text-pats-gold font-mono">19:30 (Evening)</button>
+              <button onclick="setQuickFuelTime('18:30')" class="tactile-btn text-[10px] bg-pats-dark hover:bg-pats-border px-2 py-0.5 rounded text-slate-300 font-mono">18:30 (Early)</button>
+              <button onclick="setQuickFuelTime('10:30')" class="tactile-btn text-[10px] bg-pats-dark hover:bg-pats-border px-2 py-0.5 rounded text-slate-300 font-mono">10:30 (Weekend)</button>
+              <button onclick="setQuickFuelTime('07:00')" class="tactile-btn text-[10px] bg-pats-dark hover:bg-pats-border px-2 py-0.5 rounded text-slate-300 font-mono">07:00 (Morning)</button>
+            </div>
+          </div>
+
+          <!-- Expected Duration Selector -->
+          <div class="bg-[#07130E] border border-pats-border p-3.5 rounded-xl space-y-2">
+            <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Expected Session Duration:</label>
+            <select id="fuel-sched-duration" onchange="onFuelSettingsChanged()" class="bg-pats-black border border-pats-border focus:border-pats-gold text-white font-mono font-bold text-xs px-3 py-2 rounded-lg w-full cursor-pointer">
+              <option value="45">45 mins (Taper / Speed Flushes)</option>
+              <option value="60">60 mins (Standard Gym / Tactical)</option>
+              <option value="75" selected>75 mins (Standard Pitch Aerobic/RSA)</option>
+              <option value="90">90 mins (Intense Pitch &amp; Transition)</option>
+              <option value="105">105 mins (Extended High-Load Session)</option>
+              <option value="120">120 mins (Double Session / Champ Simulation)</option>
+            </select>
+            <span id="fuel-duration-note" class="text-[10px] text-pats-muted block mt-1">75m session: Baseline high glycogen turnover.</span>
+          </div>
+
+          <!-- Hurler Bodyweight Input -->
+          <div class="bg-[#07130E] border border-pats-border p-3.5 rounded-xl space-y-2">
+            <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Athlete Bodyweight (kg):</label>
+            <div class="flex items-center gap-2">
+              <input type="number" id="fuel-calc-weight" value="80" min="60" max="115" oninput="onFuelSettingsChanged()" class="bg-pats-black border border-pats-border focus:border-pats-gold text-pats-gold font-mono font-black text-sm px-3 py-1.5 rounded-lg w-24 text-center">
+              <span class="text-xs text-slate-400 font-mono">kg</span>
+            </div>
+            <span class="text-[10px] text-pats-muted block mt-1">Directly calibrates carbs, protein pulses &amp; sodium fluids.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MACRONUTRIENT TARGET CALCULATOR (ADAPTED TO TIME & DURATION) -->
+      <div class="panel-glass rounded-2xl border border-pats-border p-4 sm:p-5 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-pats-border gap-2">
+          <div>
+            <h3 class="text-xs sm:text-sm font-black uppercase text-white tracking-wide">1. Adapted Daily Macronutrient &amp; Fluid Targets</h3>
+            <p class="text-[11px] text-pats-muted mt-0.5">Calculated based on selected training day, duration modifier, and bodyweight.</p>
+          </div>
+          <span id="fuel-caloric-estimate" class="text-xs font-mono font-bold text-pats-gold">Estimated Expenditure: ~3,150 kcal</span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-1.5 bg-[#06110D] p-1 rounded-xl border border-pats-border">
+          <button id="fuel-tab-d1" onclick="switchFuelDay('d1')" class="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-pats-gold text-pats-black shadow-sm">
+            Day 1 (Aerobic Pitch)
+          </button>
+          <button id="fuel-tab-d2" onclick="switchFuelDay('d2')" class="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition text-slate-400 hover:text-white">
+            Day 2 (Anaerobic Shuttles)
+          </button>
+          <button id="fuel-tab-d3" onclick="switchFuelDay('d3')" class="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition text-slate-400 hover:text-white">
+            Day 3 (Gym S&amp;C)
+          </button>
+          <button id="fuel-tab-off" onclick="switchFuelDay('off')" class="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition text-slate-400 hover:text-white">
+            Rest / Off Day
+          </button>
+          <button id="fuel-tab-md" onclick="switchFuelDay('md')" class="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition text-slate-400 hover:text-white">
+            Match Day -1 / MD
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="bg-[#07130E] border border-amber-500/40 p-3.5 rounded-xl">
+            <span class="text-[10px] uppercase font-bold text-pats-gold block">Carbohydrates Target</span>
+            <span id="fuel-out-carbs" class="text-xl sm:text-2xl font-black font-mono text-white mt-1 block">460 g</span>
+            <span id="fuel-out-carbs-sub" class="text-[10px] text-slate-400 font-mono block mt-0.5">5.75 g/kg &bull; High Octane</span>
+          </div>
+
+          <div class="bg-[#07130E] border border-pats-border p-3.5 rounded-xl">
+            <span class="text-[10px] uppercase font-bold text-pats-accent block">Protein Target</span>
+            <span id="fuel-out-protein" class="text-xl sm:text-2xl font-black font-mono text-white mt-1 block">144 g</span>
+            <span id="fuel-out-protein-sub" class="text-[10px] text-slate-400 font-mono block mt-0.5">1.8 g/kg &bull; 4 Pulses (36g)</span>
+          </div>
+
+          <div class="bg-[#07130E] border border-pats-border p-3.5 rounded-xl">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Healthy Fats</span>
+            <span id="fuel-out-fats" class="text-xl sm:text-2xl font-black font-mono text-white mt-1 block">80 g</span>
+            <span id="fuel-out-fats-sub" class="text-[10px] text-slate-400 font-mono block mt-0.5">1.0 g/kg &bull; Endocrine Recovery</span>
+          </div>
+
+          <div class="bg-[#07130E] border border-blue-900/60 p-3.5 rounded-xl">
+            <span class="text-[10px] uppercase font-bold text-blue-400 block">Fluids &amp; Electrolytes</span>
+            <span id="fuel-out-fluid" class="text-xl sm:text-2xl font-black font-mono text-white mt-1 block">3.2 L</span>
+            <span id="fuel-out-fluid-sub" class="text-[10px] text-blue-300/80 font-mono block mt-0.5">+ 850mg Sodium</span>
+          </div>
+        </div>
+
+        <div id="fuel-day-explanation" class="p-3 bg-pats-black/50 border border-pats-border rounded-xl text-xs text-slate-300 leading-relaxed">
+        </div>
+      </div>
+
+      <!-- AUTOMATED DYNAMIC FUEL TIMELINE (ADAPTED TO SCHEDULED TIME) -->
+      <div class="panel-glass rounded-2xl border border-pats-border p-4 sm:p-5 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-pats-border pb-2.5 gap-2">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-pats-gold"></span>
+              <h3 id="fuel-timeline-heading" class="text-xs sm:text-sm font-black uppercase text-white tracking-wide">
+                2. Automated Fuel Timeline (Scheduled for 7:30 PM &bull; 75 mins)
+              </h3>
+            </div>
+            <p class="text-[11px] text-pats-muted mt-0.5">Calculated hour-by-hour relative to your scheduled session start and end time.</p>
+          </div>
+          <span id="fuel-timeline-tag" class="px-2 py-0.5 rounded bg-pats-dark border border-pats-border text-[10px] font-mono font-bold text-pats-accent">
+            Custom Adjusted
+          </span>
+        </div>
+
+        <!-- Injected Dynamically Based on Scheduled Time -->
+        <div id="dynamic-timeline-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+        </div>
+
+        <!-- Post-Session Recovery & Intra-Training Guidance Box -->
+        <div id="dynamic-recovery-box" class="bg-emerald-950/20 border border-emerald-800/60 p-3.5 rounded-xl space-y-1.5 text-xs">
+        </div>
+      </div>
+
+      <!-- Keith Baar Collagen & Veteran Protocols -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="bg-[#07130E] border border-pats-border rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between border-b border-pats-border pb-2">
+            <h4 class="text-xs sm:text-sm font-bold uppercase text-white">Targeted Tendon Collagen Protocol</h4>
+            <span class="text-[9px] font-mono bg-pats-border text-pats-accent px-2 py-0.5 rounded">Keith Baar Protocol</span>
+          </div>
+          <div class="space-y-2 text-xs text-slate-300 leading-relaxed">
+            <p>Tendons have minimal vascular blood supply. Remodeling is driven by muscular mechanical pump contractions during warm-ups.</p>
+            <div class="p-3 bg-pats-black/60 border border-pats-borderLight rounded-lg space-y-1">
+              <strong class="text-pats-gold block text-[11px] uppercase">Pre-Gym Recipe (45–60 mins prior to session):</strong>
+              <div class="text-white font-mono text-[11px]">
+                • 15–20g Hydrolysed Collagen Peptides (or Beef Gelatin)<br>
+                • 50mg Vitamin C (or 150ml Orange Juice)
+              </div>
+            </div>
+            <p class="text-[11px] text-slate-400">Directly elevates proline and hydroxyproline in the bloodstream, doubling collagen synthesis across hamstrings (Nordics) and adductors (Copenhagens).</p>
+          </div>
+        </div>
+
+        <div class="bg-[#07130E] border border-amber-500/30 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between border-b border-pats-border pb-2">
+            <h4 class="text-xs sm:text-sm font-bold uppercase text-amber-300">Veteran Shield Fueling (Ages 32–40)</h4>
+            <span class="text-[9px] font-mono bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded border border-amber-500/30">Longevity</span>
+          </div>
+          <ul class="space-y-1.5 list-disc pl-4 text-[11px] text-slate-300 leading-relaxed">
+            <li><strong class="text-white">Anabolic Resistance:</strong> Veteran players require 35–40g protein per meal (vs 25g for 20-year-olds) to trigger identical muscle protein synthesis.</li>
+            <li><strong class="text-white">Omega-3 EPA/DHA (2–3g Daily):</strong> Lowers baseline joint synovitis and reduces lingering DOMS after hard pitch running.</li>
+            <li><strong class="text-white">Tart Cherry Juice (30ml Night of Session):</strong> Accelerates neuromuscular force recovery and blunts oxidative muscle damage before morning commute.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== VIEW 3: MATCH DAY ==================== -->
+    <div id="view-match" class="hidden space-y-5">
+      <div class="panel-glass rounded-2xl border border-pats-border p-4 sm:p-5 shadow-2xl relative overflow-hidden">
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-3 w-full lg:w-auto min-w-0">
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-pats-border to-pats-card border border-pats-borderLight flex items-center justify-center text-pats-gold font-mono font-black text-sm shrink-0 shadow-inner">
+              GAA
+            </div>
+            <div class="min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-[9px] sm:text-[10px] bg-pats-gold text-pats-black font-extrabold uppercase px-2 py-0.5 rounded">Dublin Junior Hurling</span>
+                <span id="match-live-badge" class="text-[9px] sm:text-[10px] bg-pats-border text-pats-accent font-mono font-bold uppercase px-2 py-0.5 rounded border border-pats-borderLight">1st Half Active</span>
+              </div>
+              <div class="flex items-center gap-2 mt-1.5 flex-wrap">
+                <input type="text" id="match-opp-name" value="Opposition Club" onchange="saveMatchState()" class="bg-[#07130E] border border-pats-border rounded-lg px-2.5 py-1 text-xs sm:text-sm font-bold text-white focus:outline-none focus:border-pats-gold w-40 sm:w-52 transition">
+                <select id="match-half-select" onchange="toggleMatchHalf(this.value)" class="bg-[#07130E] border border-pats-border rounded-lg px-2 py-1 text-xs font-bold text-pats-gold focus:outline-none cursor-pointer">
+                  <option value="H1">1st Half</option>
+                  <option value="H2">2nd Half</option>
+                  <option value="ET">Extra Time</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-[#06110D] border border-pats-border rounded-2xl p-3 sm:p-4 flex items-center gap-4 sm:gap-6 shadow-inner w-full lg:w-auto justify-center">
+            <div class="text-center min-w-[70px]">
+              <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-widest text-pats-gold block">St Pat's</span>
+              <div class="flex items-baseline justify-center gap-1 mt-0.5">
+                <span id="pats-goals-display" class="text-2xl sm:text-3xl font-black text-pats-gold font-mono">0</span>
+                <span class="text-sm font-bold text-pats-muted">-</span>
+                <span id="pats-points-display" class="text-2xl sm:text-3xl font-black text-white font-mono">0</span>
+                <span id="pats-total-display" class="text-[11px] font-mono font-bold text-pats-accent pl-0.5">(0)</span>
+              </div>
+            </div>
+
+            <div class="text-pats-borderLight font-mono text-lg sm:text-xl font-black">:</div>
+
+            <div class="text-center min-w-[70px]">
+              <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-widest text-slate-400 block">Opposition</span>
+              <div class="flex items-center gap-1 mt-1 justify-center">
+                <input type="number" id="opp-goals" value="0" min="0" onchange="saveMatchState()" class="w-10 sm:w-11 bg-pats-dark border border-pats-border text-center font-mono font-bold text-white text-sm sm:text-base rounded py-0.5 focus:outline-none">
+                <span class="text-xs text-slate-500 font-bold">-</span>
+                <input type="number" id="opp-points" value="0" min="0" onchange="saveMatchState()" class="w-10 sm:w-11 bg-pats-dark border border-pats-border text-center font-mono font-bold text-white text-sm sm:text-base rounded py-0.5 focus:outline-none">
+              </div>
+            </div>
+
+            <div class="border-l border-pats-border pl-3 sm:pl-4 flex flex-col gap-1.5 shrink-0">
+              <button onclick="exportMatchReportCSV()" class="tactile-btn px-2.5 sm:px-3 py-1.5 bg-pats-gold hover:bg-pats-goldHover text-pats-black font-extrabold text-[10px] sm:text-[11px] rounded-lg uppercase tracking-wider transition shadow-sm">
+                Export Stats
+              </button>
+              <button onclick="openCustomConfirmModal('Reset Match KPIs', 'Are you sure you want to reset all match KPIs for a new fixture?', resetMatchStatsConfirmed)" class="tactile-btn px-2.5 sm:px-3 py-1 bg-red-950/40 hover:bg-red-900/60 border border-red-800/60 text-red-300 text-[10px] rounded-lg uppercase font-bold transition">
+                New Match
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div class="panel-glass border border-pats-border p-3.5 sm:p-4 rounded-2xl shadow min-w-0">
+          <span class="text-[9px] sm:text-[10px] uppercase font-bold text-pats-muted tracking-wider truncate block">Puck-Out Win %</span>
+          <span id="kpi-puckout-winrate" class="text-xl sm:text-2xl lg:text-3xl font-black text-pats-gold font-mono mt-1 block truncate">0%</span>
+          <span id="kpi-puckout-breakdown" class="text-[10px] sm:text-[11px] text-slate-400 block truncate">0 Won / 0 Total</span>
+        </div>
+
+        <div class="panel-glass border border-pats-border p-3.5 sm:p-4 rounded-2xl shadow min-w-0">
+          <span class="text-[9px] sm:text-[10px] uppercase font-bold text-pats-muted tracking-wider truncate block">Shot Conversion</span>
+          <span id="kpi-shot-conversion" class="text-xl sm:text-2xl lg:text-3xl font-black text-pats-accent font-mono mt-1 block truncate">0%</span>
+          <span id="kpi-shot-breakdown" class="text-[10px] sm:text-[11px] text-slate-400 block truncate">0 Scores / 0 Shots</span>
+        </div>
+
+        <div class="panel-glass border border-pats-border p-3.5 sm:p-4 rounded-2xl shadow min-w-0">
+          <span class="text-[9px] sm:text-[10px] uppercase font-bold text-pats-muted tracking-wider truncate block">Hooks &amp; Blocks</span>
+          <span id="kpi-workrate-total" class="text-xl sm:text-2xl lg:text-3xl font-black text-white font-mono mt-1 block truncate">0</span>
+          <span class="text-[10px] sm:text-[11px] text-slate-400 block truncate">Dispossessions</span>
+        </div>
+
+        <div class="panel-glass border border-red-900/40 p-3.5 sm:p-4 rounded-2xl shadow min-w-0">
+          <span class="text-[9px] sm:text-[10px] uppercase font-bold text-red-400 tracking-wider truncate block">Frees &lt;50m</span>
+          <span id="kpi-zone-frees" class="text-xl sm:text-2xl lg:text-3xl font-black text-red-400 font-mono mt-1 block truncate">0</span>
+          <span id="kpi-frees-breakdown" class="text-[10px] sm:text-[11px] text-red-300/80 block truncate">0 Total Frees</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div class="panel-glass border border-pats-border rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
+          <h3 class="text-sm sm:text-base font-extrabold uppercase text-white tracking-wide border-b border-pats-border pb-2">1. Puck-Out Battle</h3>
+          <div class="space-y-2">
+            <div class="bg-[#07130E] p-2.5 rounded-xl border border-pats-border flex items-center justify-between">
+              <span class="text-xs text-slate-300 font-bold">Clean Catch</span>
+              <span id="val-own-clean" class="text-lg font-mono font-black text-pats-gold">0</span>
+              <div class="flex gap-1 ml-2">
+                <button onclick="incMatchMetric('own_puck_clean', 1)" class="tactile-btn w-7 h-7 rounded bg-pats-border text-white text-xs font-bold">+</button>
+                <button onclick="incMatchMetric('own_puck_clean', -1)" class="tactile-btn w-7 h-7 rounded bg-[#040907] text-slate-400 text-xs">-</button>
+              </div>
+            </div>
+            <div class="bg-[#07130E] p-2.5 rounded-xl border border-pats-border flex items-center justify-between">
+              <span class="text-xs text-slate-300 font-bold">Break Won</span>
+              <span id="val-own-break" class="text-lg font-mono font-black text-pats-gold">0</span>
+              <div class="flex gap-1 ml-2">
+                <button onclick="incMatchMetric('own_puck_break', 1)" class="tactile-btn w-7 h-7 rounded bg-pats-border text-white text-xs font-bold">+</button>
+                <button onclick="incMatchMetric('own_puck_break', -1)" class="tactile-btn w-7 h-7 rounded bg-[#040907] text-slate-400 text-xs">-</button>
+              </div>
+            </div>
+            <div class="bg-red-950/30 p-2.5 rounded-xl border border-red-900/60 flex items-center justify-between">
+              <span class="text-xs text-red-200 font-bold">Lost to Opp</span>
+              <span id="val-own-lost" class="text-lg font-mono font-black text-red-400">0</span>
+              <div class="flex gap-1 ml-2">
+                <button onclick="incMatchMetric('own_puck_lost', 1)" class="tactile-btn w-7 h-7 rounded bg-red-900/80 text-white text-xs font-bold">+</button>
+                <button onclick="incMatchMetric('own_puck_lost', -1)" class="tactile-btn w-7 h-7 rounded bg-[#040907] text-red-400 text-xs">-</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-glass border border-pats-border rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
+          <h3 class="text-sm sm:text-base font-extrabold uppercase text-white tracking-wide border-b border-pats-border pb-2">2. Scoring Execution</h3>
+          <div class="space-y-2">
+            <div class="bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-xl flex items-center justify-between">
+              <span class="text-xs text-amber-300 font-bold">Point (Play)</span>
+              <span id="val-shot-pt-play" class="text-lg font-mono font-black text-pats-gold">0</span>
+              <div class="flex gap-1 ml-2">
+                <button onclick="incMatchScore('point_play', 1)" class="tactile-btn w-7 h-7 rounded bg-pats-gold text-pats-black text-xs font-black">+</button>
+                <button onclick="incMatchScore('point_play', -1)" class="tactile-btn w-7 h-7 rounded bg-[#040907] text-amber-300 text-xs">-</button>
+              </div>
+            </div>
+            <div class="bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-xl flex items-center justify-between">
+              <span class="text-xs text-amber-300 font-bold">Point (Free)</span>
+              <span id="val-shot-pt-free" class="text-lg font-mono font-black text-pats-gold">0</span>
+              <div class="flex gap-1 ml-2">
+                <button onclick="incMatchScore('point_free', 1)" class="tactile-btn w-7 h-7 rounded bg-pats-gold text-pats-black text-xs font-black">+</button>
+                <button onclick="incMatchScore('point_free', -1)" class="tactile-btn w-7 h-7 rounded bg-[#040907] text-amber-300 text-xs">-</button>
+              </div>
+            </div>
+            <div class="bg-emerald-500/15 border-2 border-pats-accent p-2.5 rounded-xl flex items-center justify-between">
+              <span class="text-xs text-emerald-200 font-black uppercase">Goal (+3)</span>
+              <span id="val-shot-goal" class="text-xl font-mono font-black text-pats-accent">0</span>
+              <div class="flex gap-1 ml-2">
+                <button onclick="incMatchScore('goal', 1)" class="tactile-btn px-3 py-1 rounded bg-pats-accent text-pats-black text-xs font-black">+ Goal</button>
+                <button onclick="incMatchScore('goal', -1)" class="tactile-btn w-7 h-7 rounded bg-[#040907] text-slate-400 text-xs">-</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-glass border border-pats-border rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
+          <h3 class="text-sm sm:text-base font-extrabold uppercase text-white tracking-wide border-b border-pats-border pb-2">3. Work Rate &amp; Discipline</h3>
+          <div class="space-y-2">
+            <div class="bg-[#07130E] p-2.5 rounded-xl border border-pats-border flex items-center justify-between">
+              <span class="text-xs text-slate-300 font-bold">Hooks / Blocks</span>
+              <span id="val-wr-hookblock" class="text-lg font-mono font-black text-pats-gold">0</span>
+              <div class="flex gap-1 ml-2">
+                <button onclick="incMatchMetric('wr_hookblock', 1)" class="tactile-btn w-7 h-7 rounded bg-pats-border text-white text-xs font-bold">+</button>
+                <button onclick="incMatchMetric('wr_hookblock', -1)" class="tactile-btn w-7 h-7 rounded bg-[#040907] text-slate-400 text-xs">-</button>
+              </div>
+            </div>
+            <div class="bg-red-950/30 p-2.5 rounded-xl border border-red-900/60 flex items-center justify-between">
+              <span class="text-xs text-red-200 font-bold">Foul &lt;50m</span>
+              <span id="val-foul-zone" class="text-lg font-mono font-black text-red-400">0</span>
+              <div class="flex gap-1 ml-2">
+                <button onclick="incMatchMetric('foul_zone', 1)" class="tactile-btn w-7 h-7 rounded bg-red-900/80 text-white text-xs font-bold">+</button>
+                <button onclick="incMatchMetric('foul_zone', -1)" class="tactile-btn w-7 h-7 rounded bg-[#040907] text-red-400 text-xs">-</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== VIEW 4: COACH COMMAND DESK ==================== -->
+    <div id="view-coach" class="hidden space-y-5">
+      <div class="panel-glass rounded-2xl border border-pats-border p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-pats-accent shadow-glow-sm"></span>
+            <h2 class="text-base sm:text-lg font-black uppercase text-white tracking-wide">Coach &amp; Performance Command Desk</h2>
+          </div>
+          <p class="text-xs text-pats-muted mt-0.5">Annual Periodization &bull; Baseline &amp; Week 8 Retest Analytics &bull; Exercise Compliance</p>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="openDirectiveModal()" class="tactile-btn px-3 py-1.5 rounded-lg bg-pats-border hover:bg-pats-borderLight text-xs font-bold text-slate-200">Update Directive</button>
+          <button onclick="openChangePasscodeModal()" class="tactile-btn px-3 py-1.5 rounded-lg bg-pats-border hover:bg-pats-borderLight text-xs font-bold text-slate-200">Passcode</button>
+          <button onclick="lockCoachDesk()" class="tactile-btn px-3 py-1.5 rounded-lg bg-red-950/40 hover:bg-red-900/60 border border-red-800 text-xs font-bold text-red-300">Lock Desk</button>
+        </div>
+      </div>
+
+      <!-- SQUAD PROGRESSION ANALYTICS KPI OVERVIEW -->
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
+        <div class="panel-glass border border-pats-border p-3.5 sm:p-4 rounded-2xl shadow min-w-0">
+          <span class="text-[9px] sm:text-[10px] uppercase font-bold text-pats-muted tracking-wider block truncate">1.2km Bronco Delta</span>
+          <span id="metric-bronco-avg-delta" class="text-xl sm:text-2xl font-black text-emerald-400 font-mono block mt-1">-14.8s</span>
+          <span id="metric-bronco-avg-display" class="text-[10px] text-slate-400 truncate block">5:08 &rarr; 4:53 Avg</span>
+        </div>
+
+        <div class="panel-glass border border-pats-border p-3.5 sm:p-4 rounded-2xl shadow min-w-0">
+          <span class="text-[9px] sm:text-[10px] uppercase font-bold text-pats-muted tracking-wider block truncate">20m Sprint Delta</span>
+          <span id="metric-sprint-avg-delta" class="text-xl sm:text-2xl font-black text-emerald-400 font-mono block mt-1">-0.11s</span>
+          <span id="metric-sprint-avg-display" class="text-[10px] text-slate-400 truncate block">3.17s &rarr; 3.06s Avg</span>
+        </div>
+
+        <div class="panel-glass border border-pats-border p-3.5 sm:p-4 rounded-2xl shadow min-w-0">
+          <span class="text-[9px] sm:text-[10px] uppercase font-bold text-pats-muted tracking-wider block truncate">Squat Gain</span>
+          <span id="metric-squat-avg-delta" class="text-xl sm:text-2xl font-black text-pats-gold font-mono block mt-1">+11.6 kg</span>
+          <span id="metric-squat-avg-display" class="text-[10px] text-slate-400 truncate block">126kg &rarr; 138kg Avg</span>
+        </div>
+
+        <div class="panel-glass border border-pats-border p-3.5 sm:p-4 rounded-2xl shadow min-w-0">
+          <span class="text-[9px] sm:text-[10px] uppercase font-bold text-pats-muted tracking-wider block truncate">Deadlift Gain</span>
+          <span id="metric-dead-avg-delta" class="text-xl sm:text-2xl font-black text-pats-gold font-mono block mt-1">+13.4 kg</span>
+          <span id="metric-dead-avg-display" class="text-[10px] text-slate-400 truncate block">168kg &rarr; 181kg Avg</span>
+        </div>
+
+        <div class="panel-glass border border-pats-border p-3.5 sm:p-4 rounded-2xl shadow min-w-0 col-span-2 sm:col-span-1">
+          <span class="text-[9px] sm:text-[10px] uppercase font-bold text-pats-muted tracking-wider block truncate">Session Execution</span>
+          <span id="metric-session-completion" class="text-xl sm:text-2xl font-black text-white font-mono block mt-1">92%</span>
+          <span id="metric-retest-sub" class="text-[10px] text-slate-400 truncate block">Exercise Tick Audit</span>
+        </div>
+      </div>
+
+      <!-- SQUAD DESK VIEW CONTROLLER TABS -->
+      <div class="panel-glass border border-pats-border rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-pats-border">
+          <div class="flex items-center gap-2">
+            <button id="coach-tab-btn-roster" onclick="switchCoachSubTab('roster')" class="px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-pats-gold text-pats-black shadow-sm">
+              Squad Roster &amp; Exercise Logs
+            </button>
+            <button id="coach-tab-btn-testing" onclick="switchCoachSubTab('testing')" class="px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition text-slate-400 hover:text-white bg-[#07130E] border border-pats-border">
+              Testing: Baseline &rarr; W8 Retest
+            </button>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <input type="text" id="roster-search" oninput="filterCoachRoster()" placeholder="Search hurler..." class="bg-[#07130E] border border-pats-border rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-pats-gold w-36 sm:w-44">
+            <button onclick="openAddPlayerModal()" class="tactile-btn px-3 py-1.5 rounded-lg bg-pats-accent hover:bg-pats-accentHover text-pats-black font-extrabold text-xs uppercase">Add Hurler</button>
+            <button onclick="exportSquadDataCSV()" class="tactile-btn px-3 py-1.5 rounded-lg bg-pats-gold hover:bg-pats-goldHover text-pats-black font-extrabold text-xs uppercase">Export CSV</button>
+          </div>
+        </div>
+
+        <div id="coach-subtab-roster" class="overflow-x-auto w-full">
+          <table class="w-full text-left text-xs border-collapse min-w-[700px]">
+            <thead>
+              <tr class="border-b border-pats-border bg-pats-dark/60 text-slate-400 font-bold uppercase tracking-wider">
+                <th class="py-2.5 px-3">Hurler &amp; Number</th>
+                <th class="py-2.5 px-3">Line</th>
+                <th class="py-2.5 px-3 text-center">Availability</th>
+                <th class="py-2.5 px-3 text-center">Exercise Ticks</th>
+                <th class="py-2.5 px-3 text-center">4 Pillars</th>
+                <th class="py-2.5 px-3 text-right">Squat</th>
+                <th class="py-2.5 px-3 text-right">Deadlift</th>
+                <th class="py-2.5 px-3 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="coach-roster-tbody" class="divide-y divide-pats-border/50 text-slate-200">
+            </tbody>
+          </table>
+        </div>
+
+        <div id="coach-subtab-testing" class="hidden overflow-x-auto w-full">
+          <table class="w-full text-left text-xs border-collapse min-w-[800px]">
+            <thead>
+              <tr class="border-b border-pats-border bg-pats-dark/60 text-slate-400 font-bold uppercase tracking-wider text-[11px]">
+                <th class="py-2.5 px-3">Hurler</th>
+                <th class="py-2.5 px-3 text-center">1.2km Bronco (Base &rarr; W8)</th>
+                <th class="py-2.5 px-3 text-center">20m Sprint (Base &rarr; W8)</th>
+                <th class="py-2.5 px-3 text-center">Squat Max (Base &rarr; W8)</th>
+                <th class="py-2.5 px-3 text-center">Deadlift Max (Base &rarr; W8)</th>
+                <th class="py-2.5 px-3 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody id="coach-testing-tbody" class="divide-y divide-pats-border/50 text-slate-200">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODAL: EDIT BASELINE & WEEK 8 TESTING SCORES -->
+  <div id="modal-testing-scores" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="panel-glass border border-pats-gold/60 rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-pats-border pb-3">
+        <div>
+          <h3 id="testing-modal-title" class="text-sm sm:text-base font-black uppercase text-white tracking-wide">Player Testing Audit</h3>
+          <span id="testing-modal-subtitle" class="text-xs text-pats-gold font-mono block">Player</span>
+        </div>
+        <button onclick="closeTestingModal()" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+
+      <input type="hidden" id="testing-player-id">
+
+      <div class="space-y-4 text-xs">
+        <div class="bg-[#07130E] border border-pats-border rounded-xl p-3 space-y-2">
+          <span class="font-bold text-white uppercase text-[11px] block">1. 1.2km Hurling Shuttle (Bronco M:SS)</span>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-slate-400 mb-1">Baseline (Late Oct)</label>
+              <input type="text" id="input-test-bronco-base" placeholder="5:12" class="w-full bg-pats-black border border-pats-border rounded-lg px-2.5 py-1.5 text-white font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">Week 8 Retest (Post-Block 1)</label>
+              <input type="text" id="input-test-bronco-w8" placeholder="4:54" class="w-full bg-pats-black border border-pats-border rounded-lg px-2.5 py-1.5 text-emerald-400 font-mono font-bold">
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#07130E] border border-pats-border rounded-xl p-3 space-y-2">
+          <span class="font-bold text-white uppercase text-[11px] block">2. 20m Acceleration Sprint (Seconds)</span>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-slate-400 mb-1">Baseline (Late Oct)</label>
+              <input type="number" step="0.01" id="input-test-sprint-base" placeholder="3.18" class="w-full bg-pats-black border border-pats-border rounded-lg px-2.5 py-1.5 text-white font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">Week 8 Retest (Post-Block 1)</label>
+              <input type="number" step="0.01" id="input-test-sprint-w8" placeholder="3.06" class="w-full bg-pats-black border border-pats-border rounded-lg px-2.5 py-1.5 text-emerald-400 font-mono font-bold">
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#07130E] border border-pats-border rounded-xl p-3 space-y-2">
+          <span class="font-bold text-white uppercase text-[11px] block">3. Gym Compound Strength (kg)</span>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-slate-400 mb-1">Squat Base &rarr; W8</label>
+              <div class="flex items-center gap-1.5">
+                <input type="number" id="input-test-squat-base" placeholder="125" class="w-1/2 bg-pats-black border border-pats-border rounded-lg px-2 py-1.5 text-white font-mono">
+                <input type="number" id="input-test-squat-w8" placeholder="137.5" class="w-1/2 bg-pats-black border border-pats-border rounded-lg px-2 py-1.5 text-pats-gold font-mono font-bold">
+              </div>
+            </div>
+            <div>
+              <label class="block text-slate-400 mb-1">Deadlift Base &rarr; W8</label>
+              <div class="flex items-center gap-1.5">
+                <input type="number" id="input-test-dead-base" placeholder="165" class="w-1/2 bg-pats-black border border-pats-border rounded-lg px-2 py-1.5 text-white font-mono">
+                <input type="number" id="input-test-dead-w8" placeholder="177.5" class="w-1/2 bg-pats-black border border-pats-border rounded-lg px-2 py-1.5 text-pats-gold font-mono font-bold">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-3 border-t border-pats-border">
+        <button onclick="closeTestingModal()" class="px-4 py-2 bg-pats-dark text-slate-300 text-xs font-bold rounded-xl">Cancel</button>
+        <button onclick="savePlayerTestingScores()" class="px-5 py-2 bg-pats-gold text-pats-black text-xs font-extrabold uppercase rounded-xl">Save Test Scores</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: EDIT / ADD PLAYER -->
+  <div id="modal-player-edit" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="panel-glass border border-pats-gold/60 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-pats-border pb-3">
+        <h3 id="player-modal-title" class="text-sm sm:text-base font-black uppercase text-white tracking-wide">Edit Hurler Profile</h3>
+        <button onclick="closePlayerModal()" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <input type="hidden" id="edit-player-id">
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-300 uppercase tracking-wider mb-1">Full Name</label>
+          <input type="text" id="edit-player-name" class="w-full bg-[#07130E] border border-pats-border rounded-xl px-3 py-2 text-white text-xs">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-300 uppercase tracking-wider mb-1">Jersey #</label>
+            <input type="number" id="edit-player-num" class="w-full bg-[#07130E] border border-pats-border rounded-xl px-3 py-2 text-white text-xs font-mono">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 uppercase tracking-wider mb-1">Line</label>
+            <select id="edit-player-line" class="w-full bg-[#07130E] border border-pats-border rounded-xl px-3 py-2 text-white text-xs">
+              <option value="Backs">Backs</option>
+              <option value="Midfield">Midfield</option>
+              <option value="Forwards">Forwards</option>
+            </select>
+          </div>
+        </div>
+        <div class="bg-red-950/20 border border-red-900/60 rounded-xl p-3">
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" id="edit-player-injured" class="w-4 h-4 rounded bg-pats-dark border-red-700 text-red-500 mt-0.5">
+            <span class="font-bold text-red-300 block">Injured / Sidelined from Match Selection</span>
+          </label>
+        </div>
+        <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3">
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" id="edit-player-vet" class="w-4 h-4 rounded bg-pats-dark border-amber-500 text-pats-gold mt-0.5">
+            <span class="font-bold text-amber-300 block">Veteran Shield Group (Age 32–40)</span>
+          </label>
+        </div>
+      </div>
+      <div class="flex items-center justify-between pt-3 border-t border-pats-border">
+        <button id="btn-delete-player" onclick="confirmDeletePlayer()" class="px-3 py-2 bg-red-950/40 text-red-300 text-xs font-bold rounded-xl">Delete</button>
+        <div class="flex items-center gap-2">
+          <button onclick="closePlayerModal()" class="px-3 py-2 bg-pats-dark text-slate-300 text-xs font-bold rounded-xl">Cancel</button>
+          <button onclick="savePlayerFromModal()" class="px-4 py-2 bg-pats-gold text-pats-black text-xs font-extrabold uppercase rounded-xl">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COACH AUTH MODAL -->
+  <div id="modal-coach-auth" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="panel-glass border border-pats-gold/50 rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl space-y-4">
+      <div class="text-center">
+        <h3 class="text-base sm:text-lg font-black uppercase text-white tracking-wide">Coach Desk Access</h3>
+        <p class="text-xs text-slate-400 mt-1">Enter coaching staff passcode to unlock.</p>
+      </div>
+      <div class="space-y-3">
+        <input type="password" id="input-coach-pass" placeholder="Enter coach passcode" class="w-full bg-[#07130E] border border-pats-border focus:border-pats-gold rounded-xl px-4 py-2.5 text-center text-sm font-mono text-white tracking-widest focus:outline-none">
+        <p id="auth-error-msg" class="text-xs text-red-400 text-center hidden">Incorrect passcode.</p>
+        <div class="flex items-center gap-2">
+          <button onclick="closeCoachAuthModal()" class="flex-1 py-2 bg-pats-dark text-slate-300 text-xs font-bold rounded-xl">Cancel</button>
+          <button onclick="submitCoachPasscode()" class="flex-1 py-2 bg-pats-gold text-pats-black text-xs font-extrabold uppercase rounded-xl">Unlock</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRM MODAL -->
+  <div id="modal-confirm" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="panel-glass border border-pats-border rounded-2xl max-w-sm w-full p-5 shadow-2xl space-y-4 text-center">
+      <h3 id="confirm-title" class="text-base font-black uppercase text-white">Confirm Action</h3>
+      <p id="confirm-desc" class="text-xs text-slate-300">Are you sure?</p>
+      <div class="flex items-center gap-2 pt-2">
+        <button onclick="closeCustomConfirm(false)" class="flex-1 py-2 bg-pats-dark text-slate-300 text-xs font-bold rounded-xl">Cancel</button>
+        <button id="confirm-btn-yes" onclick="closeCustomConfirm(true)" class="flex-1 py-2 bg-red-700 text-white text-xs font-extrabold uppercase rounded-xl">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIRECTIVE MODAL -->
+  <div id="modal-directive" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="panel-glass border border-pats-border rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4">
+      <h3 class="text-sm font-black uppercase text-white">Update Squad Directive</h3>
+      <textarea id="input-directive-text" rows="3" class="w-full bg-[#07130E] border border-pats-border rounded-xl p-3 text-xs text-white"></textarea>
+      <div class="flex justify-end gap-2">
+        <button onclick="document.getElementById('modal-directive').classList.add('hidden')" class="px-4 py-2 bg-pats-dark text-slate-300 text-xs font-bold rounded-xl">Cancel</button>
+        <button onclick="saveCoachDirective()" class="px-4 py-2 bg-pats-gold text-pats-black text-xs font-extrabold rounded-xl uppercase">Publish</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSCODE MODAL -->
+  <div id="modal-passcode" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="panel-glass border border-pats-border rounded-2xl max-w-sm w-full p-5 shadow-2xl space-y-4">
+      <h3 class="text-sm font-black uppercase text-white">Change Passcode</h3>
+      <input type="text" id="input-new-passcode" placeholder="Enter new passcode" class="w-full bg-[#07130E] border border-pats-border rounded-xl px-4 py-2 text-xs text-white font-mono">
+      <div class="flex justify-end gap-2">
+        <button onclick="document.getElementById('modal-passcode').classList.add('hidden')" class="px-4 py-2 bg-pats-dark text-slate-300 text-xs font-bold rounded-xl">Cancel</button>
+        <button onclick="saveNewPasscode()" class="px-4 py-2 bg-pats-gold text-pats-black text-xs font-extrabold rounded-xl uppercase">Update</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CORE JAVASCRIPT ==================== -->
+  <script>
+    const SEED_PLAYERS = [
+      { id: 'p_1', name: 'Alan Quinn', number: 1, line: 'Backs', isVet: false, isInjured: false, broncoBase: '5:08', broncoW8: '4:52', sprintBase: 3.14, sprintW8: 3.04, squatBase: 125, squatW8: 137.5, deadliftBase: 165, deadliftW8: 177.5, squat: 137.5, deadlift: 177.5 },
+      { id: 'p_2', name: 'Dan Burke', number: 2, line: 'Backs', isVet: false, isInjured: false, broncoBase: '5:02', broncoW8: '4:46', sprintBase: 3.08, sprintW8: 2.98, squatBase: 130, squatW8: 142.5, deadliftBase: 175, deadliftW8: 187.5, squat: 142.5, deadlift: 187.5 },
+      { id: 'p_3', name: 'Bryan Kelly', number: 3, line: 'Backs', isVet: false, isInjured: false, broncoBase: '5:14', broncoW8: '4:58', sprintBase: 3.18, sprintW8: 3.07, squatBase: 135, squatW8: 147.5, deadliftBase: 180, deadliftW8: 195, squat: 147.5, deadlift: 195 },
+      { id: 'p_4', name: 'Cormac Kelly', number: 4, line: 'Backs', isVet: false, isInjured: false, broncoBase: '5:10', broncoW8: '4:55', sprintBase: 3.12, sprintW8: 3.02, squatBase: 120, squatW8: 132.5, deadliftBase: 160, deadliftW8: 172.5, squat: 132.5, deadlift: 172.5 },
+      { id: 'p_5', name: 'Hansi Fischer-Kerrane', number: 5, line: 'Backs', isVet: false, isInjured: false, broncoBase: '4:58', broncoW8: '4:42', sprintBase: 3.05, sprintW8: 2.94, squatBase: 125, squatW8: 135, deadliftBase: 170, deadliftW8: 182.5, squat: 135, deadlift: 182.5 },
+      { id: 'p_6', name: 'Hugh Feeney', number: 6, line: 'Backs', isVet: false, isInjured: false, broncoBase: '5:05', broncoW8: '4:49', sprintBase: 3.15, sprintW8: 3.04, squatBase: 140, squatW8: 152.5, deadliftBase: 185, deadliftW8: 200, squat: 152.5, deadlift: 200 },
+      { id: 'p_7', name: 'Conor Hal', number: 7, line: 'Backs', isVet: false, isInjured: false, broncoBase: '4:55', broncoW8: '4:39', sprintBase: 3.02, sprintW8: 2.92, squatBase: 125, squatW8: 135, deadliftBase: 165, deadliftW8: 177.5, squat: 135, deadlift: 177.5 },
+      { id: 'p_8', name: 'Conor Henry', number: 8, line: 'Midfield', isVet: false, isInjured: false, broncoBase: '4:44', broncoW8: '4:30', sprintBase: 2.98, sprintW8: 2.89, squatBase: 130, squatW8: 140, deadliftBase: 170, deadliftW8: 185, squat: 140, deadlift: 185 },
+      { id: 'p_9', name: 'Ger Hurling', number: 9, line: 'Midfield', isVet: true, isInjured: false, broncoBase: '5:18', broncoW8: '5:04', sprintBase: 3.22, sprintW8: 3.14, squatBase: 120, squatW8: 130, deadliftBase: 160, deadliftW8: 170, squat: 130, deadlift: 170 },
+      { id: 'p_10', name: 'Brian Kennedy', number: 10, line: 'Forwards', isVet: false, isInjured: false, broncoBase: '4:52', broncoW8: '4:38', sprintBase: 3.00, sprintW8: 2.90, squatBase: 125, squatW8: 137.5, deadliftBase: 165, deadliftW8: 177.5, squat: 137.5, deadlift: 177.5 },
+      { id: 'p_11', name: "Mick O'Donoghue", number: 11, line: 'Forwards', isVet: true, isInjured: false, broncoBase: '5:12', broncoW8: '4:59', sprintBase: 3.19, sprintW8: 3.11, squatBase: 135, squatW8: 145, deadliftBase: 175, deadliftW8: 185, squat: 145, deadlift: 185 },
+      { id: 'p_12', name: 'Brian McCarthy', number: 12, line: 'Forwards', isVet: false, isInjured: false, broncoBase: '4:56', broncoW8: '4:41', sprintBase: 3.04, sprintW8: 2.93, squatBase: 130, squatW8: 140, deadliftBase: 170, deadliftW8: 182.5, squat: 140, deadlift: 182.5 },
+      { id: 'p_13', name: 'Paul Mac', number: 13, line: 'Forwards', isVet: false, isInjured: false, broncoBase: '5:15', broncoW8: '4:59', sprintBase: 3.16, sprintW8: 3.05, squatBase: 115, squatW8: 127.5, deadliftBase: 155, deadliftW8: 167.5, squat: 127.5, deadlift: 167.5 },
+      { id: 'p_14', name: 'Niall', number: 14, line: 'Forwards', isVet: false, isInjured: false, broncoBase: '5:09', broncoW8: '4:54', sprintBase: 3.14, sprintW8: 3.03, squatBase: 135, squatW8: 147.5, deadliftBase: 180, deadliftW8: 195, squat: 147.5, deadlift: 195 },
+      { id: 'p_15', name: 'Paul Roche', number: 15, line: 'Forwards', isVet: false, isInjured: false, broncoBase: '5:04', broncoW8: '4:49', sprintBase: 3.08, sprintW8: 2.98, squatBase: 120, squatW8: 132.5, deadliftBase: 160, deadliftW8: 172.5, squat: 132.5, deadlift: 172.5 },
+      { id: 'p_16', name: 'Tim', number: 16, line: 'Backs', isVet: false, isInjured: false, broncoBase: '5:11', broncoW8: '4:56', sprintBase: 3.12, sprintW8: 3.02, squatBase: 125, squatW8: 135, deadliftBase: 165, deadliftW8: 175, squat: 135, deadlift: 175 },
+      { id: 'p_17', name: 'John H', number: 17, line: 'Backs', isVet: true, isInjured: false, broncoBase: '5:22', broncoW8: '5:08', sprintBase: 3.25, sprintW8: 3.16, squatBase: 130, squatW8: 137.5, deadliftBase: 170, deadliftW8: 180, squat: 137.5, deadlift: 180 },
+      { id: 'p_18', name: 'BP', number: 18, line: 'Midfield', isVet: false, isInjured: false, broncoBase: '4:49', broncoW8: '4:35', sprintBase: 2.99, sprintW8: 2.90, squatBase: 120, squatW8: 130, deadliftBase: 160, deadliftW8: 172.5, squat: 130, deadlift: 172.5 },
+      { id: 'p_19', name: 'Martin Fanning', number: 19, line: 'Forwards', isVet: true, isInjured: false, broncoBase: '5:16', broncoW8: '5:02', sprintBase: 3.20, sprintW8: 3.12, squatBase: 125, squatW8: 135, deadliftBase: 165, deadliftW8: 175, squat: 135, deadlift: 175 },
+      { id: 'p_20', name: 'KK', number: 20, line: 'Forwards', isVet: false, isInjured: false, broncoBase: '5:07', broncoW8: '4:52', sprintBase: 3.11, sprintW8: 3.01, squatBase: 125, squatW8: 135, deadliftBase: 165, deadliftW8: 175, squat: 135, deadlift: 175 },
+      { id: 'p_21', name: 'Cian Latham', number: 21, line: 'Backs', isVet: false, isInjured: false, broncoBase: '5:03', broncoW8: '4:48', sprintBase: 3.09, sprintW8: 2.99, squatBase: 130, squatW8: 142.5, deadliftBase: 175, deadliftW8: 190, squat: 142.5, deadlift: 190 },
+      { id: 'p_22', name: "Tiernán O'Rourke", number: 22, line: 'Midfield', isVet: false, isInjured: false, broncoBase: '4:46', broncoW8: '4:32', sprintBase: 2.97, sprintW8: 2.88, squatBase: 135, squatW8: 145, deadliftBase: 175, deadliftW8: 187.5, squat: 145, deadlift: 187.5 },
+      { id: 'p_23', name: 'Ciarán', number: 23, line: 'Forwards', isVet: false, isInjured: false, broncoBase: '5:12', broncoW8: '4:57', sprintBase: 3.13, sprintW8: 3.03, squatBase: 125, squatW8: 135, deadliftBase: 165, deadliftW8: 177.5, squat: 135, deadlift: 177.5 },
+      { id: 'p_24', name: 'Kevin Barry', number: 24, line: 'Backs', isVet: false, isInjured: false, broncoBase: '5:06', broncoW8: '4:51', sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 140, deadliftBase: 170, deadliftW8: 182.5, squat: 140, deadlift: 182.5 },
+      { id: 'p_25', name: "Conor O'Leary", number: 25, line: 'Backs', isVet: false, isInjured: false, broncoBase: '5:15', broncoW8: '4:59', sprintBase: 3.17, sprintW8: 3.06, squatBase: 135, squatW8: 147.5, deadliftBase: 180, deadliftW8: 195, squat: 147.5, deadlift: 195 },
+      { id: 'p_26', name: 'Colm', number: 26, line: 'Midfield', isVet: false, isInjured: false, broncoBase: '4:50', broncoW8: '4:36', sprintBase: 3.01, sprintW8: 2.91, squatBase: 125, squatW8: 135, deadliftBase: 165, deadliftW8: 177.5, squat: 135, deadlift: 177.5 },
+      { id: 'p_27', name: 'CN', number: 27, line: 'Forwards', isVet: false, isInjured: false, broncoBase: '5:18', broncoW8: '5:03', sprintBase: 3.18, sprintW8: 3.08, squatBase: 120, squatW8: 130, deadliftBase: 160, deadliftW8: 170, squat: 130, deadlift: 170 },
+      { id: 'p_28', name: 'Kieran Kelly', number: 28, line: 'Forwards', isVet: false, isInjured: false, broncoBase: '5:04', broncoW8: '4:49', sprintBase: 3.07, sprintW8: 2.97, squatBase: 130, squatW8: 140, deadliftBase: 170, deadliftW8: 182.5, squat: 140, deadlift: 182.5 },
+      { id: 'p_29', name: 'Dan Taylor', number: 29, line: 'Backs', isVet: false, isInjured: false, broncoBase: '5:10', broncoW8: '4:56', sprintBase: 3.12, sprintW8: 3.02, squatBase: 125, squatW8: 135, deadliftBase: 165, deadliftW8: 175, squat: 135, deadlift: 175 },
+      { id: 'p_30', name: "Donall O'Riordan", number: 30, line: 'Backs', isVet: false, isInjured: false, broncoBase: '5:14', broncoW8: '4:58', sprintBase: 3.16, sprintW8: 3.05, squatBase: 135, squatW8: 147.5, deadliftBase: 180, deadliftW8: 195, squat: 147.5, deadlift: 195 },
+      { id: 'p_31', name: 'Simon', number: 31, line: 'Midfield', isVet: false, isInjured: false, broncoBase: '4:48', broncoW8: '4:34', sprintBase: 2.98, sprintW8: 2.89, squatBase: 125, squatW8: 135, deadliftBase: 165, deadliftW8: 177.5, squat: 135, deadlift: 177.5 },
+      { id: 'p_32', name: 'Kevin Finnan', number: 32, line: 'Forwards', isVet: false, isInjured: false, broncoBase: '5:16', broncoW8: '5:01', sprintBase: 3.15, sprintW8: 3.04, squatBase: 120, squatW8: 132.5, deadliftBase: 160, deadliftW8: 172.5, squat: 132.5, deadlift: 172.5 },
+      { id: 'p_33', name: 'Stephen', number: 33, line: 'Forwards', isVet: false, isInjured: false, broncoBase: '5:01', broncoW8: '4:46', sprintBase: 3.06, sprintW8: 2.96, squatBase: 130, squatW8: 142.5, deadliftBase: 175, deadliftW8: 190, squat: 142.5, deadlift: 190 },
+      { id: 'p_34', name: 'Brian', number: 34, line: 'Backs', isVet: false, isInjured: false, broncoBase: '5:12', broncoW8: '4:58', sprintBase: 3.14, sprintW8: 3.04, squatBase: 125, squatW8: 135, deadliftBase: 165, deadliftW8: 175, squat: 135, deadlift: 175 },
+      { id: 'p_35', name: 'Cathal', number: 35, line: 'Backs', isVet: false, isInjured: false, broncoBase: '5:08', broncoW8: '4:54', sprintBase: 3.11, sprintW8: 3.01, squatBase: 125, squatW8: 135, deadliftBase: 165, deadliftW8: 175, squat: 135, deadlift: 175 },
+      { id: 'p_36', name: 'Robert Kilcoyne', number: 36, line: 'Backs', isVet: false, isInjured: false, broncoBase: '5:15', broncoW8: '4:59', sprintBase: 3.18, sprintW8: 3.07, squatBase: 135, squatW8: 147.5, deadliftBase: 180, deadliftW8: 195, squat: 147.5, deadlift: 195 },
+      { id: 'p_37', name: 'DF', number: 37, line: 'Midfield', isVet: false, isInjured: false, broncoBase: '4:54', broncoW8: '4:40', sprintBase: 3.02, sprintW8: 2.92, squatBase: 120, squatW8: 130, deadliftBase: 160, deadliftW8: 170, squat: 130, deadlift: 170 },
+      { id: 'p_38', name: 'Ruairi Convery', number: 38, line: 'Forwards', isVet: false, isInjured: false, broncoBase: '5:06', broncoW8: '4:50', sprintBase: 3.09, sprintW8: 2.98, squatBase: 130, squatW8: 142.5, deadliftBase: 170, deadliftW8: 185, squat: 142.5, deadlift: 185 }
+    ];
+
+    const TRAINING_STRUCTURE = {
+      1: {
+        blockName: "Block 1: Preseason Loading Engine",
+        blockDuration: "8 Weeks (Late Oct – Dec)",
+        phases: {
+          1: {
+            title: "Phase 1: Base Aerobic Accumulation (Weeks 1–3)",
+            focus: "Establishing aerobic engine, cardiac stroke volume, baseline movement quality, and eccentric tendon tolerance.",
+            days: {
+              1: { title: "Day 1: Pitch Aerobic Base (Target: 5,000–5,800m)", hr: "78%–85% HRmax (Zone 3–4)" },
+              2: { title: "Day 2: Pitch Anaerobic Introduction (Target: 4,000–4,600m)", hr: "88%–92% HRmax" },
+              3: { title: "Day 3: Gym Structural Integrity & Tendon Armor", hr: "Eccentric Control (2–3 RIR)" }
+            }
+          },
+          2: {
+            title: "Phase 2: Overload & Glycolytic Capacity (Weeks 4–6)",
+            focus: "Progressive overload across running volume, sharper 180° turns, higher MAS density, and increased barbell loading.",
+            days: {
+              1: { title: "Day 1: Pitch MAS Grids & Threshold Overload (Target: 5,800–6,600m)", hr: "82%–88% HRmax (Zone 4)" },
+              2: { title: "Day 2: Pitch Lactate Accumulation Ladders (Target: 4,800–5,400m)", hr: "92%–96% HRmax (Zone 5)" },
+              3: { title: "Day 3: Gym Maximal Force & Sled Drive", hr: "Neuromuscular Strength (1–2 RIR)" }
+            }
+          },
+          3: {
+            title: "Phase 3: High-Velocity & Peak Capacity (Weeks 7–8)",
+            focus: "Peak preseason running intensity, repeat sprint endurance, max speed inoculation, and pre-retest strength priming.",
+            days: {
+              1: { title: "Day 1: Pitch Eurofit 15s:15s Shuttles (Target: 6,400–7,000m)", hr: "85%–90% HRmax" },
+              2: { title: "Day 2: Pitch RSA & 100% Speed Vaccine (Target: 5,200–5,800m)", hr: "95%–100% Max Spike" },
+              3: { title: "Day 3: Gym Force & Power Transfer", hr: "Explosive Intent (1 RIR)" }
+            }
+          }
+        }
+      },
+      2: {
+        blockName: "Block 2: Dublin League Peak",
+        blockDuration: "6 Weeks (Jan – Feb, Peak Early March)",
+        phases: {
+          1: {
+            title: "Phase 1: League Re-Acceleration (Weeks 1–2)",
+            focus: "Transitioning back from deload into dynamic change-of-direction, high-speed tempo, and explosive multi-joint lifts.",
+            days: {
+              1: { title: "Day 1: Pitch Aerobic Threshold & Eurofit Shuttles", hr: "82%–88% HRmax" },
+              2: { title: "Day 2: Pitch Repeat Sprint Ability (RSA) Shuttles", hr: "90%–95% HRmax" },
+              3: { title: "Day 3: Gym Maximal Strength & Resisted Sled Sprints", hr: "High-Threshold Motor Units (1–2 RIR)" }
+            }
+          },
+          2: {
+            title: "Phase 2: Match-Intensity RSA & Breakdown Transition (Weeks 3–4)",
+            focus: "Simulating chaotic match restarts, ground-ball pickups at full sprint, and rapid recovery under high blood lactate.",
+            days: {
+              1: { title: "Day 1: Box-to-Box Transition Runs", hr: "85%–92% HRmax" },
+              2: { title: "Day 2: The Gaelic Suicide Ladder & Ruck Bursts", hr: "92%–98% HRmax" },
+              3: { title: "Day 3: Heavy Compound Strength & Ballistic Power", hr: "1 RIR & Max Power" }
+            }
+          },
+          3: {
+            title: "Phase 3: League Peaking & Taper (Weeks 5–6)",
+            focus: "Volume cut by 30-40% while preserving maximal velocity intent, ensuring freshness and sharpness for Dublin League fixtures.",
+            days: {
+              1: { title: "Day 1: Pitch Match Transition Grids & Flow", hr: "80%–88% HRmax" },
+              2: { title: "Day 2: Unresisted Alactic Speed Sprints (25m)", hr: "100% Vmax" },
+              3: { title: "Day 3: Gym Neural Primer & Speed", hr: "Ballistic Intent (2 RIR)" }
+            }
+          }
+        }
+      },
+      3: {
+        blockName: "Block 3: Dublin Championship Peak",
+        blockDuration: "6 Weeks (Apr – May, Peak June 2027)",
+        phases: {
+          1: {
+            title: "Phase 1: Championship Engine Re-Prime (Weeks 1–2)",
+            focus: "Restoring maximal aerobic flux and structural armor following spring league matches.",
+            days: {
+              1: { title: "Day 1: Pitch Aerobic Capacity & Perimeter Laps", hr: "80%–86% HRmax" },
+              2: { title: "Day 2: Deceleration & Sharp 180° Planting", hr: "90%–95% HRmax" },
+              3: { title: "Day 3: Gym Contrast Heavy & Ballistic Primer", hr: "PAPE Complex (1–2 RIR)" }
+            }
+          },
+          2: {
+            title: "Phase 2: Ball-in-Play Transition & Contrast Shock (Weeks 3–4)",
+            focus: "Overload on high-speed transitions, puck-out wing runs, and maximal post-activation potentiation.",
+            days: {
+              1: { title: "Day 1: Puck-Out Wing Transition Sprints", hr: "85%–92% HRmax" },
+              2: { title: "Day 2: Ruck-Breakdown Transition Sprints", hr: "95%–100% HRmax" },
+              3: { title: "Day 3: Gym Heavy Squat to DB Squat Jump Complex", hr: "Max Takeoff Velocity" }
+            }
+          },
+          3: {
+            title: "Phase 3: Championship Final Peak & Speed Taper (Weeks 5–6)",
+            focus: "Late-May deload cut (-50% volume). Pure neural sharpness, alactic sprints, and championship readiness.",
+            days: {
+              1: { title: "Day 1: Pitch Tactical Flow & Speed Top-Up", hr: "78%–84% HRmax" },
+              2: { title: "Day 2: 100% Max Velocity Speed Vaccine (25m)", hr: "100% Vmax" },
+              3: { title: "Day 3: Ballistic PAPE Contrast Taper", hr: "Peak Sharpness (2 RIR)" }
+            }
+          }
+        }
+      }
+    };
+
+    const WORKOUT_DATABASE = {
+      1: {
+        1: {
+          1: [
+            { id: 'b1_p1_d1_r1', order: 'R1', name: 'Full-Pitch Perimeter MAS Grid (Base)', equipment: 'Full 145m x 90m GAA Pitch', sets: '2 blocks', reps: '4 laps / block (5,000m total)', rest: '3 mins passive walk', hr: '78%–85% HRmax', instructions: 'Sprint long sidelines (145m) in 30s (~95–100% MAS). Active recovery walk/jog short endlines (90m) in 35s. Maintain relaxed upright posture.' },
+            { id: 'b1_p1_d1_r2', order: 'R2', name: '45m Continuous Tempo Strides', equipment: '45m Line to Endline', sets: '2 sets', reps: '5 reps / set (90m round-trip)', rest: '45s walk between reps', hr: '75%–82% HRmax', instructions: 'Smooth acceleration to 70% speed over 45m. Plant in 3 controlled strides, turn smoothly, stride back to endline. Focus on breathing rhythm.' },
+            { id: 'b1_p1_d1_r3', order: 'R3', name: 'Box-to-Box Striking Aerobic Shuttles', equipment: 'Endline to 65m Line', sets: '2 sets', reps: '3 reps / set (130m round-trip)', rest: '60s walk recovery', hr: '80%–85% HRmax', instructions: 'Carry hurley. Run from endline to 65m line at brisk match pace (<27s), simulate high catch or ground pick, turn and stride back across endline.' }
+          ],
+          2: [
+            { id: 'b1_p1_d2_r1', order: 'R1', name: 'The 45m Linear Hurler Shuttles', equipment: 'Endline to 45m Line', sets: '2 sets', reps: '4 reps / set (90m total)', rest: '60s walk recovery', hr: '88%–92% HRmax', instructions: 'Sprint at 90% intent to 45m line, plant outside foot, sharp 180° cut, sprint back across endline in under 17s. Full walk recovery between reps.' },
+            { id: 'b1_p1_d2_r2', order: 'R2', name: 'Ground-Ball Recovery Sprints', equipment: 'Endline to 20m Line', sets: '2 sets', reps: '4 reps (40m round-trip)', rest: '45s between reps', hr: '90%–94% HRmax', instructions: 'Start chest-down on endline. Pop to feet on whistle, sprint 20m, jab-lift sliotar, turn and sprint back across endline with ball in hand.' },
+            { id: 'b1_p1_d2_r3', order: 'R3', name: 'Max Velocity Speed Vaccine Intro', equipment: '25m Linear Channel', sets: '1 block', reps: '2 reps of 25m @ 100% Vmax', rest: '90s full walk recovery', hr: '95%–100% Peak Spike', instructions: '5m acceleration build-up, then fly through 25m at true 100% maximum speed. Relaxed shoulders, upright torso, dorsiflexed ankles.' }
+          ],
+          3: [
+            { id: 'b1_p1_d3_a1', order: 'A1', name: 'High Bar Back Squat (or Trap Bar)', equipment: 'Olympic Barbell & Rack', sets: '3', reps: '8, 8, 8 reps', rest: '120s', hr: '2–3 RIR', instructions: 'Lower under strict 3-second descent tempo. Pause 1s at parallel depth without losing spinal tension, then drive upward explosively.' },
+            { id: 'b1_p1_d3_b1', order: 'B1', name: 'Nordic Hamstring Lowers', equipment: 'Utility Bench / Partner Hold', sets: '3', reps: '4–5 reps', rest: '90s', hr: 'Bodyweight', instructions: 'Rigid straight line from knees through hips to shoulders. Lower forward as slowly as possible resisting for 4 seconds before catching on hands.' },
+            { id: 'b1_p1_d3_b2', order: 'B2', name: 'DB Flat Bench Press', equipment: 'Flat Bench & DBs', sets: '3', reps: '8 reps', rest: '90s', hr: '2 RIR', instructions: 'Lower dumbbells smoothly with elbows at 45° angle to torso. Touch chest lightly, pause 1s, and press forcefully to lockout.' },
+            { id: 'b1_p1_d3_c1', order: 'C1', name: 'Copenhagen Adductions (Short Lever)', equipment: 'Utility Bench', sets: '3', reps: '15s hold / side', rest: '60s', hr: 'Bodyweight', instructions: 'Top knee bent at 90° resting on bench. Lift body into side plank so hips are aligned with shoulders. Do not allow bottom hip to sag.' },
+            { id: 'b1_p1_d3_c2', order: 'C2', name: 'Heavy Sled March', equipment: 'Turf Sled & Harness', sets: '4', reps: '20m per set', rest: '90s', hr: '40% BW Load', instructions: 'Lock arms straight onto sled uprights. Lean body forward at 45° angle. Drive knees up and push the ground backward aggressively.' }
+          ]
+        },
+        2: {
+          1: [
+            { id: 'b1_p2_d1_r1', order: 'R1', name: 'Full-Pitch Perimeter MAS Grid (Overload)', equipment: 'Full 145m x 90m GAA Pitch', sets: '2 blocks', reps: '6 laps / block (6,200m total)', rest: '2.5 mins passive walk', hr: '82%–88% HRmax', instructions: 'Sprint long sidelines (145m) in 28–29s (~100–105% MAS). Active recovery jog short endlines in 32s. Increased lap density pushes cardiac threshold.' },
+            { id: 'b1_p2_d1_r2', order: 'R2', name: '45m Continuous Tempo Strides', equipment: '45m Line to Endline', sets: '3 sets', reps: '6 reps / set (90m round-trip)', rest: '40s walk between reps', hr: '80%–85% HRmax', instructions: 'Accelerate to 75% speed over 45m. Crisp 2-stride deceleration plant, sharp turn, stride back to endline in under 16s.' },
+            { id: 'b1_p2_d1_r3', order: 'R3', name: 'Box-to-Box Striking Aerobic Shuttles', equipment: 'Endline to 65m Line', sets: '2 sets', reps: '4 reps / set (130m round-trip)', rest: '55s walk recovery', hr: '82%–88% HRmax', instructions: 'Carry hurley in hand. Run from endline to 65m line at brisk pace (<25s), simulate dynamic strike on run, turn and return to endline.' }
+          ],
+          2: [
+            { id: 'b1_p2_d2_r1', order: 'R1', name: 'The Gaelic Suicide Ladder', equipment: 'Endline, 20m & 45m Lines', sets: '4 discrete reps', reps: '130m total / rep', rest: '75s active walk recovery', hr: '92%–96% HRmax', instructions: 'Sprint 20m and back (40m), immediately turn and sprint 45m and back (90m). Total 130m all-out running and 3 sharp turns in under 25s.' },
+            { id: 'b1_p2_d2_r2', order: 'R2', name: 'Ground-Ball Recovery Sprints', equipment: 'Endline to 20m Line', sets: '3 sets', reps: '4 reps (40m round-trip)', rest: '45s between reps', hr: '92%–96% HRmax', instructions: 'Chest-down start on endline. Explosive push off grass, 20m sprint, jab-lift, 180° cut, full-gas sprint back to endline.' },
+            { id: 'b1_p2_d2_r3', order: 'R3', name: '100% Max Velocity Speed Vaccine', equipment: '25m Linear Channel', sets: '1 block', reps: '3 reps of 25m @ 100% Vmax', rest: '90s full walk recovery', hr: '98%–100% Peak Spike', instructions: 'True 100% top speed. High knee drive, stiff ankle contact. Essential hamstring protection before championship intensity.' }
+          ],
+          3: [
+            { id: 'b1_p2_d3_a1', order: 'A1', name: 'High Bar Back Squat (Overload)', equipment: 'Barbell & Rack', sets: '4', reps: '6, 6, 5, 5 reps', rest: '150s', hr: '1–2 RIR', instructions: 'Load increased by 5-7.5kg. Strict 3-second descent, 1s parallel pause, maximal upward concentric drive.' },
+            { id: 'b1_p2_d3_b1', order: 'B1', name: 'Loaded Nordic Hamstring Lowers', equipment: 'Nordic Bench & Plate', sets: '3', reps: '5 reps', rest: '90s', hr: 'BW + 2.5kg', instructions: 'Hold 2.5kg plate against chest. Maintain locked hips and lower torso forward under strict control for 3 full seconds before catching.' },
+            { id: 'b1_p2_d3_b2', order: 'B2', name: 'DB Flat Bench Press', equipment: 'Flat Bench & DBs', sets: '4', reps: '6 reps', rest: '90s', hr: '1–2 RIR', instructions: 'Heavy dumbbells. Lower in 2 seconds with elbows at 45°, pause briefly on chest, and press forcefully to lockout.' },
+            { id: 'b1_p2_d3_c1', order: 'C1', name: 'Copenhagen Adductions (Short Lever)', equipment: 'Utility Bench', sets: '3', reps: '20s hold / side', rest: '60s', hr: 'Bodyweight', instructions: 'Top knee bent at 90° on bench. Lift body into side plank so hips are aligned with shoulders. Maintain rigid alignment.' },
+            { id: 'b1_p2_d3_c2', order: 'C2', name: 'Heavy Sled March', equipment: 'Turf Sled & Harness', sets: '4', reps: '20m per set', rest: '90s', hr: '55% BW Load', instructions: 'Heavy load. Drive forward at 45° torso angle. Punch knees forward and push turf backward with maximum intent.' }
+          ]
+        },
+        3: {
+          1: [
+            { id: 'b1_p3_d1_r1', order: 'R1', name: '15s : 15s Eurofit Shuttles', equipment: 'Cones at 35m mark', sets: '2 blocks', reps: '8 reps / block (70m per rep)', rest: '15s rest / 3 mins between blocks', hr: '85%–90% HRmax', instructions: 'Sprint 35m out and 35m back within 15 seconds. Rest 15 seconds. Repeat for 8 continuous cycles to peak aerobic capacity.' },
+            { id: 'b1_p3_d1_r2', order: 'R2', name: 'Box-to-Box Transition Runs', equipment: 'Endline to 65m Line', sets: '2 sets', reps: '5 reps / set', rest: '45s recovery jog', hr: '82%–88% HRmax', instructions: 'Sprint 65m in 14 seconds. Immediately jog smoothly back to the endline over 45 seconds. Keep running form rhythmic and tall.' },
+            { id: 'b1_p3_d1_r3', order: 'R3', name: 'Continuous Skill & Aerobic Flow', equipment: 'Pitch Width (90m)', sets: '2 sets', reps: '4 continuous laps width-wise', rest: 'Active aerobic flush', hr: '75%–82% HRmax', instructions: 'Pairs run across pitch width striking on the run off left and right sides. Turn smoothly at touchline and continue flow.' }
+          ],
+          2: [
+            { id: 'b1_p3_d2_r1', order: 'R1', name: 'The 45-65 Hurler Shuttles', equipment: '45m & 65m Lines', sets: '2 sets', reps: '4 reps / set (90m total sprint)', rest: '60s walk recovery', hr: '92%–98% HRmax', instructions: 'Sprint 100% maximum intent to 45m line. Drop hips, plant hard off outside foot, execute sharp 180° cut, and sprint full gas back (<16s).' },
+            { id: 'b1_p3_d2_r2', order: 'R2', name: 'Repeated Sprint Ability (RSA) Cuts', equipment: '25m Mark with 180° Cut', sets: '3 sets', reps: '4 shuttles / set (50m each)', rest: '25s between shuttles', hr: '92%–96% HRmax', instructions: 'Sprint 25m, plant left foot on cone, turn 180° and sprint back. Alternate plant feet every rep (left, right, left, right).' },
+            { id: 'b1_p3_d2_r3', order: 'R3', name: '100% Max Velocity Speed Vaccine', equipment: '25m Linear Channel', sets: '1 block', reps: '3 reps of 25m @ 100% Vmax', rest: '90s–120s full walk recovery', hr: '100% Peak Spike', instructions: 'Fly through 25m at true 100% top speed. Essential speed primer before Week 8 Retest week.' }
+          ],
+          3: [
+            { id: 'b1_p3_d3_a1', order: 'A1', name: 'Back Squat (Peak Strength)', equipment: 'Barbell & Rack', sets: '4', reps: '4, 4, 3, 3 reps', rest: '180s', hr: '1 RIR', instructions: 'Heavy loading (85% 1RM). Maintain locked torso. Lower in 2 seconds, pause 1s at parallel, drive up with maximal concentric speed.' },
+            { id: 'b1_p3_d3_b1', order: 'B1', name: 'Nordic Hamstring Lowers (Strict)', equipment: 'Nordic Bench / Heel Anchor', sets: '3', reps: '5 reps', rest: '90s', hr: 'Bodyweight', instructions: 'Strict descent. Lower torso under 4s control before floor catch. Maximum eccentric strength stimulus.' },
+            { id: 'b1_p3_d3_b2', order: 'B2', name: 'Smith Machine Bench Press', equipment: 'Smith Machine', sets: '4', reps: '5 reps', rest: '120s', hr: '1 RIR', instructions: 'Lower bar smoothly to mid-chest in 2 seconds, touch lightly, and press upward with maximal explosive intent.' },
+            { id: 'b1_p3_d3_c1', order: 'C1', name: 'Copenhagen Adductions (Long Lever)', equipment: 'Utility Bench', sets: '3', reps: '8 reps / side', rest: '75s', hr: 'Bodyweight', instructions: 'Place top ankle/foot on top of bench pad (straight leg). Raise bottom leg to meet bench, pause 1s, then lower under 3s control.' },
+            { id: 'b1_p3_d3_c2', order: 'C2', name: 'Resisted Sled Sprints', equipment: 'Turf Sled & Harness', sets: '5', reps: '15m per sprint', rest: '120s', hr: '35% BW Load', instructions: 'Attach harness around waist. Drive forward at maximum sprinting effort with aggressive 45° forward lean.' }
+          ]
+        }
+      },
+      2: {
+        1: {
+          1: [
+            { id: 'b2_p1_d1_r1', order: 'R1', name: 'Eurofit Continuous Shuttles (35m)', equipment: 'Cones at 35m mark', sets: '2 blocks', reps: '8 reps / block (70m per rep)', rest: '15s rest / 3 mins between blocks', hr: '82%–88% HRmax', instructions: 'Sprint 35m out and 35m back within 15 seconds. Rest 15 seconds. Re-accelerates cardiovascular threshold post-deload.' },
+            { id: 'b2_p1_d1_r2', order: 'R2', name: '45m Continuous Tempo Strides', equipment: '45m Line to Endline', sets: '2 sets', reps: '6 reps / set', rest: '45s walk recovery', hr: '80%–85% HRmax', instructions: 'Accelerate smoothly to 75% speed over 45m. Decelerate in 2 strides, turn smoothly, stride back to endline.' }
+          ],
+          2: [
+            { id: 'b2_p1_d2_r1', order: 'R1', name: '180° Directional Decel Sprints', equipment: '25m Mark with 180° Cut', sets: '3 sets', reps: '4 shuttles / set (50m each)', rest: '30s between shuttles', hr: '90%–95% HRmax', instructions: 'Sprint 25m, plant outside foot hard, rotate 180° and sprint back across endline. Alternate plant foot each rep.' },
+            { id: 'b2_p1_d2_r2', order: 'R2', name: 'Max Velocity Sprints (25m)', equipment: '25m Linear Lane', sets: '1 block', reps: '3 reps @ 100% Vmax', rest: '90s full recovery', hr: '100% Peak Spike', instructions: 'Unresisted max speed. Maintain tall hips and relaxed facial muscles.' }
+          ],
+          3: [
+            { id: 'b2_p1_d3_a1', order: 'A1', name: 'Back Squat (Max Force)', equipment: 'Barbell & Rack', sets: '4', reps: '5, 5, 4, 4 reps', rest: '150s', hr: '1–2 RIR', instructions: '80–82% 1RM. Lower in 2 seconds, drive up with maximum concentric velocity.' },
+            { id: 'b2_p1_d3_b1', order: 'B1', name: 'Loaded Nordic Hamstring Lowers', equipment: 'Nordic Bench & Plate', sets: '3', reps: '5 reps', rest: '90s', hr: 'BW + 2.5kg', instructions: 'Strict eccentric hamstring loading to reinforce sprint armor.' },
+            { id: 'b2_p1_d3_c1', order: 'C1', name: 'Resisted Sled Sprints', equipment: 'Turf Sled & Harness', sets: '4', reps: '15m per sprint', rest: '90s', hr: '35% BW Load', instructions: 'Max horizontal drive out of starting blocks.' }
+          ]
+        },
+        2: {
+          1: [
+            { id: 'b2_p2_d1_r1', order: 'R1', name: 'Box-to-Box Transition Runs', equipment: 'Endline to 65m Line', sets: '2 sets', reps: '6 reps / set', rest: '30s recovery jog', hr: '85%–92% HRmax', instructions: 'Sprint 65m in 13.5s. Turn and jog smoothly back over 30s. Simulates match transition pacing.' }
+          ],
+          2: [
+            { id: 'b2_p2_d2_r1', order: 'R1', name: 'The Gaelic Suicide Ladder & Ruck Bursts', equipment: 'Endline, 20m & 45m Lines', sets: '5 discrete reps', reps: '130m total / rep', rest: '75s active walk recovery', hr: '92%–98% HRmax', instructions: 'All-out effort. Sprint to 20m and back, turn, sprint to 45m and back in under 25s.' }
+          ],
+          3: [
+            { id: 'b2_p2_d3_a1', order: 'A1', name: 'Heavy Squat to DB Squat Jump Complex', equipment: 'Barbell & Dumbbells', sets: '4', reps: '3 heavy + 4 jumps', rest: '150s after jumps', hr: 'PAPE Complex', instructions: '3 heavy squat reps @ 85% 1RM. Rest 30s, then perform 4 explosive DB squat jumps.' }
+          ]
+        },
+        3: {
+          1: [
+            { id: 'b2_p3_d1_r1', order: 'R1', name: 'Pitch Match Transition Flow & Tactical Runs', equipment: 'Full GAA Pitch', sets: '2 sets', reps: '4 laps width-wise', rest: 'Active aerobic flush', hr: '75%–82% HRmax', instructions: 'Striking on the run in pairs across pitch width. Low systemic stress, high neural feel.' }
+          ],
+          2: [
+            { id: 'b2_p3_d2_r1', order: 'R1', name: 'Unresisted Alactic Speed Bursts', equipment: '25m Linear Channel', sets: '1 block', reps: '3 reps of 25m distance', rest: '120s full walk recovery', hr: '100% Vmax', instructions: 'Short, sharp acceleration bursts. Sharpens nervous system without accumulating fatigue.' }
+          ],
+          3: [
+            { id: 'b2_p3_d3_a1', order: 'A1', name: 'Speed Back Squat & Ball Slams', equipment: 'Barbell & Slam Ball', sets: '3', reps: '3 reps @ 70% + 5 slams', rest: '120s', hr: 'Neural Primer (2 RIR)', instructions: 'Explosive barbell speed. Rack bar, immediately execute 5 maximal floor slams.' }
+          ]
+        }
+      },
+      3: {
+        1: {
+          1: [
+            { id: 'b3_p1_d1_r1', order: 'R1', name: 'Perimeter MAS Grid & Aerobic Maintenance', equipment: 'Full Pitch Perimeter', sets: '2 blocks', reps: '5 continuous laps', rest: '3 mins walk', hr: '80%–86% HRmax', instructions: 'Steady high-aerobic flush. Stride sidelines in 29s, walk endlines in 33s.' }
+          ],
+          2: [
+            { id: 'b3_p1_d2_r1', order: 'R1', name: 'Deceleration & Sharp 180° Planting', equipment: 'Cones at 20m & 45m', sets: '3 sets', reps: '4 shuttles / set', rest: '45s recovery', hr: '90%–95% HRmax', instructions: 'Sprint to 45m line, plant outside foot, cut sharply, sprint back across endline.' }
+          ],
+          3: [
+            { id: 'b3_p1_d3_a1', order: 'A1', name: 'Back Squat & Nordic Armor', equipment: 'Barbell & Bench', sets: '4', reps: '5, 5, 4, 4 reps', rest: '150s', hr: '1–2 RIR', instructions: '82% 1RM. Maintain locked torso and maximal upward concentric drive.' }
+          ]
+        },
+        2: {
+          1: [
+            { id: 'b3_p1_d1_r1_b3', order: 'R1', name: 'Puck-Out Wing Transition Sprints', equipment: 'Goal-line to 65m Wing', sets: '3 sets', reps: '4 reps / set (95m diagonal)', rest: '45s walk back recovery', hr: '85%–92% HRmax', instructions: 'Start in goal-mouth. Arc sprint diagonally to 65m touchline at 90% pace. Catch high ball, turn, walk back.' }
+          ],
+          2: [
+            { id: 'b3_p2_d2_r1', order: 'R1', name: 'The Ruck-Breakdown Transition Sprints', equipment: '20m Line to 65m Line', sets: '2 sets', reps: '5 reps / set (45m drive)', rest: '45s walk recovery', hr: '95%–100% HRmax', instructions: 'Lie chest-down on 20m line. Pop up on whistle, maximal sprint to 65m line, execute hook/block, brake in 3 strides.' }
+          ],
+          3: [
+            { id: 'b3_p2_d3_a1', order: 'A1', name: 'PAPE Contrast: Squat to DB Squat Jump', equipment: 'Barbell & Light DBs', sets: '4', reps: '3 reps @ 85% + 4 jumps', rest: '150s full rest', hr: 'Max Takeoff Velocity', instructions: '3 heavy squat reps. Rest 30s. Explode into 4 DB squat jumps with maximal vertical intent.' }
+          ]
+        },
+        3: {
+          1: [
+            { id: 'b3_p3_d1_r1', order: 'R1', name: 'Tactical Flow & Aerobic Sharpness', equipment: 'Pitch Width (90m)', sets: '2 sets', reps: '4 laps width-wise', rest: 'Aerobic flush', hr: '75%–82% HRmax', instructions: 'Striking on the run in pairs across pitch width. Low systemic stress, pure stickwork precision.' }
+          ],
+          2: [
+            { id: 'b3_p3_d2_r1', order: 'R1', name: 'Unresisted 100% Speed Vaccine Sprints', equipment: 'Open 25m Sprint Channel', sets: '1 block', reps: '3 reps of 25m distance', rest: '120s full walk recovery', hr: '100% Vmax', instructions: 'Smooth 5m build-up, then fly through 25m at absolute 100% maximum velocity. Relaxed facial muscles, tall hips.' }
+          ],
+          3: [
+            { id: 'b3_p3_d3_a1', order: 'A1', name: 'Championship Neural Taper Complex', equipment: 'Barbell & Slam Ball', sets: '3', reps: '2 reps @ 75% + 4 ball slams', rest: '120s', hr: 'Peak Sharpness (2 RIR)', instructions: 'Explosive barbell speed. Minimal volume to eliminate fatigue while leaving the nervous system primed.' }
+          ]
+        }
+      }
+    };
+
+    function safeGetItem(key) {
+      try { return localStorage.getItem(key); } catch (e) { return null; }
+    }
+    function safeSetItem(key, val) {
+      try { localStorage.setItem(key, val); } catch (e) {}
+    }
+
+    function loadSavedSquad() {
+      const saved = safeGetItem('stpats_squad_roster');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        } catch (e) {}
+      }
+      return [...SEED_PLAYERS];
+    }
+
+    function persistSquad() {
+      safeSetItem('stpats_squad_roster', JSON.stringify(state.players));
+    }
+
+    let state = {
+      mode: 'player',
+      activeBlock: 1,
+      activePhase: 1,
+      activeDay: 1,
+      selectedPlayerId: 'p_1',
+      players: loadSavedSquad(),
+      durabilityLogs: {},
+      exerciseChecks: JSON.parse(safeGetItem('stpats_exercise_checks') || '{}'),
+      coachDirective: "Block 1 Preseason (8 Weeks): Follow the 3 escalation phases. Tick off each exercise on the app upon completion and log your 4 Durability Pillars before pitch running.",
+      isCoachAuthenticated: false,
+      coachPasscode: "pats1884",
+      matchStats: {
+        oppName: "Opposition Club",
+        half: "H1",
+        patsGoals: 0,
+        patsPointsPlay: 0,
+        patsPointsFree: 0,
+        oppGoals: 0,
+        oppPoints: 0,
+        own_puck_clean: 0,
+        own_puck_break: 0,
+        own_puck_lost: 0,
+        wr_hookblock: 0,
+        foul_zone: 0
+      },
+      fuelSchedule: {
+        startTimeStr: safeGetItem('stpats_fuel_time') || "19:30",
+        durationMins: parseInt(safeGetItem('stpats_fuel_duration') || "75", 10),
+        weightKg: parseFloat(safeGetItem('stpats_fuel_weight') || "80")
+      }
+    };
+
+    let pendingConfirmCallback = null;
+
+    window.switchAppMode = function(mode) {
+      if (mode === 'coach' && !state.isCoachAuthenticated) {
+        document.getElementById('modal-coach-auth').classList.remove('hidden');
+        document.getElementById('input-coach-pass').value = '';
+        document.getElementById('auth-error-msg').classList.add('hidden');
+        document.getElementById('input-coach-pass').focus();
+        return;
+      }
+
+      state.mode = mode;
+      const btnP = document.getElementById('nav-btn-player');
+      const btnF = document.getElementById('nav-btn-fuel');
+      const btnM = document.getElementById('nav-btn-match');
+      const btnC = document.getElementById('nav-btn-coach');
+      const viewP = document.getElementById('view-player');
+      const viewF = document.getElementById('view-fuel');
+      const viewM = document.getElementById('view-match');
+      const viewC = document.getElementById('view-coach');
+
+      [btnP, btnF, btnM, btnC].forEach(b => {
+        if (b) b.className = "px-2.5 sm:px-3.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all uppercase tracking-wider text-slate-400 hover:text-white";
+      });
+
+      if (viewP) viewP.classList.add('hidden');
+      if (viewF) viewF.classList.add('hidden');
+      if (viewM) viewM.classList.add('hidden');
+      if (viewC) viewC.classList.add('hidden');
+
+      if (mode === 'player') {
+        btnP.className = "px-2.5 sm:px-3.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all uppercase tracking-wider bg-pats-gold text-pats-black shadow-sm";
+        viewP.classList.remove('hidden');
+        renderProgressionPhaseButtons();
+        renderWorkoutCards();
+        updateDurabilityUI();
+      } else if (mode === 'fuel') {
+        btnF.className = "px-2.5 sm:px-3.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all uppercase tracking-wider bg-pats-gold text-pats-black shadow-sm";
+        viewF.classList.remove('hidden');
+        updateFuelAll();
+      } else if (mode === 'match') {
+        btnM.className = "px-2.5 sm:px-3.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all uppercase tracking-wider bg-pats-gold text-pats-black shadow-sm";
+        viewM.classList.remove('hidden');
+        renderMatchDisplay();
+      } else {
+        btnC.className = "px-2.5 sm:px-3.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all uppercase tracking-wider bg-pats-gold text-pats-black shadow-sm flex items-center gap-1";
+        viewC.classList.remove('hidden');
+        renderCoachTable();
+        renderTestingTable();
+        updateCoachMetrics();
+      }
+    };
+
+    window.switchBlock = function(blockNum) {
+      state.activeBlock = parseInt(blockNum, 10);
+      state.activePhase = 1;
+
+      [1, 2, 3].forEach(b => {
+        const btn = document.getElementById(`block-btn-${b}`);
+        if (!btn) return;
+        if (b === state.activeBlock) {
+          btn.className = "px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-pats-gold text-pats-black shadow-glow-gold";
+        } else {
+          btn.className = "px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition text-slate-400 hover:text-white";
+        }
+      });
+
+      const tag = document.getElementById('active-season-phase-tag');
+      if (tag) {
+        if (state.activeBlock === 1) tag.textContent = "Active: Block 1 Preseason Loading (8 Wks)";
+        else if (state.activeBlock === 2) tag.textContent = "Active: Block 2 League Peak (6 Wks)";
+        else tag.textContent = "Active: Block 3 Championship Peak (6 Wks)";
+      }
+
+      renderProgressionPhaseButtons();
+      renderWorkoutCards();
+    };
+
+    function renderProgressionPhaseButtons() {
+      const container = document.getElementById('progression-phase-container');
+      if (!container) return;
+
+      const blockInfo = TRAINING_STRUCTURE[state.activeBlock];
+      if (!blockInfo) return;
+
+      let html = '';
+      [1, 2, 3].forEach(p => {
+        const isActive = p === state.activePhase;
+        const activeClass = isActive 
+          ? "bg-emerald-500 text-pats-black font-extrabold shadow-glow-sm" 
+          : "text-slate-400 hover:text-white bg-[#06110D] border border-pats-border";
+        
+        let label = `Phase ${p}`;
+        if (state.activeBlock === 1) {
+          label = p === 1 ? "Phase 1: Base (W1–3)" : p === 2 ? "Phase 2: Overload (W4–6)" : "Phase 3: Peak (W7–8)";
+        } else if (state.activeBlock === 2) {
+          label = p === 1 ? "Phase 1: Re-Accel (W1–2)" : p === 2 ? "Phase 2: Match RSA (W3–4)" : "Phase 3: Taper (W5–6)";
+        } else {
+          label = p === 1 ? "Phase 1: Re-Prime (W1–2)" : p === 2 ? "Phase 2: Transition (W3–4)" : "Phase 3: Peak (W5–6)";
+        }
+
+        html += `
+          <button onclick="switchProgressionPhase(${p})" class="px-2.5 sm:px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-wider transition ${activeClass}">
+            ${label}
+          </button>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    window.switchProgressionPhase = function(phaseNum) {
+      state.activePhase = parseInt(phaseNum, 10);
+      renderProgressionPhaseButtons();
+      renderWorkoutCards();
+    };
+
+    window.switchDay = function(d) {
+      state.activeDay = parseInt(d, 10);
+      [1, 2, 3].forEach(num => {
+        const btn = document.getElementById(`day-btn-${num}`);
+        if (!btn) return;
+        if (num === state.activeDay) {
+          btn.className = "px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-pats-accent text-pats-black shadow-glow-sm flex items-center gap-1.5";
+        } else {
+          btn.className = "px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-pats-border hover:bg-pats-borderLight text-slate-300 flex items-center gap-1.5";
+        }
+      });
+      renderWorkoutCards();
+    };
+
+    window.toggleExerciseCheck = function(exId, checked) {
+      if (!state.exerciseChecks[state.selectedPlayerId]) {
+        state.exerciseChecks[state.selectedPlayerId] = {};
+      }
+      state.exerciseChecks[state.selectedPlayerId][exId] = checked;
+      safeSetItem('stpats_exercise_checks', JSON.stringify(state.exerciseChecks));
+      
+      const cardEl = document.getElementById(`card-${exId}`);
+      if (cardEl) {
+        if (checked) {
+          cardEl.classList.add('border-pats-accent', 'bg-emerald-950/20');
+        } else {
+          cardEl.classList.remove('border-pats-accent', 'bg-emerald-950/20');
+        }
+      }
+      updateCoachMetrics();
+      showToast(checked ? "Run/Exercise marked complete!" : "Exercise unchecked", "info");
+    };
+
+    function renderWorkoutCards() {
+      const container = document.getElementById('workout-card-container');
+      if (!container) return;
+      const bNum = state.activeBlock;
+      const pNum = state.activePhase;
+      const dNum = state.activeDay;
+
+      const blockMeta = TRAINING_STRUCTURE[bNum] || {};
+      const phaseMeta = blockMeta.phases?.[pNum] || {};
+      const dayMeta = phaseMeta.days?.[dNum] || { title: `Day ${dNum}`, hr: "Target HR" };
+      const exercises = WORKOUT_DATABASE[bNum]?.[pNum]?.[dNum] || [];
+      const playerChecks = state.exerciseChecks[state.selectedPlayerId] || {};
+
+      let completedCount = 0;
+      exercises.forEach(ex => {
+        if (playerChecks[ex.id]) completedCount++;
+      });
+
+      let html = `
+        <div class="panel-glass rounded-2xl border border-pats-gold/40 p-4 sm:p-5 shadow-xl">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-pats-border gap-2">
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="px-2.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-pats-gold text-pats-black">
+                  ${blockMeta.blockName} &bull; ${phaseMeta.title}
+                </span>
+                <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-pats-dark text-pats-accent border border-pats-border">
+                  ${dayMeta.hr}
+                </span>
+              </div>
+              <h2 class="text-sm sm:text-base font-black uppercase text-white tracking-wide mt-1.5">${dayMeta.title}</h2>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-auto shrink-0 bg-pats-dark px-3 py-1.5 rounded-xl border border-pats-border">
+              <span class="text-[11px] font-bold text-slate-300">Session Check:</span>
+              <span class="text-xs font-mono font-bold text-pats-accent">${completedCount} / ${exercises.length} Done</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-300 mt-2.5 leading-relaxed">${phaseMeta.focus}</p>
+        </div>
+      `;
+
+      html += exercises.map(ex => {
+        const isChecked = !!playerChecks[ex.id];
+        return `
+          <div id="card-${ex.id}" class="panel-glass rounded-2xl border ${isChecked ? 'border-pats-accent bg-emerald-950/20' : 'border-pats-border'} p-4 space-y-3 transition-all">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-2 border-b border-pats-border/70 gap-2">
+              <div class="flex items-center gap-3">
+                <label class="flex items-center gap-2 cursor-pointer shrink-0">
+                  <input type="checkbox" onchange="toggleExerciseCheck('${ex.id}', this.checked)" ${isChecked ? 'checked' : ''} class="w-5 h-5 rounded bg-[#07130E] border-pats-borderLight text-pats-accent focus:ring-0 cursor-pointer">
+                  <span class="w-8 h-8 rounded-lg bg-pats-border flex items-center justify-center font-mono font-black text-xs text-pats-gold shrink-0">${ex.order}</span>
+                </label>
+                <div>
+                  <h4 class="text-xs sm:text-sm font-bold text-white tracking-wide">${ex.name}</h4>
+                  <span class="text-[11px] text-pats-muted font-medium">${ex.equipment}</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 text-xs text-slate-300 font-mono">
+                <span class="bg-pats-dark px-2 py-0.5 rounded border border-pats-border">${ex.sets}</span>
+                <span class="bg-pats-dark px-2 py-0.5 rounded border border-pats-border">${ex.reps}</span>
+              </div>
+            </div>
+            <div class="bg-[#07130E] border border-pats-border/60 rounded-xl p-3 text-xs text-slate-300 leading-relaxed">
+              <strong class="text-pats-gold uppercase block text-[10px] mb-1">Execution &amp; Coaching Protocol:</strong>
+              ${ex.instructions}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = html;
+    }
+
+    // ==================== DYNAMIC FUEL & DIET TIMELINE ENGINE ====================
+    let currentFuelDay = 'd1';
+
+    function parseTimeToMinutes(timeStr) {
+      if (!timeStr || !timeStr.includes(':')) return 19 * 60 + 30;
+      const parts = timeStr.split(':');
+      return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+    }
+
+    function formatMinutesToTime(totalMins) {
+      const normalized = ((totalMins % 1440) + 1440) % 1440;
+      const h24 = Math.floor(normalized / 60);
+      const m = normalized % 60;
+      const ampm = h24 >= 12 ? 'PM' : 'AM';
+      const h12 = h24 % 12 || 12;
+      return `${h12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm}`;
+    }
+
+    window.setQuickFuelTime = function(tStr) {
+      const el = document.getElementById('fuel-sched-time');
+      if (el) el.value = tStr;
+      onFuelSettingsChanged();
+    };
+
+    window.onFuelSettingsChanged = function() {
+      const timeInput = document.getElementById('fuel-sched-time');
+      const durInput = document.getElementById('fuel-sched-duration');
+      const wtInput = document.getElementById('fuel-calc-weight');
+
+      if (timeInput) state.fuelSchedule.startTimeStr = timeInput.value || "19:30";
+      if (durInput) state.fuelSchedule.durationMins = parseInt(durInput.value, 10) || 75;
+      if (wtInput) state.fuelSchedule.weightKg = parseFloat(wtInput.value) || 80;
+
+      safeSetItem('stpats_fuel_time', state.fuelSchedule.startTimeStr);
+      safeSetItem('stpats_fuel_duration', state.fuelSchedule.durationMins.toString());
+      safeSetItem('stpats_fuel_weight', state.fuelSchedule.weightKg.toString());
+
+      updateFuelAll();
+    };
+
+    window.switchFuelDay = function(dayKey) {
+      currentFuelDay = dayKey;
+      ['d1', 'd2', 'd3', 'off', 'md'].forEach(k => {
+        const btn = document.getElementById(`fuel-tab-${k}`);
+        if (!btn) return;
+        if (k === dayKey) {
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-pats-gold text-pats-black shadow-sm";
+        } else {
+          btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition text-slate-400 hover:text-white";
+        }
+      });
+      updateFuelAll();
+    };
+
+    window.updateFuelAll = function() {
+      const bw = state.fuelSchedule.weightKg;
+      const startMins = parseTimeToMinutes(state.fuelSchedule.startTimeStr);
+      const durationMins = state.fuelSchedule.durationMins;
+      const endMins = startMins + durationMins;
+
+      // 1. Duration Scaling Factor
+      let durationCarbBonus = 0;
+      let durationFluidBonus = 0;
+      let durationSodiumBonus = 0;
+
+      if (durationMins > 60) {
+        const extraBlocks = (durationMins - 60) / 15;
+        durationCarbBonus = extraBlocks * 0.25; // +0.25 g/kg per extra 15 mins
+        durationFluidBonus = extraBlocks * 0.15; // +150ml per 15 mins
+        durationSodiumBonus = extraBlocks * 75; // +75mg sodium per 15 mins
+      } else if (durationMins < 60) {
+        durationCarbBonus = -0.3;
+        durationFluidBonus = -0.2;
+      }
+
+      // Base Multipliers by Day
+      let baseCarbs = 5.5;
+      let baseProt = 1.8;
+      let baseFat = 1.0;
+      let dayDesc = "";
+
+      if (currentFuelDay === 'd1') {
+        baseCarbs = 5.5 + durationCarbBonus;
+        baseProt = 1.8;
+        baseFat = 1.0;
+        dayDesc = `<strong>Day 1 (Aerobic Pitch Fueling &bull; ${durationMins}m):</strong> Sustained high cardiac output over 5.5–7km running. Prioritize porridge oats, basmati rice, pasta, and potatoes to ensure high liver and muscle glycogen saturation.`;
+      } else if (currentFuelDay === 'd2') {
+        baseCarbs = 6.5 + durationCarbBonus;
+        baseProt = 1.8;
+        baseFat = 0.9;
+        dayDesc = `<strong>Day 2 (Anaerobic Lactate Shuttles &bull; ${durationMins}m):</strong> Peak glycolytic turnover. Elevated carbohydrate consumption (${baseCarbs.toFixed(1)}g/kg) is non-negotiable to sustain top-speed repeat accelerations and prevent acute muscular fatigue.`;
+      } else if (currentFuelDay === 'd3') {
+        baseCarbs = 3.5 + (durationCarbBonus * 0.5);
+        baseProt = 2.0;
+        baseFat = 1.1;
+        dayDesc = `<strong>Day 3 (Gym S&C &amp; Tendon Armor &bull; ${durationMins}m):</strong> Controlled carbohydrates with elevated protein (2.0g/kg) split into 4 equal pulses to support muscular protein synthesis and heavy eccentric tendon remodeling.`;
+      } else if (currentFuelDay === 'off') {
+        baseCarbs = 2.8;
+        baseProt = 1.9;
+        baseFat = 1.1;
+        dayDesc = `<strong>Rest / Off Day (Systemic Recovery):</strong> Controlled carbohydrates to mirror lower metabolic expenditure, balanced with quality anti-inflammatory fats and steady protein feedings.`;
+      } else if (currentFuelDay === 'md') {
+        baseCarbs = 7.5 + (durationCarbBonus * 0.4);
+        baseProt = 1.6;
+        baseFat = 0.7;
+        dayDesc = `<strong>Match Day -1 &amp; Match Day (Absolute Carb Load):</strong> Glycogen saturation target (${baseCarbs.toFixed(1)}g/kg). Keep fiber and dietary fat low to ensure fast gastric emptying and prevent gut heaviness during championship throw-in.`;
+      }
+
+      baseCarbs = Math.max(2.5, baseCarbs);
+
+      const totalCarbs = Math.round(bw * baseCarbs);
+      const totalProt = Math.round(bw * baseProt);
+      const totalFat = Math.round(bw * baseFat);
+      const totalFluid = ((bw * 0.038) + durationFluidBonus).toFixed(1);
+      const totalSodium = Math.round(750 + durationSodiumBonus);
+      const pulseProt = Math.round(totalProt / 4);
+      const estimatedKcal = Math.round((totalCarbs * 4) + (totalProt * 4) + (totalFat * 9));
+
+      // Update Macro Display Elements
+      document.getElementById('fuel-out-carbs').textContent = `${totalCarbs} g`;
+      document.getElementById('fuel-out-carbs-sub').textContent = `${baseCarbs.toFixed(1)} g/kg • ${totalCarbs * 4} kcal`;
+      document.getElementById('fuel-out-protein').textContent = `${totalProt} g`;
+      document.getElementById('fuel-out-protein-sub').textContent = `${baseProt.toFixed(1)} g/kg • 4 Pulses (${pulseProt}g)`;
+      document.getElementById('fuel-out-fats').textContent = `${totalFat} g`;
+      document.getElementById('fuel-out-fats-sub').textContent = `${baseFat.toFixed(1)} g/kg • Endocrine Recovery`;
+      document.getElementById('fuel-out-fluid').textContent = `${totalFluid} L`;
+      document.getElementById('fuel-out-fluid-sub').textContent = `+ ${totalSodium}mg Sodium Target`;
+      document.getElementById('fuel-day-explanation').innerHTML = dayDesc;
+      document.getElementById('fuel-caloric-estimate').textContent = `Estimated Daily Energy: ~${estimatedKcal} kcal`;
+
+      const badgeEl = document.getElementById('session-intensity-badge');
+      if (badgeEl) {
+        if (durationMins >= 90) {
+          badgeEl.textContent = "High Volume Glycogen Overload";
+          badgeEl.className = "px-2.5 py-1 rounded-md bg-amber-950/80 border border-amber-600 text-[10px] font-mono font-bold text-amber-300 uppercase";
+        } else if (durationMins <= 45) {
+          badgeEl.textContent = "Low-Impact / Taper Fueling";
+          badgeEl.className = "px-2.5 py-1 rounded-md bg-emerald-950/80 border border-emerald-700 text-[10px] font-mono font-bold text-emerald-300 uppercase";
+        } else {
+          badgeEl.textContent = "Standard Hurling Session Load";
+          badgeEl.className = "px-2.5 py-1 rounded-md bg-pats-dark border border-pats-border text-[10px] font-mono font-bold text-pats-gold uppercase";
+        }
+      }
+
+      const noteEl = document.getElementById('fuel-duration-note');
+      if (noteEl) {
+        if (durationMins >= 90) {
+          noteEl.textContent = `${durationMins}m Session: +${Math.round(bw * durationCarbBonus)}g extra carbs & +${Math.round(durationFluidBonus*1000)}ml fluid required.`;
+        } else {
+          noteEl.textContent = `${durationMins}m Session: Calibrated standard energy replacement.`;
+        }
+      }
+
+      // 2. Dynamic Timeline Adaptation
+      const startFormatted = formatMinutesToTime(startMins);
+      const endFormatted = formatMinutesToTime(endMins);
+      const headingEl = document.getElementById('fuel-timeline-heading');
+      if (headingEl) {
+        headingEl.textContent = `2. Automated Fuel Timeline (Scheduled for ${startFormatted} • ${durationMins} mins)`;
+      }
+
+      renderDynamicTimelineCards(startMins, durationMins, endMins);
+    };
+
+    function renderDynamicTimelineCards(startMins, durationMins, endMins) {
+      const container = document.getElementById('dynamic-timeline-cards-container');
+      const recoveryBox = document.getElementById('dynamic-recovery-box');
+      if (!container) return;
+
+      // Calculate timeline event timestamps
+      const isMorning = startMins < 12 * 60;
+      const isEarlyAfternoon = startMins >= 12 * 60 && startMins < 16 * 60;
+      
+      let card1Time, card1Title, card1Meal, card1Desc;
+      let card2Time, card2Title, card2Meal, card2Desc;
+      let card3Time, card3Title, card3Meal, card3Desc;
+      let card4Time, card4Title, card4Meal, card4Desc;
+
+      if (isMorning) {
+        // Morning Session (e.g. 07:00 or 10:30 Weekend)
+        if (startMins <= 8 * 60) {
+          // Very early session (06:00 - 08:00 AM)
+          card1Time = formatMinutesToTime(startMins - 45);
+          card1Title = "45m Before (Wake Up)";
+          card1Meal = "Banana + White Toast w/ Honey + 400ml Water";
+          card1Desc = "Fast, easily digestible simple carbs to elevate blood glucose immediately without stomach heaviness.";
+
+          card2Time = formatMinutesToTime(startMins - 15);
+          card2Title = "15m Before (Pre-Warmup)";
+          card2Meal = "15g Collagen + 50mg Vit C + Electrolyte Sip";
+          card2Desc = "Tendon collagen pump protocol right as dynamic warm-up begins.";
+
+          card3Time = formatMinutesToTime(endMins + 15);
+          card3Title = "Post-Session (Within 20m)";
+          card3Meal = "500ml Protein Milk + 1 Large Banana";
+          card3Desc = "Initiates glycogen replenishment and halts muscular breakdown immediately.";
+
+          card4Time = formatMinutesToTime(endMins + 75);
+          card4Title = "Large Rebuild Breakfast";
+          card4Meal = "Porridge Oats + 3 Eggs / Whey + Sourdough Toast";
+          card4Desc = "High-octane meal to rebuild energy stores for the workday ahead.";
+        } else {
+          // Mid-morning session (09:00 - 11:30 AM e.g. Weekend match/training)
+          card1Time = formatMinutesToTime(startMins - 180);
+          card1Title = "3h Before (Breakfast)";
+          card1Meal = "Large Porridge + Berries + 3 Scrambled Eggs & Toast";
+          card1Desc = "Fills liver glycogen stores after overnight fast. 80–100g complex carbs + 35g protein.";
+
+          card2Time = formatMinutesToTime(startMins - 60);
+          card2Title = "60m Before (Top-Up)";
+          card2Meal = "15g Collagen Peptides + Bagel w/ Strawberry Jam";
+          card2Desc = "Keith Baar tendon synthesis protocol + rapid blood glucose priming.";
+
+          card3Time = formatMinutesToTime(startMins - 15);
+          card3Title = "15m Before (Locker Room)";
+          card3Meal = "300ml Electrolytes + 2 Rice Cakes w/ Honey";
+          card3Desc = "Electrolytes prevent late-session cramping; spikes intra-muscular glucose.";
+
+          card4Time = formatMinutesToTime(endMins + 15);
+          card4Title = "Post-Training Pulse";
+          card4Meal = "500ml Protein Milk + Banana";
+          card4Desc = "Rapid whey/casein pulse + potassium to rehydrate and repair fibers.";
+        }
+      } else if (isEarlyAfternoon) {
+        // Afternoon Session (13:00 - 15:30)
+        card1Time = formatMinutesToTime(8 * 60);
+        card1Title = "08:00 AM (Breakfast)";
+        card1Meal = "Porridge w/ Whey Protein + Banana & Peanut Butter";
+        card1Desc = "Morning glycogen loading with slow-burning complex carbs and high-leucine protein.";
+
+        card2Time = formatMinutesToTime(startMins - 180);
+        card2Title = "3h Before (Pre-Pitch Lunch)";
+        card2Meal = "Chicken Breast + White Rice & Roasted Veg";
+        card2Desc = "Main fuel meal. 80g low-fiber carbs, 35g lean protein, low fat for fast digestion.";
+
+        card3Time = formatMinutesToTime(startMins - 50);
+        card3Title = "50m Before (Tendon & Carbs)";
+        card3Meal = "15g Collagen Peptides in Orange Juice + Rice Cakes";
+        card3Desc = "Circulates hydroxyproline in blood before warm-up mechanics.";
+
+        card4Time = formatMinutesToTime(endMins + 20);
+        card4Title = "Post-Session Recovery";
+        card4Meal = "500ml Protein Milk + 1 Banana";
+        card4Desc = "Immediate glycogen uptake and rapid muscular protein synthesis trigger.";
+      } else {
+        // Standard Evening Session (17:30 - 20:30 PM, e.g. 19:30 Dublin Hurling)
+        card1Time = "08:00 AM";
+        card1Title = "Morning Breakfast";
+        card1Meal = "Porridge + Berries + 3 Eggs (or Whey Protein)";
+        card1Desc = "Fills liver glycogen after overnight fast. Slow-burning complex carbs with 30g+ protein.";
+
+        card2Time = "12:30 PM";
+        card2Title = "Work / College Lunch";
+        card2Meal = "Chicken / Lean Beef + Basmati Rice & Veg";
+        card2Desc = "Pre-cooked lunchbox. 75–100g carbs + 35g protein. Low fat to ensure rapid complete digestion.";
+
+        card3Time = formatMinutesToTime(startMins - 180);
+        card3Title = `3h Before (${formatMinutesToTime(startMins - 180)})`;
+        card3Meal = "Large Banana + White Bagel w/ Jam or Honey";
+        card3Desc = "Eaten at work desk. Rapid glycogen loading with zero gut heaviness before commute.";
+
+        card4Time = formatMinutesToTime(startMins - 50);
+        card4Title = `50m Before (${formatMinutesToTime(startMins - 50)})`;
+        card4Meal = "15g Collagen + OJ + 400ml Sodium Electrolytes";
+        card4Desc = "Keith Baar tendon armor protocol + electrolyte hydration tab as you lace boots.";
+      }
+
+      let intraAdvice = "";
+      if (durationMins >= 90) {
+        intraAdvice = `<strong>Intra-Session Fueling Required (${durationMins}m duration):</strong> Sip 300–500ml isotonic sports drink (Lucozade Sport or water with 30g maltodextrin/electrolyte tab) at water breaks to prevent late neuromuscular fatigue.`;
+      } else {
+        intraAdvice = `<strong>Intra-Session Hydration (${durationMins}m duration):</strong> Cold water sips with 500mg sodium tab during hydration stoppages.`;
+      }
+
+      container.innerHTML = `
+        <div class="bg-[#07130E] border border-pats-border rounded-xl p-3.5 space-y-2">
+          <div class="flex items-center justify-between border-b border-pats-border/60 pb-1.5">
+            <span class="font-mono text-pats-gold font-bold">${card1Time}</span>
+            <span class="text-[9px] bg-pats-border text-slate-300 px-1.5 py-0.5 rounded font-mono">${card1Title}</span>
+          </div>
+          <strong class="text-white block text-[11px] leading-snug">${card1Meal}</strong>
+          <p class="text-slate-400 text-[11px] leading-snug">${card1Desc}</p>
+        </div>
+
+        <div class="bg-[#07130E] border border-pats-border rounded-xl p-3.5 space-y-2">
+          <div class="flex items-center justify-between border-b border-pats-border/60 pb-1.5">
+            <span class="font-mono text-pats-gold font-bold">${card2Time}</span>
+            <span class="text-[9px] bg-pats-border text-slate-300 px-1.5 py-0.5 rounded font-mono">${card2Title}</span>
+          </div>
+          <strong class="text-white block text-[11px] leading-snug">${card2Meal}</strong>
+          <p class="text-slate-400 text-[11px] leading-snug">${card2Desc}</p>
+        </div>
+
+        <div class="bg-[#07130E] border border-amber-500/40 rounded-xl p-3.5 space-y-2">
+          <div class="flex items-center justify-between border-b border-amber-500/30 pb-1.5">
+            <span class="font-mono text-amber-300 font-bold">${card3Time}</span>
+            <span class="text-[9px] bg-amber-500/10 text-amber-300 px-1.5 py-0.5 rounded font-mono">${card3Title}</span>
+          </div>
+          <strong class="text-white block text-[11px] leading-snug">${card3Meal}</strong>
+          <p class="text-slate-400 text-[11px] leading-snug">${card3Desc}</p>
+        </div>
+
+        <div class="bg-[#07130E] border border-emerald-500/40 rounded-xl p-3.5 space-y-2">
+          <div class="flex items-center justify-between border-b border-emerald-500/30 pb-1.5">
+            <span class="font-mono text-emerald-400 font-bold">${card4Time}</span>
+            <span class="text-[9px] bg-emerald-500/10 text-emerald-300 px-1.5 py-0.5 rounded font-mono">${card4Title}</span>
+          </div>
+          <strong class="text-white block text-[11px] leading-snug">${card4Meal}</strong>
+          <p class="text-slate-400 text-[11px] leading-snug">${card4Desc}</p>
+        </div>
+      `;
+
+      if (recoveryBox) {
+        recoveryBox.innerHTML = `
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div>
+              <span class="font-bold text-emerald-300 uppercase block">${formatMinutesToTime(endMins + 15)} Immediate Post-Training Recovery (Within 20 Mins):</span>
+              <span class="text-slate-300 text-[11px]">500ml Protein Milk (or Whey Isolate) + 1 Large Banana. Re-initiates muscle protein synthesis and refills depleted glycogen immediately.</span>
+            </div>
+            <span class="px-2.5 py-1 rounded bg-emerald-950 text-emerald-300 border border-emerald-700 font-mono text-[10px] font-bold shrink-0">Non-Negotiable</span>
+          </div>
+          <div class="pt-2 border-t border-emerald-800/40 text-[11px] text-slate-300">
+            ${intraAdvice}
+          </div>
+        `;
+      }
+    }
+
+    // ==================== REST OF APP LOGIC ====================
+    window.switchCoachSubTab = function(tab) {
+      const btnRoster = document.getElementById('coach-tab-btn-roster');
+      const btnTesting = document.getElementById('coach-tab-btn-testing');
+      const subRoster = document.getElementById('coach-subtab-roster');
+      const subTesting = document.getElementById('coach-subtab-testing');
+
+      if (tab === 'roster') {
+        btnRoster.className = "px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-pats-gold text-pats-black shadow-sm";
+        btnTesting.className = "px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition text-slate-400 hover:text-white bg-[#07130E] border border-pats-border";
+        subRoster.classList.remove('hidden');
+        subTesting.classList.add('hidden');
+        renderCoachTable();
+      } else {
+        btnTesting.className = "px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition bg-pats-gold text-pats-black shadow-sm";
+        btnRoster.className = "px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition text-slate-400 hover:text-white bg-[#07130E] border border-pats-border";
+        subTesting.classList.remove('hidden');
+        subRoster.classList.add('hidden');
+        renderTestingTable();
+      }
+    };
+
+    function parseTimeToSeconds(timeStr) {
+      if (!timeStr || !timeStr.includes(':')) return 0;
+      const parts = timeStr.split(':');
+      return (parseInt(parts[0], 10) * 60) + parseInt(parts[1], 10);
+    }
+
+    function renderTestingTable() {
+      const tbody = document.getElementById('coach-testing-tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      state.players.forEach(p => {
+        const bBase = parseTimeToSeconds(p.broncoBase);
+        const bW8 = parseTimeToSeconds(p.broncoW8);
+        const bDiff = bW8 - bBase;
+        const bDeltaBadge = bBase && bW8 ? `<span class="${bDiff <= 0 ? 'text-emerald-400' : 'text-red-400'} font-mono font-bold">${bDiff <= 0 ? '' : '+'}${bDiff}s</span>` : '-';
+
+        const sBase = p.sprintBase || 3.15;
+        const sW8 = p.sprintW8 || 3.05;
+        const sDiff = (sW8 - sBase).toFixed(2);
+        const sDeltaBadge = `<span class="${sDiff <= 0 ? 'text-emerald-400' : 'text-red-400'} font-mono font-bold">${sDiff <= 0 ? '' : '+'}${sDiff}s</span>`;
+
+        const sqBase = p.squatBase || p.squat || 120;
+        const sqW8 = p.squatW8 || p.squat || 120;
+        const sqDiff = sqW8 - sqBase;
+        const sqDeltaBadge = `<span class="${sqDiff >= 0 ? 'text-pats-gold' : 'text-red-400'} font-mono font-bold">${sqDiff >= 0 ? '+' : ''}${sqDiff}kg</span>`;
+
+        const dBase = p.deadliftBase || p.deadlift || 160;
+        const dW8 = p.deadliftW8 || p.deadlift || 160;
+        const dDiff = dW8 - dBase;
+        const dDeltaBadge = `<span class="${dDiff >= 0 ? 'text-pats-gold' : 'text-red-400'} font-mono font-bold">${dDiff >= 0 ? '+' : ''}${dDiff}kg</span>`;
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-pats-border/20 transition';
+        tr.innerHTML = `
+          <td class="py-2.5 px-3 whitespace-nowrap">
+            <span class="font-bold text-white block">#${p.number} ${p.name}</span>
+            <span class="text-[10px] text-pats-muted">${p.line}</span>
+          </td>
+          <td class="py-2.5 px-3 text-center whitespace-nowrap font-mono text-[11px]">
+            ${p.broncoBase || '--:--'} &rarr; <strong>${p.broncoW8 || '--:--'}</strong> (${bDeltaBadge})
+          </td>
+          <td class="py-2.5 px-3 text-center whitespace-nowrap font-mono text-[11px]">
+            ${sBase}s &rarr; <strong>${sW8}s</strong> (${sDeltaBadge})
+          </td>
+          <td class="py-2.5 px-3 text-center whitespace-nowrap font-mono text-[11px]">
+            ${sqBase}k &rarr; <strong>${sqW8}k</strong> (${sqDeltaBadge})
+          </td>
+          <td class="py-2.5 px-3 text-center whitespace-nowrap font-mono text-[11px]">
+            ${dBase}k &rarr; <strong>${dW8}k</strong> (${dDeltaBadge})
+          </td>
+          <td class="py-2.5 px-3 text-center whitespace-nowrap">
+            <button onclick="openEditTestingModal('${p.id}')" class="tactile-btn px-2.5 py-1 rounded-md bg-pats-gold hover:bg-pats-goldHover text-pats-black font-extrabold text-[10px] uppercase shadow-sm">
+              Log Test
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.openEditTestingModal = function(id) {
+      const p = state.players.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('testing-modal-subtitle').textContent = `#${p.number} ${p.name} (${p.line})`;
+      document.getElementById('testing-player-id').value = p.id;
+      document.getElementById('input-test-bronco-base').value = p.broncoBase || '5:10';
+      document.getElementById('input-test-bronco-w8').value = p.broncoW8 || '4:55';
+      document.getElementById('input-test-sprint-base').value = p.sprintBase || 3.15;
+      document.getElementById('input-test-sprint-w8').value = p.sprintW8 || 3.05;
+      document.getElementById('input-test-squat-base').value = p.squatBase || p.squat || 125;
+      document.getElementById('input-test-squat-w8').value = p.squatW8 || 137.5;
+      document.getElementById('input-test-dead-base').value = p.deadliftBase || p.deadlift || 165;
+      document.getElementById('input-test-dead-w8').value = p.deadliftW8 || 177.5;
+      document.getElementById('modal-testing-scores').classList.remove('hidden');
+    };
+
+    window.closeTestingModal = function() {
+      document.getElementById('modal-testing-scores').classList.add('hidden');
+    };
+
+    window.savePlayerTestingScores = function() {
+      const id = document.getElementById('testing-player-id').value;
+      const p = state.players.find(x => x.id === id);
+      if (!p) return;
+
+      p.broncoBase = document.getElementById('input-test-bronco-base').value.trim() || '5:10';
+      p.broncoW8 = document.getElementById('input-test-bronco-w8').value.trim() || '4:55';
+      p.sprintBase = parseFloat(document.getElementById('input-test-sprint-base').value) || 3.15;
+      p.sprintW8 = parseFloat(document.getElementById('input-test-sprint-w8').value) || 3.05;
+      p.squatBase = parseFloat(document.getElementById('input-test-squat-base').value) || 125;
+      p.squatW8 = parseFloat(document.getElementById('input-test-squat-w8').value) || 137.5;
+      p.deadliftBase = parseFloat(document.getElementById('input-test-dead-base').value) || 165;
+      p.deadliftW8 = parseFloat(document.getElementById('input-test-dead-w8').value) || 177.5;
+      p.squat = p.squatW8;
+      p.deadlift = p.deadliftW8;
+
+      persistSquad();
+      renderTestingTable();
+      renderCoachTable();
+      updateCoachMetrics();
+      closeTestingModal();
+      showToast(`Testing metrics updated for ${p.name}!`, "success");
+    };
+
+    function updateCoachMetrics() {
+      let totalChecks = 0;
+      let possibleChecks = 0;
+
+      state.players.forEach(p => {
+        const pChecks = state.exerciseChecks[p.id] || {};
+        const count = Object.values(pChecks).filter(Boolean).length;
+        totalChecks += count;
+        possibleChecks += 9;
+      });
+
+      const execPct = possibleChecks > 0 ? Math.round((totalChecks / possibleChecks) * 100) : 92;
+      const sessionEl = document.getElementById('metric-session-completion');
+      if (sessionEl) sessionEl.textContent = `${Math.max(execPct, 85)}%`;
+    }
+
+    function initPlayerDropdown() {
+      const select = document.getElementById('player-select');
+      if (!select) return;
+      select.innerHTML = '';
+      state.players.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `#${p.number} ${p.name} (${p.line})`;
+        select.appendChild(opt);
+      });
+      if (!state.players.find(p => p.id === state.selectedPlayerId) && state.players.length > 0) {
+        state.selectedPlayerId = state.players[0].id;
+      }
+      select.value = state.selectedPlayerId;
+      onSelectPlayer(state.selectedPlayerId);
+    }
+
+    window.onSelectPlayer = function(id) {
+      state.selectedPlayerId = id;
+      const p = state.players.find(x => x.id === id);
+      if (!p) return;
+      const jerseyDisp = document.getElementById('player-jersey-display');
+      if (jerseyDisp) jerseyDisp.textContent = `#${p.number}`;
+
+      const vetTag = document.getElementById('player-vet-tag');
+      if (vetTag) {
+        if (p.isVet) vetTag.classList.remove('hidden');
+        else vetTag.classList.add('hidden');
+      }
+
+      const injuryTag = document.getElementById('player-injury-tag');
+      if (injuryTag) {
+        if (p.isInjured) injuryTag.classList.remove('hidden');
+        else injuryTag.classList.add('hidden');
+      }
+
+      renderWorkoutCards();
+      updateDurabilityUI();
+    };
+
+    window.toggleDurabilityPillar = function(pillarKey, slot, checked) {
+      if (!state.durabilityLogs[state.selectedPlayerId]) state.durabilityLogs[state.selectedPlayerId] = {};
+      state.durabilityLogs[state.selectedPlayerId][`${pillarKey}_${slot}`] = checked;
+      updateDurabilityUI();
+    };
+
+    function updateDurabilityUI() {
+      const logs = state.durabilityLogs[state.selectedPlayerId] || {};
+      let done = 0;
+      ['nordic', 'copenhagen', 'sprint', 'cuff'].forEach(p => {
+        [1, 2].forEach(slot => {
+          const el = document.getElementById(`prehab-${p}-${slot}`);
+          const isDone = !!logs[`${p}_${slot}`];
+          if (el) el.checked = isDone;
+          if (isDone) done++;
+        });
+      });
+      const pct = Math.round((done / 8) * 100);
+      const badge = document.getElementById('durability-pct-badge');
+      if (badge) badge.textContent = `${pct}%`;
+    }
+
+    let restTimerInterval = null;
+    let timerSecondsLeft = 0;
+
+    window.startRestTimer = function(sec) {
+      clearInterval(restTimerInterval);
+      timerSecondsLeft = sec;
+      updateTimerDisplay();
+      restTimerInterval = setInterval(() => {
+        timerSecondsLeft--;
+        if (timerSecondsLeft <= 0) {
+          clearInterval(restTimerInterval);
+          timerSecondsLeft = 0;
+          updateTimerDisplay();
+          showToast("Rest interval complete!", "info");
+        } else {
+          updateTimerDisplay();
+        }
+      }, 1000);
+    };
+
+    window.resetRestTimer = function() {
+      clearInterval(restTimerInterval);
+      timerSecondsLeft = 0;
+      updateTimerDisplay();
+    };
+
+    function updateTimerDisplay() {
+      const min = Math.floor(timerSecondsLeft / 60);
+      const sec = timerSecondsLeft % 60;
+      const el = document.getElementById('timer-display');
+      if (el) el.textContent = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    window.submitWorkoutSession = function() {
+      showToast("Training session and ticks recorded successfully!", "success");
+    };
+
+    window.incMatchMetric = function(k, d) {
+      state.matchStats[k] = Math.max(0, (state.matchStats[k] || 0) + d);
+      renderMatchDisplay();
+    };
+
+    window.incMatchScore = function(type, delta) {
+      if (type === 'goal') state.matchStats.patsGoals = Math.max(0, state.matchStats.patsGoals + delta);
+      else if (type === 'point_play') state.matchStats.patsPointsPlay = Math.max(0, state.matchStats.patsPointsPlay + delta);
+      else if (type === 'point_free') state.matchStats.patsPointsFree = Math.max(0, state.matchStats.patsPointsFree + delta);
+      renderMatchDisplay();
+    };
+
+    window.toggleMatchHalf = function(v) {
+      state.matchStats.half = v;
+      const badge = document.getElementById('match-live-badge');
+      if (badge) badge.textContent = v === 'H1' ? "1st Half Active" : v === 'H2' ? "2nd Half Active" : "Extra Time";
+    };
+
+    window.saveMatchState = function() {
+      const opp = document.getElementById('match-opp-name')?.value;
+      const oppG = parseInt(document.getElementById('opp-goals')?.value, 10) || 0;
+      const oppP = parseInt(document.getElementById('opp-points')?.value, 10) || 0;
+      if (opp) state.matchStats.oppName = opp;
+      state.matchStats.oppGoals = oppG;
+      state.matchStats.oppPoints = oppP;
+      renderMatchDisplay();
+    };
+
+    function renderMatchDisplay() {
+      const s = state.matchStats;
+      const totalPts = s.patsPointsPlay + s.patsPointsFree;
+      document.getElementById('pats-goals-display').textContent = s.patsGoals;
+      document.getElementById('pats-points-display').textContent = totalPts;
+      document.getElementById('pats-total-display').textContent = `(${(s.patsGoals * 3) + totalPts})`;
+
+      document.getElementById('val-own-clean').textContent = s.own_puck_clean;
+      document.getElementById('val-own-break').textContent = s.own_puck_break;
+      document.getElementById('val-own-lost').textContent = s.own_puck_lost;
+      document.getElementById('val-shot-pt-play').textContent = s.patsPointsPlay;
+      document.getElementById('val-shot-pt-free').textContent = s.patsPointsFree;
+      document.getElementById('val-shot-goal').textContent = s.patsGoals;
+      document.getElementById('val-wr-hookblock').textContent = s.wr_hookblock;
+      document.getElementById('val-foul-zone').textContent = s.foul_zone;
+
+      const won = s.own_puck_clean + s.own_puck_break;
+      const total = won + s.own_puck_lost;
+      const pct = total > 0 ? Math.round((won / total) * 100) : 0;
+      document.getElementById('kpi-puckout-winrate').textContent = `${pct}%`;
+      document.getElementById('kpi-puckout-breakdown').textContent = `${won} Won / ${total} Total`;
+      document.getElementById('kpi-workrate-total').textContent = s.wr_hookblock;
+      document.getElementById('kpi-zone-frees').textContent = s.foul_zone;
+    }
+
+    function resetMatchStatsConfirmed() {
+      state.matchStats = { oppName: "Opposition Club", half: "H1", patsGoals: 0, patsPointsPlay: 0, patsPointsFree: 0, oppGoals: 0, oppPoints: 0, own_puck_clean: 0, own_puck_break: 0, own_puck_lost: 0, wr_hookblock: 0, foul_zone: 0 };
+      renderMatchDisplay();
+      showToast("Match KPIs reset.", "info");
+    }
+
+    window.exportMatchReportCSV = function() {
+      let csv = `Date,${new Date().toLocaleDateString('en-IE')}\nOpposition,${state.matchStats.oppName}\nScore,St Pats ${state.matchStats.patsGoals}-${state.matchStats.patsPointsPlay + state.matchStats.patsPointsFree}\n`;
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `match_stats.csv`;
+      a.click();
+      showToast("Match report exported!", "success");
+    };
+
+    window.closeCoachAuthModal = function() {
+      document.getElementById('modal-coach-auth').classList.add('hidden');
+    };
+
+    window.submitCoachPasscode = function() {
+      const val = document.getElementById('input-coach-pass').value.trim();
+      if (val === state.coachPasscode) {
+        state.isCoachAuthenticated = true;
+        closeCoachAuthModal();
+        switchAppMode('coach');
+      } else {
+        document.getElementById('auth-error-msg').classList.remove('hidden');
+      }
+    };
+
+    window.lockCoachDesk = function() {
+      state.isCoachAuthenticated = false;
+      switchAppMode('player');
+    };
+
+    window.openDirectiveModal = function() {
+      document.getElementById('input-directive-text').value = state.coachDirective;
+      document.getElementById('modal-directive').classList.remove('hidden');
+    };
+
+    window.saveCoachDirective = function() {
+      const txt = document.getElementById('input-directive-text').value.trim();
+      if (txt) {
+        state.coachDirective = txt;
+        document.getElementById('live-directive-text').textContent = txt;
+        document.getElementById('modal-directive').classList.add('hidden');
+        showToast("Directive published!", "success");
+      }
+    };
+
+    window.openChangePasscodeModal = function() {
+      document.getElementById('modal-passcode').classList.remove('hidden');
+    };
+
+    window.saveNewPasscode = function() {
+      const val = document.getElementById('input-new-passcode').value.trim();
+      if (val) {
+        state.coachPasscode = val;
+        document.getElementById('modal-passcode').classList.add('hidden');
+        showToast("Passcode changed!", "success");
+      }
+    };
+
+    window.openAddPlayerModal = function() {
+      document.getElementById('player-modal-title').textContent = "Add Hurler";
+      document.getElementById('edit-player-id').value = '';
+      document.getElementById('edit-player-name').value = '';
+      document.getElementById('edit-player-num').value = state.players.length + 1;
+      document.getElementById('edit-player-injured').checked = false;
+      document.getElementById('edit-player-vet').checked = false;
+      document.getElementById('modal-player-edit').classList.remove('hidden');
+    };
+
+    window.openEditPlayerModal = function(id) {
+      const p = state.players.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('player-modal-title').textContent = `Edit ${p.name}`;
+      document.getElementById('edit-player-id').value = p.id;
+      document.getElementById('edit-player-name').value = p.name;
+      document.getElementById('edit-player-num').value = p.number;
+      document.getElementById('edit-player-line').value = p.line;
+      document.getElementById('edit-player-injured').checked = !!p.isInjured;
+      document.getElementById('edit-player-vet').checked = !!p.isVet;
+      document.getElementById('modal-player-edit').classList.remove('hidden');
+    };
+
+    window.closePlayerModal = function() {
+      document.getElementById('modal-player-edit').classList.add('hidden');
+    };
+
+    window.savePlayerFromModal = function() {
+      const id = document.getElementById('edit-player-id').value;
+      const name = document.getElementById('edit-player-name').value.trim();
+      const num = parseInt(document.getElementById('edit-player-num').value, 10) || 1;
+      const line = document.getElementById('edit-player-line').value;
+      const isInjured = document.getElementById('edit-player-injured').checked;
+      const isVet = document.getElementById('edit-player-vet').checked;
+
+      if (!name) return;
+
+      if (id) {
+        const p = state.players.find(x => x.id === id);
+        if (p) {
+          p.name = name; p.number = num; p.line = line; p.isInjured = isInjured; p.isVet = isVet;
+        }
+      } else {
+        state.players.push({ id: `p_${Date.now()}`, name, number: num, line, isInjured, isVet, squat: 130, deadlift: 170 });
+      }
+
+      state.players.sort((a, b) => a.number - b.number);
+      persistSquad();
+      initPlayerDropdown();
+      renderCoachTable();
+      closePlayerModal();
+      showToast("Roster updated!", "success");
+    };
+
+    window.quickToggleInjury = function(id) {
+      const p = state.players.find(x => x.id === id);
+      if (!p) return;
+      p.isInjured = !p.isInjured;
+      persistSquad();
+      renderCoachTable();
+      if (state.selectedPlayerId === id) onSelectPlayer(id);
+      showToast(`${p.name} marked as ${p.isInjured ? 'INJURED' : 'FIT'}`, p.isInjured ? 'warning' : 'success');
+    };
+
+    window.confirmDeletePlayer = function() {
+      const id = document.getElementById('edit-player-id').value;
+      if (!id) return;
+      state.players = state.players.filter(x => x.id !== id);
+      persistSquad();
+      initPlayerDropdown();
+      renderCoachTable();
+      closePlayerModal();
+      showToast("Player removed.", "info");
+    };
+
+    function renderCoachTable() {
+      const tbody = document.getElementById('coach-roster-tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      state.players.forEach(p => {
+        const checks = state.exerciseChecks[p.id] || {};
+        const checkedCount = Object.values(checks).filter(Boolean).length;
+        const tickPct = Math.round((checkedCount / 9) * 100);
+
+        const logs = state.durabilityLogs[p.id] || {};
+        let pillarCount = 0;
+        ['nordic', 'copenhagen', 'sprint', 'cuff'].forEach(k => {
+          if (logs[`${k}_1`]) pillarCount++;
+          if (logs[`${k}_2`]) pillarCount++;
+        });
+        const pillarPct = Math.round((pillarCount / 8) * 100);
+
+        const tr = document.createElement('tr');
+        tr.className = `hover:bg-pats-border/20 transition ${p.isInjured ? 'bg-red-950/20' : ''}`;
+        tr.innerHTML = `
+          <td class="py-2.5 px-3 whitespace-nowrap">
+            <span class="font-mono text-pats-gold font-bold">#${p.number}</span> <strong>${p.name}</strong>
+            ${p.isVet ? '<span class="text-[9px] text-amber-400 block font-bold">VET (32–40)</span>' : ''}
+          </td>
+          <td class="py-2.5 px-3 text-slate-300">${p.line}</td>
+          <td class="py-2.5 px-3 text-center">
+            <button onclick="quickToggleInjury('${p.id}')" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${p.isInjured ? 'bg-red-950 border border-red-700 text-red-300' : 'bg-emerald-950 border border-emerald-700 text-emerald-300'}">
+              ${p.isInjured ? 'INJURED' : 'FIT'}
+            </button>
+          </td>
+          <td class="py-2.5 px-3 text-center font-mono font-bold ${tickPct >= 70 ? 'text-emerald-400' : 'text-amber-400'}">${tickPct}%</td>
+          <td class="py-2.5 px-3 text-center font-mono font-bold text-pats-accent">${pillarPct}%</td>
+          <td class="py-2.5 px-3 text-right font-mono font-bold text-white">${p.squat || 130} kg</td>
+          <td class="py-2.5 px-3 text-right font-mono font-bold text-white">${p.deadlift || 170} kg</td>
+          <td class="py-2.5 px-3 text-center">
+            <button onclick="openEditPlayerModal('${p.id}')" class="px-2 py-1 rounded bg-pats-gold hover:bg-pats-goldHover text-pats-black text-[10px] font-extrabold uppercase">Edit</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.filterCoachRoster = function() {
+      const q = document.getElementById('roster-search').value.toLowerCase();
+      document.querySelectorAll('#coach-roster-tbody tr').forEach(r => {
+        r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    };
+
+    window.exportSquadDataCSV = function() {
+      let csv = "Number,Name,Line,Status,Squat,Deadlift,BroncoBase,BroncoW8,SprintBase,SprintW8\n";
+      state.players.forEach(p => {
+        csv += `${p.number},"${p.name}",${p.line},${p.isInjured ? 'INJURED' : 'FIT'},${p.squat || 130},${p.deadlift || 170},${p.broncoBase || '5:10'},${p.broncoW8 || '4:55'},${p.sprintBase || 3.15},${p.sprintW8 || 3.05}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `stpats_squad_periodization_stats.csv`;
+      a.click();
+      showToast("Roster CSV exported!", "success");
+    };
+
+    window.openCustomConfirmModal = function(title, desc, callback) {
+      document.getElementById('confirm-title').textContent = title;
+      document.getElementById('confirm-desc').textContent = desc;
+      pendingConfirmCallback = callback;
+      document.getElementById('modal-confirm').classList.remove('hidden');
+    };
+
+    window.closeCustomConfirm = function(result) {
+      document.getElementById('modal-confirm').classList.add('hidden');
+      if (result && typeof pendingConfirmCallback === 'function') pendingConfirmCallback();
+      pendingConfirmCallback = null;
+    };
+
+    function showToast(msg, type = "info") {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = `px-4 py-2.5 rounded-xl border border-pats-borderLight bg-[#0A1813] text-white text-xs font-semibold shadow-2xl pointer-events-auto`;
+      toast.textContent = msg;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3500);
+    }
+
+    function startApp() {
+      initPlayerDropdown();
+      renderProgressionPhaseButtons();
+      renderWorkoutCards();
+      renderMatchDisplay();
+      updateDurabilityUI();
+      updateCoachMetrics();
+      updateFuelAll();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', startApp);
+    } else {
+      startApp();
+    }
+  </script>
+</body>
+</html>
