@@ -154,7 +154,7 @@ Active View: 2. Block 1 Preseason
 ST PAT'S ANNUAL CHAMPIONSHIP ROADMAP
 </h2>
 <p class="text-xs text-slate-400 mt-0.5 mb-4">
-Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload ; Block 2 (6-Wk League + <strong class="text-emerald-300">Mid-Jan Hurling Integration</strong>) &rarr; Deload &rarr; Block 3 (Championship Peak)
+Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload &rarr; Block 2 (6-Wk League + <strong class="text-emerald-300">Mid-Jan Hurling Integration</strong>) &rarr; Deload &rarr; Block 3 (Championship Peak)
 </p>
 
 <!-- 8-Stage Grid (Interactive Tap to load full conditioning programme) -->
@@ -444,7 +444,7 @@ GAA Glycogen &amp; Tendon Protocol
 class="w-full mt-1 bg-pats-bg border border-pats-cardBorder rounded-lg px-2 py-1.5 text-xs text-white font-semibold outline-none focus:border-pats-gold cursor-pointer">
 <option value="training">Hard Hurling / Pitch Session</option>
 <option value="match">Championship / League Match</option>
-<option value="gym">Gym ; Prehab Only</option>
+<option value="gym">Gym &amp; Prehab Only</option>
 <option value="rest">Deload / Rest Day</option>
 </select>
 </div>
@@ -917,7 +917,7 @@ Squad Roster &amp; Exercise Logs
 </button>
 <button onclick="setCoachSubTab('testing')" id="subtab-testing"
 class="py-2.5 px-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all text-slate-300 hover:text-white tactile-btn">
-Testing: Baseline ; W8 Retest
+Testing: Baseline &rarr; W8 Retest
 </button>
 </div>
 
@@ -1022,7 +1022,7 @@ class="w-full bg-pats-card border border-pats-cardBorder rounded-xl pl-9 pr-3 py
 </select>
 </div>
 <div>
-<label class="block text-[10px] uppercase font-bold text-slate-400">Veteran Shield (32-46)</label>
+<label class="block text-[10px] uppercase font-bold text-slate-400">Veteran Shield (32-40)</label>
 <select id="modal-vet" class="w-full mt-1 bg-pats-card border border-pats-cardBorder rounded-lg px-3 py-1.5 text-white outline-none focus:border-pats-gold">
 <option value="false">Standard Protocol</option>
 <option value="true">Veteran Shield Active</option>
@@ -1091,7 +1091,7 @@ class="w-full bg-pats-card border border-pats-cardBorder rounded-xl pl-9 pr-3 py
 <!-- ================= APPLICATION JAVASCRIPT STATE ENGINE ================= -->
 <script>
 /* =========================================================================
-1. COMPLETE ST PAT'S JUNIOR HURLER ROSTER (Pods 1–6 from Training Sheet)
+1. COMPLETE ST PAT'S JUNIOR A HURLER ROSTER (Pods 1–6 from Training Sheet)
 ========================================================================= */
 const initialPlayers = [
 // POD 1
@@ -1207,14 +1207,14 @@ const ROADMAP_CONDITIONING = {
 title: "1. Baseline Testing Battery (Late October)",
 subtitle: "Maximal Aerobic Speed (MAS), 20m Acceleration & 3RM Strength Audit",
 duration: "1 Week Protocol",
-objective: "Establish baseline aerobic speeds ($MAS$), linear acceleration splits, and posterior chain strength benchmarks to customize 8-week progressive overload targets.",
+objective: "Establish baseline aerobic speeds (MAS), linear acceleration splits, and posterior chain strength benchmarks to customize 8-week progressive overload targets.",
 prescription: `
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
 <div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-2">
 <span class="text-pats-gold font-bold uppercase text-[11px] block">Test 1: 1.2km Bronco Shuttle Protocol</span>
 <p class="text-slate-300 leading-relaxed">• <strong>Setup:</strong> Cones placed at 20m, 40m, and 60m from baseline.</p>
-<p class="text-slate-300 leading-relaxed">• <strong>Execution:</strong> Sprint 20m & back $\\rightarrow$ 40m & back $\\rightarrow$ 60m & back (240m per lap). Complete 5 continuous laps without stopping (1,200m total).</p>
-<p class="text-slate-300 leading-relaxed">• <strong>MAS Formula:</strong> $MAS = 1200 / (Time - 20s)$. Elite Middle 8: $<4:45$. Match Ready: $4:46-5:10$.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Execution:</strong> Sprint 20m & back → 40m & back → 60m & back (240m per lap). Complete 5 continuous laps without stopping (1,200m total).</p>
+<p class="text-slate-300 leading-relaxed">• <strong>MAS Formula:</strong> MAS = 1200 / (Total Time in Seconds - 20s). Elite Middle 8: under 4:45. Match Ready: 4:46 - 5:10.</p>
 </div>
 <div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-2">
 <span class="text-emerald-400 font-bold uppercase text-[11px] block">Test 2: 20m Linear Acceleration & Max Velocity</span>
@@ -1271,7 +1271,7 @@ prescription: `
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
 <div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-2">
 <span class="text-pats-gold font-bold uppercase text-[11px] block">Standardized Retest Protocol</span>
-<p class="text-slate-300 leading-relaxed">• <strong>Tuesday Pitch:</strong> Standardized 15-min warm-up $\\rightarrow$ 20m Sprint Electronic Retest $\\rightarrow$ 1.2km Bronco Shuttle Retest.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Tuesday Pitch:</strong> Standardized 15-min warm-up → 20m Sprint Electronic Retest → 1.2km Bronco Shuttle Retest.</p>
 <p class="text-slate-300 leading-relaxed">• <strong>Thursday Gym:</strong> Squat & Deadlift 3RM progress delta testing.</p>
 <p class="text-slate-300 leading-relaxed">• <strong>Target Benchmark:</strong> Squad average -12s to -18s improvement on Bronco times, +10kg to +15kg on compound 1RM lifts.</p>
 </div>
@@ -1304,7 +1304,7 @@ prescription: `
 title: "5. Block 2: Dublin League & Mid-January Hurling Integration (Jan – Feb)",
 subtitle: "6 Weeks • 3 Progression Phases • Hurling Skill Integration & Running Recalibration",
 duration: "6 Weeks (Weeks 1–6)",
-objective: "Integrate the hurley & sliotar directly into conditioning. Isolated dry running is reduced by ~35% and replaced with Ball-in-Play (BIP) striking transitions and conditioned match play to avoid workload spikes.",
+objective: "Integrate the hurley & sliotar directly into conditioning. Isolated dry running is reduced by approximately 35% and replaced with Ball-in-Play (BIP) striking transitions and conditioned match play to avoid workload spikes.",
 prescription: `
 <div class="space-y-3 text-xs">
 <div class="p-3 bg-emerald-950/40 rounded-xl border border-emerald-500/50 space-y-1">
@@ -1315,15 +1315,15 @@ As technical hurling and match scrimmages begin, linear 'dry' running is modifie
 </div>
 <div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
 <span class="font-bold text-white text-xs uppercase block">Phase 1 (W1–2): Hurling Introduction & Match Pace Exposure</span>
-<p class="text-slate-300">• <strong>Day 1 (Aerobic + Hurling):</strong> Box-to-Box Striking Transition Grids (65m clearance strike $\\rightarrow$ 80m support sprint $\\rightarrow$ gather break $\\rightarrow$ strike). 2 sets of 5 reps with 20s recovery walk. Replaces dry laps.</p>
+<p class="text-slate-300">• <strong>Day 1 (Aerobic + Hurling):</strong> Box-to-Box Striking Transition Grids (65m clearance strike → 80m support sprint → gather break → strike). 2 sets of 5 reps with 20s recovery walk. Replaces dry laps.</p>
 <p class="text-slate-300">• <strong>Day 2 (Anaerobic + Combat):</strong> Contested Ground Sliotar Pick-up into 45m Sprints under pressure. 5 reps with point finish over the bar.</p>
 <p class="text-slate-300">• <strong>Workload Target:</strong> 3,800m conditioning + 2,400m hurling drills = 6,200m total GPS load.</p>
 </div>
 <div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
 <span class="font-bold text-white text-xs uppercase block">Phase 2 (W3–4): Repeat Sprint Ability (RSA) in Hurling Rallies</span>
 <p class="text-slate-300">• <strong>Day 1 (Pitch):</strong> 15s : 15s Eurofit Shuttles with sliotar jab-lift at 36m halfway cone. 2 blocks of 7 reps.</p>
-<p class="text-slate-300">• <strong>Day 2 (Pitch):</strong> Conditioned Small-Sided Games ($4 \\times 4\\text{ mins}$ @ 5v5 on $65\\text{m} \\times 45\\text{m}$ pitch). High tackle rate & fast recovery.</p>
-<p class="text-slate-300">• <strong>Conditioning Top-Up:</strong> SkiErg Glycolytic Buffering (2 sets of $4 \\times 15\\text{s}$ sub-1:42 split, zero leg impact).</p>
+<p class="text-slate-300">• <strong>Day 2 (Pitch):</strong> Conditioned Small-Sided Games (4 × 4 mins at 5v5 on 65m × 45m pitch). High tackle rate & fast recovery.</p>
+<p class="text-slate-300">• <strong>Conditioning Top-Up:</strong> SkiErg Glycolytic Buffering (2 sets of 4 × 15s sub-1:42 split, zero leg impact).</p>
 </div>
 <div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
 <span class="font-bold text-white text-xs uppercase block">Phase 3 (W5–6): Pre-League Tactical Sharpness & Neural Priming</span>
@@ -1363,7 +1363,7 @@ prescription: `
 <div class="space-y-3 text-xs">
 <div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
 <span class="font-bold text-white text-xs uppercase block">Phase 1 (W1–2): High-Speed Running (HSR) Density</span>
-<p class="text-slate-300">• <strong>Pitch Day 1:</strong> Ball-in-Play (BIP) Transitions: 30s continuous reactive sprint & strike : 60s rest (2 sets of 5 reps). Target: $>22\\text{ km/h}$ exposure.</p>
+<p class="text-slate-300">• <strong>Pitch Day 1:</strong> Ball-in-Play (BIP) Transitions: 30s continuous reactive sprint & strike : 60s rest (2 sets of 5 reps). Target: over 22 km/h exposure.</p>
 <p class="text-slate-300">• <strong>Pitch Day 2:</strong> 5-10-5 Pro Agility Shuttle runs with sliotar jab-lift at center cone (4 reps @ 100% intent).</p>
 </div>
 <div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
@@ -1394,9 +1394,9 @@ prescription: `
 </div>
 <div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-2">
 <span class="text-emerald-400 font-bold uppercase text-[11px] block">Championship Match Readiness Standards</span>
-<p class="text-slate-300 leading-relaxed">• <strong>Puck-Out Retention Target:</strong> $>60\%$ won.</p>
-<p class="text-slate-300 leading-relaxed">• <strong>Shot Conversion:</strong> $>55\%$ accuracy (zero dropped short into keeper's hands).</p>
-<p class="text-slate-300 leading-relaxed">• <strong>Discipline:</strong> $<4$ frees conceded inside the 50m scoring zone.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Puck-Out Retention Target:</strong> over 60% won.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Shot Conversion:</strong> over 55% accuracy (zero dropped short into keeper's hands).</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Discipline:</strong> fewer than 4 frees conceded inside the 50m scoring zone.</p>
 </div>
 </div>
 `
@@ -1719,7 +1719,7 @@ Drill 2: 15s : 15s Eurofit Shuttles (72m)
 </div>
 <div class="text-xs text-slate-300 space-y-1.5">
 <p>• <strong>Setup:</strong> Cones set at 72m distance (100% MAS standard for St Pat's backs &amp; forwards).</p>
-<p>• <strong>Work:Rest:</strong> 15s hard run to cone $\\rightarrow$ 15s walk back recovery. Rest 2.5 mins between sets.</p>
+<p>• <strong>Work:Rest:</strong> 15s hard run to cone → 15s walk back recovery. Rest 2.5 mins between sets.</p>
 <p>• <strong>Veteran Shield (Age 32-40):</strong> ${isVet ? '<span class="text-pats-gold font-bold">ACTIVE: Drop shuttle to 64m. Cap at 2 sets to avoid tendon shear.</span>' : 'Standard 72m distance.'}</p>
 </div>
 <div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
@@ -1792,7 +1792,7 @@ Drill 1: Box-to-Box Striking Transition Shuttles (With Hurley &amp; Sliotar)
 </svg>
 
 <div class="text-xs text-slate-300 space-y-1">
-<p>• <strong>Protocol:</strong> Player 1 strikes sliotar 65m downfield $\rightarrow$ immediately follows ball on a 80m sprint $\rightarrow$ gathers break under pressure $\rightarrow$ turns and delivers 60m clearance back to partner.</p>
+<p>• <strong>Protocol:</strong> Player 1 strikes sliotar 65m downfield → immediately follows ball on a 80m sprint → gathers break under pressure → turns and delivers 60m clearance back to partner.</p>
 <p>• <strong>Work:Rest:</strong> 16s high-speed transition run : 24s active walking recovery. Replaces dry perimeter running.</p>
 <p>• <strong>Veteran Shield (Age 32-40):</strong> ${isVet ? '<span class="text-pats-gold font-bold">ACTIVE: 1 set of 4 reps; then rotate to puck-out support feeder to preserve Achilles.</span>' : 'Standard 2 sets prescribed.'}</p>
 </div>
@@ -1816,13 +1816,13 @@ ${Array.from({ length: strikeReps }, (_, i) => `
 <div class="flex items-center justify-between text-[11px] font-bold text-slate-300">
 <span class="flex items-center gap-1.5">
 <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-Drill 2: Conditioned Small-Sided Game Conditioning ($4 \\times 4\\text{ mins}$)
+Drill 2: Conditioned Small-Sided Game Conditioning (4 × 4 mins)
 </span>
 <span class="text-emerald-400 font-mono">${ssgGames} Games @ 4v4 Intensity</span>
 </div>
 <div class="text-xs text-slate-300 space-y-1.5">
-<p>• <strong>Pitch Setup:</strong> 65m $\times$ 45m grid with two sets of full goalposts. 4v4 or 5v5 continuous contact.</p>
-<p>• <strong>Rules:</strong> Maximum 2 touches on hurley. If a turnover occurs, all 4 defenders must transition over halfway within 4 seconds. Keeps heart rate $>88\\%\\text{ HR}_{\\max}$ with real match-play collisions.</p>
+<p>• <strong>Pitch Setup:</strong> 65m × 45m grid with two sets of full goalposts. 4v4 or 5v5 continuous contact.</p>
+<p>• <strong>Rules:</strong> Maximum 2 touches on hurley. If a turnover occurs, all 4 defenders must transition over halfway within 4 seconds. Keeps heart rate above 88% Max Heart Rate with real match-play collisions.</p>
 <p>• <strong>Rest:</strong> 2 mins active walking &amp; hydration flush between games.</p>
 </div>
 <div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
@@ -1905,7 +1905,7 @@ Drill 1: 13m → 20m → 45m Gaelic Suicide Ladder
 <path d="M 30 30 L 340 30 L 30 30" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
 </svg>
 <div class="text-xs text-slate-300 space-y-1">
-<p>• <strong>Execution:</strong> Sprint goal line to 13m $\\rightarrow$ touch ground $\\rightarrow$ turn &amp; sprint to goal $\\rightarrow$ turn &amp; sprint to 20m $\\rightarrow$ turn to goal $\\rightarrow$ turn &amp; sprint through 45m line.</p>
+<p>• <strong>Execution:</strong> Sprint goal line to 13m → touch ground → turn &amp; sprint to goal → turn &amp; sprint to 20m → turn to goal → turn &amp; sprint through 45m line.</p>
 <p>• <strong>Target Time:</strong> Under 29.5s. Rest 90s complete walking rest between reps.</p>
 </div>
 <div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
@@ -1931,7 +1931,7 @@ Drill 2: Ruck-Breakdown Transition Sprints (65m)
 <span class="text-amber-400 font-mono">${rsaReps} Reps @ 100% Intensity</span>
 </div>
 <div class="text-xs text-slate-300 space-y-1">
-<p>• <strong>Protocol:</strong> Drop chest to grass (simulate contesting ground ball) $\\rightarrow$ explosive popup on whistle $\\rightarrow$ 65m sprint to opposite 45m line.</p>
+<p>• <strong>Protocol:</strong> Drop chest to grass (simulate contesting ground ball) → explosive popup on whistle → 65m sprint to opposite 45m line.</p>
 <p>• <strong>Rest:</strong> 45s walk back.</p>
 <p>• <strong>Veteran Shield (Age 32-40):</strong> ${isVet ? '<span class="text-pats-gold font-bold">ACTIVE: Start from tall athletic crouch (no chest drop) to shield spine.</span>' : 'Chest to grass required.'}</p>
 </div>
@@ -2005,7 +2005,7 @@ Drill 1: Contested Ground Sliotar Pick-up into 45m Breakaway Strike
 </svg>
 
 <div class="text-xs text-slate-300 space-y-1">
-<p>• <strong>Execution:</strong> Two hurlers sprint 15m to a contested ground sliotar $\rightarrow$ physical shoulder contact $\rightarrow$ winner executes clean jab-lift $\rightarrow$ immediate 45m breakaway sprint to slot a point on the run.</p>
+<p>• <strong>Execution:</strong> Two hurlers sprint 15m to a contested ground sliotar → physical shoulder contact → winner executes clean jab-lift → immediate 45m breakaway sprint to slot a point on the run.</p>
 <p>• <strong>Work:Rest:</strong> 12s maximal explosive effort with 60s passive walk recovery between reps.</p>
 <p>• <strong>Hurling Benefit:</strong> Trains nervous system to deliver clean wrist snap and striking accuracy under intense cardiac fatigue.</p>
 </div>
