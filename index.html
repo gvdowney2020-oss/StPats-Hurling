@@ -63,6 +63,19 @@ user-select: none;
 .tactile-btn:active {
 transform: scale(0.96);
 }
+.roadmap-card {
+transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+cursor: pointer;
+}
+.roadmap-card:hover {
+border-color: #f59e0b;
+transform: translateY(-2px);
+}
+.roadmap-card.active-stage {
+border: 2px solid #10b981 !important;
+background: rgba(16, 185, 129, 0.12) !important;
+box-shadow: 0 0 16px -2px rgba(16, 185, 129, 0.4);
+}
 </style>
 </head>
 <body class="min-h-screen flex flex-col bg-pats-bg text-slate-100 antialiased selection:bg-pats-gold selection:text-black">
@@ -123,15 +136,18 @@ class="nav-tab py-2 px-1 text-center font-semibold text-xs uppercase tracking-wi
 <!-- ========================================================================= -->
 <div id="tab-content-player-floor" class="space-y-5">
 
-<!-- ANNUAL MACROCYCLE ROADMAP -->
+<!-- ANNUAL MACROCYCLE ROADMAP & INTERACTIVE CONDITIONING HUB -->
 <section class="panel-glass rounded-2xl p-4 sm:p-5 border border-pats-cardBorder">
-<div class="flex items-center justify-between mb-2">
+<div class="flex items-center justify-between mb-2 flex-wrap gap-2">
+<div class="flex items-center gap-2">
 <span class="px-2.5 py-0.5 rounded-md bg-pats-gold text-black font-extrabold text-[10px] tracking-wider uppercase">
 Annual Macrocycle
 </span>
-<span class="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
+<span class="text-[10px] text-slate-400 font-mono">Tap any stage to view complete conditioning plan</span>
+</div>
+<span id="roadmap-active-badge" class="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-Active: Block 1 Preseason Loading
+Active View: 2. Block 1 Preseason
 </span>
 </div>
 <h2 class="text-base sm:text-lg font-extrabold text-white tracking-tight">
@@ -141,18 +157,18 @@ ST PAT'S ANNUAL CHAMPIONSHIP ROADMAP
 Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload &rarr; Block 2 (6-Wk League Peak) &rarr; Deload &rarr; Block 3 (Championship Peak)
 </p>
 
-<!-- 8-Stage Grid (Exact match to roadmap) -->
+<!-- 8-Stage Grid (Interactive Tap to load full conditioning programme) -->
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
 <!-- 1. Baseline Tests -->
-<div class="p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
+<div onclick="selectRoadmapStage(1)" id="roadmap-card-1" class="roadmap-card p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
 <span class="text-[10px] uppercase font-bold text-pats-gold">LATE OCT</span>
 <div class="mt-1">
 <h4 class="text-xs font-bold text-white">1. Baseline Tests</h4>
 <p class="text-[11px] text-slate-400">Bronco, 20m, Squat &amp; Deadlift</p>
 </div>
 </div>
-<!-- 2. Block 1 Preseason (Active) -->
-<div class="p-3 rounded-xl bg-emerald-950/70 border-2 border-emerald-400 flex flex-col justify-between shadow-lg">
+<!-- 2. Block 1 Preseason (Active Default) -->
+<div onclick="selectRoadmapStage(2)" id="roadmap-card-2" class="roadmap-card active-stage p-3 rounded-xl bg-emerald-950/70 border border-emerald-400 flex flex-col justify-between shadow-lg">
 <span class="text-[10px] uppercase font-bold text-emerald-300">NOV – DEC</span>
 <div class="mt-1">
 <h4 class="text-xs font-bold text-emerald-200">2. Block 1: Preseason</h4>
@@ -160,7 +176,7 @@ Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload &rarr; Block 2 (6-W
 </div>
 </div>
 <!-- 3. Retest Week -->
-<div class="p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
+<div onclick="selectRoadmapStage(3)" id="roadmap-card-3" class="roadmap-card p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
 <span class="text-[10px] uppercase font-bold text-pats-gold">POST-W8</span>
 <div class="mt-1">
 <h4 class="text-xs font-bold text-white">3. Retest Week</h4>
@@ -168,7 +184,7 @@ Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload &rarr; Block 2 (6-W
 </div>
 </div>
 <!-- 4. Deload Week -->
-<div class="p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
+<div onclick="selectRoadmapStage(4)" id="roadmap-card-4" class="roadmap-card p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
 <span class="text-[10px] uppercase font-bold text-pats-gold">EARLY JAN</span>
 <div class="mt-1">
 <h4 class="text-xs font-bold text-white">4. Deload Week</h4>
@@ -176,7 +192,7 @@ Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload &rarr; Block 2 (6-W
 </div>
 </div>
 <!-- 5. Block 2: League -->
-<div class="p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
+<div onclick="selectRoadmapStage(5)" id="roadmap-card-5" class="roadmap-card p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
 <span class="text-[10px] uppercase font-bold text-pats-gold">JAN – FEB</span>
 <div class="mt-1">
 <h4 class="text-xs font-bold text-white">5. Block 2: League</h4>
@@ -184,7 +200,7 @@ Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload &rarr; Block 2 (6-W
 </div>
 </div>
 <!-- 6. Deload & Peak -->
-<div class="p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
+<div onclick="selectRoadmapStage(6)" id="roadmap-card-6" class="roadmap-card p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
 <span class="text-[10px] uppercase font-bold text-pats-gold">MID-FEB</span>
 <div class="mt-1">
 <h4 class="text-xs font-bold text-white">6. Deload &amp; Peak</h4>
@@ -192,7 +208,7 @@ Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload &rarr; Block 2 (6-W
 </div>
 </div>
 <!-- 7. Block 3: Champ -->
-<div class="p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
+<div onclick="selectRoadmapStage(7)" id="roadmap-card-7" class="roadmap-card p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
 <span class="text-[10px] uppercase font-bold text-emerald-400">APR – MAY</span>
 <div class="mt-1">
 <h4 class="text-xs font-bold text-white">7. Block 3: Champ</h4>
@@ -200,13 +216,18 @@ Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload &rarr; Block 2 (6-W
 </div>
 </div>
 <!-- 8. Champ Peak -->
-<div class="p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
+<div onclick="selectRoadmapStage(8)" id="roadmap-card-8" class="roadmap-card p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
 <span class="text-[10px] uppercase font-bold text-pats-gold">SUMMER 2027</span>
 <div class="mt-1">
 <h4 class="text-xs font-bold text-white">8. Champ Peak</h4>
 <p class="text-[11px] text-slate-400">Championship Taper &amp; Peak</p>
 </div>
 </div>
+</div>
+
+<!-- DYNAMIC ROADMAP SECTION CONDITIONING PROGRAMME DISPLAY -->
+<div id="roadmap-programme-display" class="mt-4 pt-4 border-t border-pats-cardBorder space-y-3">
+<!-- Injected via JS based on selected roadmap card -->
 </div>
 </section>
 
@@ -334,7 +355,7 @@ Block 1 Preseason (8 Weeks): Follow the weekly progressive overload targets. Com
 <section class="space-y-3">
 <!-- 1. Block Selector -->
 <div class="space-y-1">
-<label class="text-[10px] uppercase font-bold text-pats-gold tracking-wider">1. Annual Macrocycle Block:</label>
+<label class="text-[10px] uppercase font-bold text-pats-gold tracking-wider">1. Annual Macrocycle Block Selector:</label>
 <div class="grid grid-cols-3 gap-1.5 bg-pats-card p-1 rounded-xl border border-pats-cardBorder text-xs">
 <button onclick="setBlock(1)" id="btn-block-1" class="py-2 px-2 rounded-lg font-bold uppercase transition-all bg-emerald-500 text-black tactile-btn">
 Block 1: Preseason (8 Wks)
@@ -1060,31 +1081,78 @@ class="w-full bg-pats-card border border-pats-cardBorder rounded-xl pl-9 pr-3 py
 <!-- ================= APPLICATION JAVASCRIPT STATE ENGINE ================= -->
 <script>
 /* =========================================================================
-1. COMPLETE ST PAT'S JUNIOR A HURLER ROSTER (Exact match to screenshots)
+1. COMPLETE ST PAT'S JUNIOR A HURLER ROSTER (Pods 1–6 from Training Sheet)
 ========================================================================= */
 const initialPlayers = [
-{ id: "p1", num: 1, name: "Alan Quinn", line: "Backs", status: "FIT", vet: true, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-{ id: "p2", num: 2, name: "Dan Burke", line: "Backs", status: "FIT", vet: false, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.15, sprintW8: 3.05, squatBase: 130, squatW8: 130, deadliftBase: 175, deadliftW8: 175 },
-{ id: "p3", num: 3, name: "Bryan Kelly", line: "Backs", status: "FIT", vet: false, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.15, sprintW8: 3.05, squatBase: 135, squatW8: 135, deadliftBase: 180, deadliftW8: 180 },
-{ id: "p4", num: 4, name: "Cormac Kelly", line: "Backs", status: "FIT", vet: false, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.15, sprintW8: 3.05, squatBase: 120, squatW8: 120, deadliftBase: 160, deadliftW8: 160 },
-{ id: "p5", num: 5, name: "Hansi Fischer-Kerrane", line: "Backs", status: "FIT", vet: false, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 170, deadliftW8: 170 },
-{ id: "p6", num: 6, name: "Hugh Feeney", line: "Backs", status: "FIT", vet: false, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.15, sprintW8: 3.05, squatBase: 140, squatW8: 140, deadliftBase: 185, deadliftW8: 185 },
-{ id: "p8", num: 8, name: "Conor Henry", line: "Midfield", status: "FIT", vet: false, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.15, sprintW8: 3.05, squatBase: 130, squatW8: 130, deadliftBase: 170, deadliftW8: 170 },
-{ id: "p9", num: 9, name: "Ger Hurling", line: "Forwards", status: "FIT", vet: false, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.15, sprintW8: 3.05, squatBase: 120, squatW8: 120, deadliftBase: 160, deadliftW8: 160 },
-{ id: "p10", num: 10, name: "Brian Kennedy", line: "Forwards", status: "FIT", vet: false, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-{ id: "p11", num: 11, name: "Mick O'Donoghue", line: "Forwards", status: "FIT", vet: false, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.12, sprintW8: 3.04, squatBase: 130, squatW8: 130, deadliftBase: 170, deadliftW8: 170 },
-{ id: "p12", num: 12, name: "Brian McCarthy", line: "Forwards", status: "FIT", vet: false, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.10, sprintW8: 3.00, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-{ id: "p13", num: 13, name: "Ciaran Cashman", line: "Forwards", status: "FIT", vet: false, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.18, sprintW8: 3.08, squatBase: 120, squatW8: 125, deadliftBase: 160, deadliftW8: 165 },
-{ id: "p14", num: 14, name: "Fionn Maher", line: "Forwards", status: "FIT", vet: false, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.08, sprintW8: 2.98, squatBase: 140, squatW8: 145, deadliftBase: 180, deadliftW8: 190 },
-{ id: "p15", num: 15, name: "Daire McCarthy", line: "Forwards", status: "FIT", vet: false, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.14, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 170 },
-{ id: "p16", num: 16, name: "Sean Ryan", line: "Midfield", status: "FIT", vet: false, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.09, sprintW8: 2.99, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-{ id: "p17", num: 17, name: "Jack Prendergast", line: "Backs", status: "FIT", vet: true, broncoBase: "--:--", broncoW8: "--:--", sprintBase: 3.22, sprintW8: 3.14, squatBase: 130, squatW8: 130, deadliftBase: 160, deadliftW8: 160 }
+// POD 1
+{ id: "p1", num: 1, name: "Alan Quinn", pod: 1, line: "Backs", status: "FIT", vet: true, broncoBase: "5:08", broncoW8: "4:52", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p2", num: 2, name: "Dan Burke", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "5:02", broncoW8: "4:46", sprintBase: 3.15, sprintW8: 3.05, squatBase: 130, squatW8: 130, deadliftBase: 175, deadliftW8: 175 },
+{ id: "p3", num: 3, name: "Brian Powell", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "4:58", broncoW8: "4:42", sprintBase: 3.12, sprintW8: 3.02, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
+{ id: "p4", num: 4, name: "Paul McCarthy", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "5:12", broncoW8: "4:56", sprintBase: 3.16, sprintW8: 3.06, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p5", num: 5, name: "Stephen Lohan", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "5:05", broncoW8: "4:50", sprintBase: 3.14, sprintW8: 3.04, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p6", num: 6, name: "Cian Darcy", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "4:55", broncoW8: "4:39", sprintBase: 3.09, sprintW8: 2.99, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
+{ id: "p7", num: 7, name: "Paddy Gleeson", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "5:15", broncoW8: "4:59", sprintBase: 3.18, sprintW8: 3.08, squatBase: 120, squatW8: 125, deadliftBase: 160, deadliftW8: 165 },
+{ id: "p8", num: 8, name: "Conor Tighe", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "5:10", broncoW8: "4:54", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p9", num: 9, name: "James Stanbridge", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "5:18", broncoW8: "5:02", sprintBase: 3.20, sprintW8: 3.10, squatBase: 120, squatW8: 120, deadliftBase: 160, deadliftW8: 160 },
+
+// POD 2
+{ id: "p10", num: 10, name: "Conor Henry", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:48", broncoW8: "4:32", sprintBase: 3.15, sprintW8: 3.05, squatBase: 130, squatW8: 130, deadliftBase: 170, deadliftW8: 170 },
+{ id: "p11", num: 11, name: "Kieron Keary", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:52", broncoW8: "4:36", sprintBase: 3.11, sprintW8: 3.01, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
+{ id: "p12", num: 12, name: "Dan Taylor", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:50", broncoW8: "4:35", sprintBase: 3.10, sprintW8: 3.00, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
+{ id: "p13", num: 13, name: "Tiernan O Rourke", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:44", broncoW8: "4:29", sprintBase: 3.08, sprintW8: 2.98, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
+{ id: "p14", num: 14, name: "Donnacha Liston", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:56", broncoW8: "4:40", sprintBase: 3.14, sprintW8: 3.04, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
+{ id: "p15", num: 15, name: "Jack Fitzgerald", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:58", broncoW8: "4:42", sprintBase: 3.12, sprintW8: 3.02, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p16", num: 16, name: "Jacob Turner", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "5:04", broncoW8: "4:48", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p17", num: 17, name: "Conor Donovan", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:59", broncoW8: "4:44", sprintBase: 3.13, sprintW8: 3.03, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+
+// POD 3
+{ id: "p18", num: 18, name: "Cormac Kelly", pod: 3, line: "Backs", status: "FIT", vet: false, broncoBase: "5:06", broncoW8: "4:50", sprintBase: 3.15, sprintW8: 3.05, squatBase: 120, squatW8: 120, deadliftBase: 160, deadliftW8: 160 },
+{ id: "p19", num: 19, name: "Ciaran Darcy", pod: 3, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:54", broncoW8: "4:38", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p20", num: 20, name: "Martin Fanning", pod: 3, line: "Forwards", status: "FIT", vet: true, broncoBase: "5:14", broncoW8: "4:59", sprintBase: 3.22, sprintW8: 3.12, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p21", num: 21, name: "Tim Kelly", pod: 3, line: "Backs", status: "FIT", vet: false, broncoBase: "5:08", broncoW8: "4:52", sprintBase: 3.16, sprintW8: 3.06, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p22", num: 22, name: "Donagh Crean", pod: 3, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:51", broncoW8: "4:36", sprintBase: 3.11, sprintW8: 3.01, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p23", num: 23, name: "Aidan Walsh", pod: 3, line: "Forwards", status: "FIT", vet: false, broncoBase: "4:57", broncoW8: "4:41", sprintBase: 3.09, sprintW8: 2.99, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
+{ id: "p24", num: 24, name: "Mathew O Connor", pod: 3, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:02", broncoW8: "4:46", sprintBase: 3.13, sprintW8: 3.03, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
+{ id: "p25", num: 25, name: "Eoghen Delaney", pod: 3, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:00", broncoW8: "4:45", sprintBase: 3.12, sprintW8: 3.02, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+
+// POD 4
+{ id: "p26", num: 26, name: "Mick O Donoghue", pod: 4, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:05", broncoW8: "4:49", sprintBase: 3.12, sprintW8: 3.04, squatBase: 130, squatW8: 130, deadliftBase: 170, deadliftW8: 170 },
+{ id: "p27", num: 27, name: "Jack Burridge", pod: 4, line: "Forwards", status: "FIT", vet: false, broncoBase: "4:59", broncoW8: "4:43", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p28", num: 28, name: "Paul Roche", pod: 4, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:03", broncoW8: "4:47", sprintBase: 3.14, sprintW8: 3.04, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p29", num: 29, name: "Kev Barry", pod: 4, line: "Backs", status: "FIT", vet: false, broncoBase: "5:09", broncoW8: "4:53", sprintBase: 3.16, sprintW8: 3.06, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p30", num: 30, name: "Cillian Brett", pod: 4, line: "Forwards", status: "FIT", vet: false, broncoBase: "4:53", broncoW8: "4:37", sprintBase: 3.08, sprintW8: 2.98, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
+{ id: "p31", num: 31, name: "Dylan Duke", pod: 4, line: "Forwards", status: "FIT", vet: false, broncoBase: "4:56", broncoW8: "4:40", sprintBase: 3.11, sprintW8: 3.01, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p32", num: 32, name: "Finn Masterson", pod: 4, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:49", broncoW8: "4:33", sprintBase: 3.09, sprintW8: 2.99, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p33", num: 33, name: "Daniel McNamara", pod: 4, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:06", broncoW8: "4:50", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+
+// POD 5
+{ id: "p34", num: 34, name: "John Hanley", pod: 5, line: "Backs", status: "FIT", vet: true, broncoBase: "5:12", broncoW8: "4:57", sprintBase: 3.20, sprintW8: 3.10, squatBase: 130, squatW8: 130, deadliftBase: 170, deadliftW8: 170 },
+{ id: "p35", num: 35, name: "Ciaran Sinnott", pod: 5, line: "Backs", status: "FIT", vet: false, broncoBase: "5:04", broncoW8: "4:48", sprintBase: 3.14, sprintW8: 3.04, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p36", num: 36, name: "Hansi Fischer-Kerrane", pod: 5, line: "Backs", status: "FIT", vet: false, broncoBase: "5:07", broncoW8: "4:51", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 170, deadliftW8: 170 },
+{ id: "p37", num: 37, name: "Ethan Ryan", pod: 5, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:47", broncoW8: "4:31", sprintBase: 3.07, sprintW8: 2.97, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
+{ id: "p38", num: 38, name: "Colum McQuaile", pod: 5, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:53", broncoW8: "4:37", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p39", num: 39, name: "Senan Mythen", pod: 5, line: "Forwards", status: "FIT", vet: false, broncoBase: "4:58", broncoW8: "4:42", sprintBase: 3.12, sprintW8: 3.02, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
+{ id: "p40", num: 40, name: "Conor Heffernan", pod: 5, line: "Backs", status: "FIT", vet: false, broncoBase: "5:09", broncoW8: "4:53", sprintBase: 3.17, sprintW8: 3.07, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p41", num: 41, name: "Jakob Connolly", pod: 5, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:01", broncoW8: "4:45", sprintBase: 3.11, sprintW8: 3.01, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+
+// POD 6
+{ id: "p42", num: 42, name: "Brian Kennedy", pod: 6, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:00", broncoW8: "4:44", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p43", num: 43, name: "Donal O' Riordan", pod: 6, line: "Backs", status: "FIT", vet: false, broncoBase: "5:06", broncoW8: "4:50", sprintBase: 3.16, sprintW8: 3.06, squatBase: 135, squatW8: 140, deadliftBase: 180, deadliftW8: 185 },
+{ id: "p44", num: 44, name: "Hugh Feeney", pod: 6, line: "Backs", status: "FIT", vet: false, broncoBase: "5:01", broncoW8: "4:45", sprintBase: 3.15, sprintW8: 3.05, squatBase: 140, squatW8: 140, deadliftBase: 185, deadliftW8: 185 },
+{ id: "p45", num: 45, name: "Cathal Carty", pod: 6, line: "Backs", status: "FIT", vet: false, broncoBase: "5:11", broncoW8: "4:55", sprintBase: 3.19, sprintW8: 3.09, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p46", num: 46, name: "Sean Kennedy", pod: 6, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:46", broncoW8: "4:30", sprintBase: 3.06, sprintW8: 2.96, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
+{ id: "p47", num: 47, name: "Moses Harley", pod: 6, line: "Forwards", status: "FIT", vet: false, broncoBase: "4:54", broncoW8: "4:38", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p48", num: 48, name: "Senan Ryan", pod: 6, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:50", broncoW8: "4:34", sprintBase: 3.09, sprintW8: 2.99, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p49", num: 49, name: "Jack Edwards", pod: 6, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:02", broncoW8: "4:46", sprintBase: 3.12, sprintW8: 3.02, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 }
 ];
 
-let players = JSON.parse(localStorage.getItem('stpats_roster_v2') || JSON.stringify(initialPlayers));
+let players = JSON.parse(localStorage.getItem('stpats_roster_v3') || JSON.stringify(initialPlayers));
 let selectedPlayerId = players[0]?.id || "p1";
 let editingPlayerId = null;
 let testingPlayerId = null;
+
+// Track exercise checkbox completions for active session
+let exerciseChecks = JSON.parse(localStorage.getItem('stpats_exercise_checks') || '{}');
 
 /* =========================================================================
 2. TRAINING STATE: BLOCKS, INDIVIDUAL WEEKS, AND 3 DAYS
@@ -1092,6 +1160,7 @@ let testingPlayerId = null;
 let currentBlock = 1; // 1: Preseason (8 Wks), 2: League (6 Wks), 3: Champ (6 Wks)
 let currentWeek = 1; // Individual week index
 let currentDay = 1; // 1: Aerobic Running, 2: Anaerobic Running, 3: Injury Prevention Gym
+let selectedStageNum = 2; // Default active view: Stage 2 (Block 1 Preseason)
 
 /* =========================================================================
 3. MATCH DAY STATS ENGINE (Dublin Junior Hurling Analytics)
@@ -1121,7 +1190,204 @@ foul_open: 0
 };
 
 /* =========================================================================
-4. INITIALIZATION ON DOM READY
+4. ROADMAP SECTION CONDITIONING PROGRAMMES (All 8 Stages)
+========================================================================= */
+const ROADMAP_CONDITIONING = {
+1: {
+title: "1. Baseline Testing Battery (Late October)",
+subtitle: "Maximal Aerobic Speed (MAS), 20m Acceleration & 3RM Strength Audit",
+duration: "1 Week Protocol",
+objective: "Establish baseline aerobic speeds ($MAS$), linear acceleration splits, and posterior chain strength benchmarks to customize 8-week progressive overload targets.",
+prescription: `
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-2">
+<span class="text-pats-gold font-bold uppercase text-[11px] block">Test 1: 1.2km Bronco Shuttle Protocol</span>
+<p class="text-slate-300 leading-relaxed">• <strong>Setup:</strong> Cones placed at 20m, 40m, and 60m from baseline.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Execution:</strong> Sprint 20m & back $\\rightarrow$ 40m & back $\\rightarrow$ 60m & back (240m per lap). Complete 5 continuous laps without stopping (1,200m total).</p>
+<p class="text-slate-300 leading-relaxed">• <strong>MAS Formula:</strong> $MAS = 1200 / (Time - 20s)$. Elite Middle 8: $<4:45$. Match Ready: $4:46-5:10$.</p>
+</div>
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-2">
+<span class="text-emerald-400 font-bold uppercase text-[11px] block">Test 2: 20m Linear Acceleration & Max Velocity</span>
+<p class="text-slate-300 leading-relaxed">• <strong>Splits:</strong> 0-10m acceleration split & 10-20m max velocity split (3 trials, 3 mins rest between runs).</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Test 3: Strength Audit:</strong> 3RM High Bar Back Squat & 3RM Conventional Deadlift under strict 2-1-1-0 tempo.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Vet Mod (32-40):</strong> Replace 3RM with 5RM to shield lumbar spine & patellar tendon.</p>
+</div>
+</div>
+`
+},
+2: {
+title: "2. Block 1 Preseason Conditioning (November – December)",
+subtitle: "8 Weeks • 3 Progression Phases • Aerobic Engine & Structural Armor",
+duration: "8 Weeks (Weeks 1–8)",
+objective: "Build immense capillary density, left ventricular stroke volume, and eccentric tissue durability before match scrimmages begin.",
+prescription: `
+<div class="space-y-3 text-xs">
+<div class="bg-[#07130E] border border-emerald-500/40 p-3 rounded-xl space-y-1.5">
+<div class="flex items-center justify-between">
+<span class="font-bold text-emerald-300 text-xs uppercase">Phase 1 (W1–2): Aerobic Base Accumulation & Anatomical Adaptation</span>
+<span class="font-mono text-pats-gold font-bold">5,500m / session</span>
+</div>
+<p class="text-slate-300">• <strong>Pitch Day 1 (Aerobic):</strong> 145m x 90m MAS Perimeter Grids. 4 continuous laps. Stride 145m in 30s @ 80% MAS; active jog 90m end-line in 35s. Heart rate 155-168 bpm.</p>
+<p class="text-slate-300">• <strong>Pitch Day 2 (Anaerobic):</strong> 45m-65m Hurler Shuttles (2 sets x 4 reps, 1:2 work:rest). Focus on clean 180° turns off both feet.</p>
+<p class="text-slate-300">• <strong>Day 3 (Gym Armor):</strong> Back Squat (3-1-1-0 tempo), Romanian Deadlifts, and mandatory 4 Durability Pillars.</p>
+</div>
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
+<div class="flex items-center justify-between">
+<span class="font-bold text-white text-xs uppercase">Phase 2 (W3–5): Threshold Velocity & Eccentric Overload</span>
+<span class="font-mono text-pats-gold font-bold">6,200m / session</span>
+</div>
+<p class="text-slate-300">• <strong>Pitch Day 1 (Aerobic):</strong> 15s:15s Eurofit Shuttles @ 72m distance (2 blocks of 8 reps; 2.5 mins rest). Heart rate 165-175 bpm.</p>
+<p class="text-slate-300">• <strong>Pitch Day 2 (Anaerobic):</strong> Gaelic Suicide Ladders (13m-20m-45m). 4 reps under 29.5s with 90s passive walk recovery.</p>
+<p class="text-slate-300">• <strong>Day 3 (Gym Armor):</strong> Resisted Sled Sprints (35% BW) and loaded Nordic curls.</p>
+</div>
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
+<div class="flex items-center justify-between">
+<span class="font-bold text-white text-xs uppercase">Phase 3 (W6–8): Max Velocity Inoculation & Pre-Retest Peak</span>
+<span class="font-mono text-emerald-400 font-bold">6,800m / session</span>
+</div>
+<p class="text-slate-300">• <strong>Pitch Day 1 (Aerobic):</strong> Box-to-Box Striking Transition Grids (80m strides in 14s, 20s recovery walk). 2 sets of 6 reps.</p>
+<p class="text-slate-300">• <strong>Pitch Day 2 (Anaerobic):</strong> Ruck-Breakdown Transition Sprints (65m on whistle from ground drop). 6 reps @ 100% intent.</p>
+<p class="text-slate-300">• <strong>Pillar 3 Speed Vaccine:</strong> 3x30m flying sprints @ 100% Vmax under full 120s rest.</p>
+</div>
+</div>
+`
+},
+3: {
+title: "3. Retest Week (Post-Week 8)",
+subtitle: "Audit Progress Deltas: Bronco, 20m Acceleration & Strength Gains",
+duration: "1 Week Audit",
+objective: "Quantify cardiovascular and force velocity adaptations following Block 1 preseason before entering the deload recovery window.",
+prescription: `
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-2">
+<span class="text-pats-gold font-bold uppercase text-[11px] block">Standardized Retest Protocol</span>
+<p class="text-slate-300 leading-relaxed">• <strong>Tuesday Pitch:</strong> Standardized 15-min warm-up $\\rightarrow$ 20m Sprint Electronic Retest $\\rightarrow$ 1.2km Bronco Shuttle Retest.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Thursday Gym:</strong> Squat & Deadlift 3RM progress delta testing.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Target Benchmark:</strong> Squad average -12s to -18s improvement on Bronco times, +10kg to +15kg on compound 1RM lifts.</p>
+</div>
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-2">
+<span class="text-cyan-400 font-bold uppercase text-[11px] block">Post-Test Active Metabolic Flush</span>
+<p class="text-slate-300 leading-relaxed">• <strong>SkiErg Recovery Protocol:</strong> 2 blocks of 8 reps (20s easy : 40s rest, Damper 4). Low-impact clearance of residual lactic acid.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Tissue Flush:</strong> 15 mins lower-limb foam rolling and hip 90/90 mobility flow.</p>
+</div>
+</div>
+`
+},
+4: {
+title: "4. Scheduled Deload Week (Early January)",
+subtitle: "-40% Volume Reduction • Central Nervous System & Tendon Remodeling",
+duration: "1 Week Neural Recovery",
+objective: "Dissipate cumulative systemic fatigue from Block 1 while preserving neuromuscular firing rates and tendon stiffness.",
+prescription: `
+<div class="space-y-2.5 text-xs">
+<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder">
+<span class="text-pats-gold font-bold uppercase text-[11px] block mb-1">Deload Conditioning Rules</span>
+<p class="text-slate-300 leading-relaxed">• <strong>Volume Reduction:</strong> Cut total running meterage from 6,800m to 3,600m (-45%).</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Intensity Preservation:</strong> Maintain high sprint velocity (e.g. 3x20m unresisted sprints), but strictly eliminate high-volume lactic shuttles.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Gym Volume:</strong> Compound lifts drop to 2 sets of 4 reps @ 2 RIR. Maintain bar speed; zero failure reps.</p>
+<p class="text-emerald-400 leading-relaxed">• <strong>Durability Non-Negotiable:</strong> Complete 2 sets of Nordics and Copenhagen holds. Prehab is never deloaded.</p>
+</div>
+</div>
+`
+},
+5: {
+title: "5. Block 2: Dublin League Campaign (January – February)",
+subtitle: "6 Weeks • 3 Progression Phases • Match Pace Exposure & Repeat Sprint Ability",
+duration: "6 Weeks (Weeks 1–6)",
+objective: "Condition the squad to sustain explosive accelerations, tackle pressure, and clean stickwork under heavy metabolic acid accumulation during league games.",
+prescription: `
+<div class="space-y-3 text-xs">
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
+<span class="font-bold text-white text-xs uppercase block">Phase 1 (W1–2): Match Pace Exposure & Anaerobic Tolerance</span>
+<p class="text-slate-300">• <strong>Pitch Day 1:</strong> 100m Box-to-Box tempo strides (14s run : 20s walk) combined with 4v4 small-sided contact games ($3 \\times 4\\text{ mins}$).</p>
+<p class="text-slate-300">• <strong>Pitch Day 2:</strong> Gaelic Suicide Ladders ($5 \\times 130\\text{m}$ reps under 26s, 75s active recovery walk).</p>
+</div>
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
+<span class="font-bold text-white text-xs uppercase block">Phase 2 (W3–4): Repeat Sprint Capacity under Lactic Strain</span>
+<p class="text-slate-300">• <strong>Pitch Day 1:</strong> 15s : 15s Eurofit Shuttles with 180° plant-and-turn (3 blocks of 6 reps @ 74m distance).</p>
+<p class="text-slate-300">• <strong>Pitch Day 2:</strong> Ruck-Breakdown Transition Sprints (65m sprint following contested ground pick-up). 6 reps @ 100% velocity.</p>
+<p class="text-slate-300">• <strong>Conditioning Top-Up:</strong> SkiErg Glycolytic Buffering (3 sets of $4 \\times 15\\text{s}$ sub-1:42 split, 45s rest).</p>
+</div>
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
+<span class="font-bold text-white text-xs uppercase block">Phase 3 (W5–6): Pre-League Final Taper & Neural Priming</span>
+<p class="text-slate-300">• <strong>Pitch:</strong> High-speed 30m breakaways with hurley strike on the run. 4 sets of 1 run with full 90s rest.</p>
+<p class="text-slate-300">• <strong>Tactical Integration:</strong> 15-minute high-tempo puck-out pressing transitions.</p>
+</div>
+</div>
+`
+},
+6: {
+title: "6. Deload & League Peak (Mid-February)",
+subtitle: "Pre-Competition Taper & Alactic Sharpness for Early March League",
+duration: "10-Day Taper",
+objective: "Drop cumulative fatigue, prime central nervous system rate of force development, and optimize glycogen supercompensation for League Round 1.",
+prescription: `
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-2">
+<span class="text-pats-gold font-bold uppercase text-[11px] block">Taper Prescription</span>
+<p class="text-slate-300 leading-relaxed">• <strong>Total Volume:</strong> Drop overall running meterage by 50%.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Puck-Out Priming:</strong> 15 mins tactical puck-out walk-throughs & break contested drills.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Sprint Priming:</strong> 2x20m flying starts @ 100% Vmax. Sharp, springy, zero heavy legs.</p>
+</div>
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-2">
+<span class="text-emerald-400 font-bold uppercase text-[11px] block">Match Day -1 Fuel Protocol</span>
+<p class="text-slate-300 leading-relaxed">• <strong>Carb Load:</strong> 7.0g/kg bodyweight across 24 hours (basmati rice, pasta, sourdough bread).</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Hydration:</strong> 40ml/kg baseline water + 1,000mg sodium electrolyte bottle.</p>
+</div>
+</div>
+`
+},
+7: {
+title: "7. Block 3: Championship Build (April – May)",
+subtitle: "6 Weeks • 3 Progression Phases • Championship High-Speed Running Density",
+duration: "6 Weeks (Weeks 1–6)",
+objective: "Prepare the team for maximum championship match intensities, breakaways, and explosive transition scoring.",
+prescription: `
+<div class="space-y-3 text-xs">
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
+<span class="font-bold text-white text-xs uppercase block">Phase 1 (W1–2): High-Speed Running (HSR) Density</span>
+<p class="text-slate-300">• <strong>Pitch Day 1:</strong> Ball-in-Play (BIP) Transitions: 30s continuous reactive sprint & strike : 60s rest (2 sets of 5 reps). Target: $>22\\text{ km/h}$ exposure.</p>
+<p class="text-slate-300">• <strong>Pitch Day 2:</strong> 5-10-5 Pro Agility Shuttle runs with sliotar jab-lift at center cone (4 reps @ 100% intent).</p>
+</div>
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
+<span class="font-bold text-white text-xs uppercase block">Phase 2 (W3–4): Lethal Breakaways & Max Acceleration</span>
+<p class="text-slate-300">• <strong>Pitch:</strong> Contrast PAPE Sprints: Heavy Sled Push (10m @ 50% BW) immediately into 25m Unresisted Match Sprint (4 sets, 2.5 mins rest).</p>
+<p class="text-slate-300">• <strong>Conditioning:</strong> Concept2 SkiErg + Sled Combo: 10s SkiErg sprint + 10s sled push (2 sets of 5 reps, 4 mins rest).</p>
+</div>
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
+<span class="font-bold text-white text-xs uppercase block">Phase 3 (W5–6): Championship Peak Supercompensation</span>
+<p class="text-slate-300">• <strong>Session Volume:</strong> Cap pitch session at 45 minutes. Maximum velocity intent, short 15m bursts, and crisp stickwork.</p>
+<p class="text-slate-300">• <strong>Prehab Check:</strong> Mandatory 3x5 Nordic lowers and 3x20s Copenhagen planks.</p>
+</div>
+</div>
+`
+},
+8: {
+title: "8. Championship Peak & Final Taper (Summer 2027)",
+subtitle: "Supercompensation Peak for Dublin Championship Opener & Knockouts",
+duration: "Championship Fixture Window",
+objective: "Achieve peak physiological sharpness, optimal tissue elasticity, full glycogen saturation, and zero residual muscular fatigue.",
+prescription: `
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-2">
+<span class="text-pats-gold font-bold uppercase text-[11px] block">Final Taper Microcycle</span>
+<p class="text-slate-300 leading-relaxed">• <strong>Volume Cut:</strong> 60% reduction in total running volume. Pitch sessions limited to 40 minutes.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Neural Primer:</strong> 3x20m unresisted sprints with 2 mins walking recovery between runs.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Skill Execution:</strong> Dynamic sideline cut clearances, short stick-passing grids, and penalty/free drills.</p>
+</div>
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-2">
+<span class="text-emerald-400 font-bold uppercase text-[11px] block">Championship Match Readiness Standards</span>
+<p class="text-slate-300 leading-relaxed">• <strong>Puck-Out Retention Target:</strong> $>60\%$ won.</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Shot Conversion:</strong> $>55\%$ accuracy (zero dropped short into keeper's hands).</p>
+<p class="text-slate-300 leading-relaxed">• <strong>Discipline:</strong> $<4$ frees conceded inside the 50m scoring zone.</p>
+</div>
+</div>
+`
+}
+};
+
+/* =========================================================================
+5. INITIALIZATION ON DOM READY
 ========================================================================= */
 window.addEventListener('DOMContentLoaded', () => {
 populateHurlerSelect();
@@ -1130,11 +1396,12 @@ renderSession();
 renderRosterTable();
 renderTestingTable();
 recalculateFuel();
+renderRoadmapProgramme(selectedStageNum);
 renderMatchDisplay();
 });
 
 /* =========================================================================
-5. NAVIGATION & TABS
+6. NAVIGATION & TABS
 ========================================================================= */
 function switchTab(tabId) {
 document.querySelectorAll('.nav-tab').forEach(b => {
@@ -1154,7 +1421,76 @@ if (el) el.classList.toggle('hidden', id !== tabId);
 }
 
 /* =========================================================================
-6. BLOCKS, WEEKS, AND SESSIONS LOGIC
+7. ROADMAP CONDITIONING SECTIONS (Click-to-view all 8 Stages)
+========================================================================= */
+function selectRoadmapStage(stageNum) {
+selectedStageNum = stageNum;
+
+// Update card highlighting
+for (let i = 1; i <= 8; i++) {
+const card = document.getElementById(`roadmap-card-${i}`);
+if (card) {
+if (i === stageNum) {
+card.classList.add('active-stage');
+} else {
+card.classList.remove('active-stage');
+}
+}
+}
+
+// If selecting a block stage, sync with the periodization block selector
+if (stageNum === 2) setBlock(1);
+else if (stageNum === 5) setBlock(2);
+else if (stageNum === 7) setBlock(3);
+
+renderRoadmapProgramme(stageNum);
+}
+
+function renderRoadmapProgramme(stageNum) {
+const container = document.getElementById('roadmap-programme-display');
+const badge = document.getElementById('roadmap-active-badge');
+if (!container) return;
+
+const prog = ROADMAP_CONDITIONING[stageNum];
+if (!prog) return;
+
+if (badge) {
+badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Active View: ${prog.title}`;
+}
+
+container.innerHTML = `
+<div class="p-4 rounded-xl bg-pats-card/90 border border-emerald-500/40 space-y-3 animate-fadeIn">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-pats-cardBorder pb-2.5 gap-2">
+<div>
+<span class="px-2 py-0.5 rounded bg-pats-bg border border-pats-cardBorder text-pats-gold font-mono text-[10px] font-bold uppercase">
+${prog.duration}
+</span>
+<h3 class="text-sm sm:text-base font-extrabold text-white mt-1">
+${prog.title}
+</h3>
+<p class="text-xs text-emerald-300/90 font-medium">${prog.subtitle}</p>
+</div>
+<div class="text-left sm:text-right">
+<span class="text-[10px] uppercase font-bold text-slate-400 block">Section Target</span>
+<span class="text-xs text-slate-200 font-mono">Dublin Championship Standard</span>
+</div>
+</div>
+
+<div class="p-3 rounded-lg bg-[#07130E] border border-pats-cardBorder text-xs text-slate-300">
+<strong class="text-pats-gold uppercase text-[10px] block mb-1">Physiological &amp; Tactical Objective:</strong>
+<p class="leading-relaxed">${prog.objective}</p>
+</div>
+
+<div class="space-y-2 pt-1">
+<strong class="text-emerald-400 uppercase text-[10px] block">Full Section Conditioning Prescription:</strong>
+${prog.prescription}
+</div>
+</div>
+`;
+}
+
+/* =========================================================================
+8. BLOCKS, WEEKS, AND SESSIONS LOGIC
 ========================================================================= */
 function setBlock(blockNum) {
 currentBlock = blockNum;
@@ -1242,6 +1578,7 @@ if (!card) return;
 
 const p = players.find(x => x.id === selectedPlayerId) || players[0];
 const isVet = p?.vet;
+const sessKey = `b${currentBlock}_w${currentWeek}_d${currentDay}_${selectedPlayerId}`;
 
 if (currentDay === 1) {
 const gridLaps = 4 + Math.floor(currentWeek * 0.5);
@@ -1256,9 +1593,9 @@ card.innerHTML = `
 Day 1 • Aerobic Engine (Pitch)
 </span>
 <h3 class="text-base sm:text-lg font-black text-white mt-1">
-MAXIMAL AEROBIC SPEED (MAS) &amp; PERIMETER RECOVERY
+MAXIMAL AEROBIC SPEED (MAS) & PERIMETER RECOVERY
 </h3>
-<p class="text-xs text-slate-400">Target: Aerobic enzyme density, capillary perfusion &amp; left ventricular volume.</p>
+<p class="text-xs text-slate-400">Target: Aerobic enzyme density, capillary perfusion & left ventricular volume.</p>
 </div>
 <div class="text-right">
 <span class="text-xs font-mono font-bold text-emerald-400 block">${totalDist}m Total</span>
@@ -1266,9 +1603,13 @@ MAXIMAL AEROBIC SPEED (MAS) &amp; PERIMETER RECOVERY
 </div>
 </div>
 
-<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder">
-<div class="flex items-center justify-between text-[11px] mb-2 font-bold text-slate-300">
-<span>Pitch Drill 1: 145m x 90m MAS Perimeter Box</span>
+<!-- Pitch Drill 1 with Checkboxes -->
+<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder space-y-2.5">
+<div class="flex items-center justify-between text-[11px] font-bold text-slate-300">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-pats-gold"></span>
+Drill 1: 145m x 90m MAS Perimeter Box
+</span>
 <span class="text-pats-gold font-mono">${gridLaps} Laps Prescribed</span>
 </div>
 <svg viewBox="0 0 400 180" class="w-full h-32 rounded-lg bg-emerald-950/40 border border-emerald-800/40">
@@ -1285,31 +1626,60 @@ MAXIMAL AEROBIC SPEED (MAS) &amp; PERIMETER RECOVERY
 <path d="M 30 140 L 30 40" stroke="#34d399" stroke-width="2" stroke-dasharray="3 3"/>
 <text x="35" y="100" fill="#34d399" font-size="8">90m Active Jog</text>
 </svg>
-<div class="mt-2 text-xs text-slate-300 space-y-1">
+<div class="text-xs text-slate-300 space-y-1">
 <p>• <strong>Prescription:</strong> ${gridLaps} continuous laps. Stride long sidelines (145m) in 30s. Jog short end-lines (90m) in 35s.</p>
-<p>• <strong>Heart Rate Target:</strong> 155–172 bpm. Builds the engine that keeps hurlers winning rucks in the 65th minute.</p>
+<p>• <strong>Heart Rate Target:</strong> 155–172 bpm. Aerobic engine for 65th-minute rucks.</p>
+</div>
+<!-- Lap Checkboxes -->
+<div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
+<span class="text-[10px] uppercase font-bold text-pats-gold">Lap Check-off:</span>
+<div class="flex flex-wrap gap-2 text-xs">
+${Array.from({ length: gridLaps }, (_, i) => `
+<label class="flex items-center gap-1 bg-pats-bg px-2 py-1 rounded border border-pats-cardBorder cursor-pointer text-[11px] text-slate-300">
+<input type="checkbox" onchange="toggleExCheck('${sessKey}_d1_lap${i+1}')" ${exerciseChecks[`${sessKey}_d1_lap${i+1}`] ? 'checked' : ''} class="accent-emerald-500 rounded">
+<span>L${i+1}</span>
+</label>
+`).join('')}
+</div>
 </div>
 </div>
 
-<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder">
-<div class="flex items-center justify-between text-[11px] mb-2 font-bold text-slate-300">
-<span>Pitch Drill 2: 15s : 15s Eurofit Shuttles</span>
+<!-- Pitch Drill 2 with Checkboxes -->
+<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder space-y-2.5">
+<div class="flex items-center justify-between text-[11px] font-bold text-slate-300">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+Drill 2: 15s : 15s Eurofit Shuttles (72m)
+</span>
 <span class="text-emerald-400 font-mono">${eurofitSets} Sets × ${eurofitReps} Reps (Week ${currentWeek})</span>
 </div>
 <div class="text-xs text-slate-300 space-y-1.5">
-<p>• <strong>Setup:</strong> Cones set at 72m distance (100% MAS standard for St Pat's backs &amp; forwards).</p>
-<p>• <strong>Work:Rest:</strong> 15s hard run to cone &rarr; 15s walk back recovery. Rest 2.5 mins between sets.</p>
+<p>• <strong>Setup:</strong> Cones set at 72m distance (100% MAS standard for St Pat's backs & forwards).</p>
+<p>• <strong>Work:Rest:</strong> 15s hard run to cone $\rightarrow$ 15s walk back recovery. Rest 2.5 mins between sets.</p>
 <p>• <strong>Veteran Shield (Age 32-40):</strong> ${isVet ? '<span class="text-pats-gold font-bold">ACTIVE: Drop shuttle to 64m. Cap at 2 sets to avoid tendon shear.</span>' : 'Standard 72m distance.'}</p>
+</div>
+<!-- Set Checkboxes -->
+<div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
+<span class="text-[10px] uppercase font-bold text-emerald-400">Set Check-off:</span>
+<div class="flex flex-wrap gap-2 text-xs">
+${Array.from({ length: eurofitSets }, (_, i) => `
+<label class="flex items-center gap-1 bg-pats-bg px-2.5 py-1 rounded border border-pats-cardBorder cursor-pointer text-[11px] text-slate-300">
+<input type="checkbox" onchange="toggleExCheck('${sessKey}_d2_set${i+1}')" ${exerciseChecks[`${sessKey}_d2_set${i+1}`] ? 'checked' : ''} class="accent-emerald-500 rounded">
+<span>Set ${i+1} (${eurofitReps}r)</span>
+</label>
+`).join('')}
+</div>
 </div>
 </div>
 
+<!-- Rest Interval Timer -->
 <div class="p-3 rounded-xl bg-pats-card/80 border border-pats-cardBorder flex items-center justify-between">
 <span class="text-xs font-bold text-slate-300">Recovery Interval Timer:</span>
 <div class="flex items-center gap-2">
-<button onclick="runTimer(15)" class="px-2.5 py-1 rounded bg-pats-bg border border-pats-cardBorder text-xs text-pats-gold font-mono hover:bg-pats-card tactile-btn">15s</button>
-<button onclick="runTimer(30)" class="px-2.5 py-1 rounded bg-pats-bg border border-pats-cardBorder text-xs text-pats-gold font-mono hover:bg-pats-card tactile-btn">30s</button>
-<button onclick="runTimer(60)" class="px-2.5 py-1 rounded bg-pats-bg border border-pats-cardBorder text-xs text-pats-gold font-mono hover:bg-pats-card tactile-btn">60s</button>
-<button onclick="runTimer(150)" class="px-2.5 py-1 rounded bg-pats-bg border border-pats-cardBorder text-xs text-pats-gold font-mono hover:bg-pats-card tactile-btn">2.5m</button>
+<button onclick="runTimer(15)" class="px-2.5 py-1 rounded bg-pats-bg border border-pats-cardBorder text-xs text-pats-gold font-mono hover:bg-pats-card">15s</button>
+<button onclick="runTimer(30)" class="px-2.5 py-1 rounded bg-pats-bg border border-pats-cardBorder text-xs text-pats-gold font-mono hover:bg-pats-card">30s</button>
+<button onclick="runTimer(60)" class="px-2.5 py-1 rounded bg-pats-bg border border-pats-cardBorder text-xs text-pats-gold font-mono hover:bg-pats-card">60s</button>
+<button onclick="runTimer(150)" class="px-2.5 py-1 rounded bg-pats-bg border border-pats-cardBorder text-xs text-pats-gold font-mono hover:bg-pats-card">2.5m</button>
 <span id="timer-display" class="text-sm font-mono font-extrabold text-emerald-400 px-2 py-0.5 bg-pats-bg rounded border border-emerald-500/30">00:00</span>
 </div>
 </div>
@@ -1325,9 +1695,9 @@ card.innerHTML = `
 Day 2 • Anaerobic Engine (Pitch)
 </span>
 <h3 class="text-base sm:text-lg font-black text-white mt-1">
-REPEAT SPRINT ABILITY (RSA) &amp; GAELIC SUICIDE LADDERS
+REPEAT SPRINT ABILITY (RSA) & GAELIC SUICIDE LADDERS
 </h3>
-<p class="text-xs text-slate-400">Target: Hydrogen ion buffering, phosphocreatine resynthesis &amp; max velocity repeats.</p>
+<p class="text-xs text-slate-400">Target: Hydrogen ion buffering, phosphocreatine resynthesis & max velocity repeats.</p>
 </div>
 <div class="text-right">
 <span class="text-xs font-mono font-bold text-amber-400 block">High Speed Running</span>
@@ -1335,9 +1705,13 @@ REPEAT SPRINT ABILITY (RSA) &amp; GAELIC SUICIDE LADDERS
 </div>
 </div>
 
-<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder">
-<div class="flex items-center justify-between text-[11px] mb-2 font-bold text-slate-300">
-<span>Drill 1: 13m &rarr; 20m &rarr; 45m Gaelic Suicide Ladder</span>
+<!-- Drill 1 with Checkboxes -->
+<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder space-y-2.5">
+<div class="flex items-center justify-between text-[11px] font-bold text-slate-300">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-pats-gold"></span>
+Drill 1: 13m → 20m → 45m Gaelic Suicide Ladder
+</span>
 <span class="text-amber-400 font-mono">${suicideReps} Reps (Full Recovery)</span>
 </div>
 <svg viewBox="0 0 400 120" class="w-full h-24 rounded-lg bg-amber-950/20 border border-amber-800/40">
@@ -1354,27 +1728,56 @@ REPEAT SPRINT ABILITY (RSA) &amp; GAELIC SUICIDE LADDERS
 <path d="M 30 50 L 190 50 L 30 50" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
 <path d="M 30 30 L 340 30 L 30 30" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
 </svg>
-<div class="mt-2 text-xs text-slate-300 space-y-1">
-<p>• <strong>Execution:</strong> Sprint goal line to 13m &rarr; touch ground &rarr; turn &amp; sprint to goal &rarr; turn &amp; sprint to 20m &rarr; turn to goal &rarr; turn &amp; sprint through 45m line.</p>
+<div class="text-xs text-slate-300 space-y-1">
+<p>• <strong>Execution:</strong> Sprint goal line to 13m $\rightarrow$ touch ground $\rightarrow$ turn & sprint to goal $\rightarrow$ turn & sprint to 20m $\rightarrow$ turn to goal $\rightarrow$ turn & sprint through 45m line.</p>
 <p>• <strong>Target Time:</strong> Under 29.5s. Rest 90s complete walking rest between reps.</p>
+</div>
+<!-- Suicide Rep Checkboxes -->
+<div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
+<span class="text-[10px] uppercase font-bold text-amber-400">Rep Check-off:</span>
+<div class="flex flex-wrap gap-2 text-xs">
+${Array.from({ length: suicideReps }, (_, i) => `
+<label class="flex items-center gap-1 bg-pats-bg px-2.5 py-1 rounded border border-pats-cardBorder cursor-pointer text-[11px] text-slate-300">
+<input type="checkbox" onchange="toggleExCheck('${sessKey}_suicide_rep${i+1}')" ${exerciseChecks[`${sessKey}_suicide_rep${i+1}`] ? 'checked' : ''} class="accent-amber-500 rounded">
+<span>Rep ${i+1} (&lt;29.5s)</span>
+</label>
+`).join('')}
+</div>
 </div>
 </div>
 
-<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder">
-<div class="flex items-center justify-between text-[11px] mb-2 font-bold text-slate-300">
-<span>Drill 2: Ruck-Breakdown Transition Sprints (65m)</span>
+<!-- Drill 2 with Checkboxes -->
+<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder space-y-2.5">
+<div class="flex items-center justify-between text-[11px] font-bold text-slate-300">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-amber-400"></span>
+Drill 2: Ruck-Breakdown Transition Sprints (65m)
+</span>
 <span class="text-amber-400 font-mono">${rsaReps} Reps @ 100% Intensity</span>
 </div>
 <div class="text-xs text-slate-300 space-y-1">
-<p>• <strong>Protocol:</strong> Drop chest to grass (simulate contesting ground ball) &rarr; explosive popup on whistle &rarr; 65m sprint to opposite 45m line.</p>
+<p>• <strong>Protocol:</strong> Drop chest to grass (simulate contesting ground ball) $\rightarrow$ explosive popup on whistle $\rightarrow$ 65m sprint to opposite 45m line.</p>
 <p>• <strong>Rest:</strong> 45s walk back. Replicates turning defense into counter-attack scoring opportunities.</p>
-<p>• <strong>Veteran Shield (Age 32-40):</strong> ${isVet ? '<span class="text-pats-gold font-bold">ACTIVE: Start from tall athletic crouch to protect spine.</span>' : 'Chest to grass required.'}</p>
+<p>• <strong>Veteran Shield (Age 32-40):</strong> ${isVet ? '<span class="text-pats-gold font-bold">ACTIVE: Start from tall athletic crouch (no chest drop) to shield spine.</span>' : 'Chest to grass required.'}</p>
+</div>
+<!-- Transition Sprints Checkboxes -->
+<div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
+<span class="text-[10px] uppercase font-bold text-amber-400">Rep Check-off:</span>
+<div class="flex flex-wrap gap-2 text-xs">
+${Array.from({ length: rsaReps }, (_, i) => `
+<label class="flex items-center gap-1 bg-pats-bg px-2.5 py-1 rounded border border-pats-cardBorder cursor-pointer text-[11px] text-slate-300">
+<input type="checkbox" onchange="toggleExCheck('${sessKey}_ruck_rep${i+1}')" ${exerciseChecks[`${sessKey}_ruck_rep${i+1}`] ? 'checked' : ''} class="accent-amber-500 rounded">
+<span>Rep ${i+1}</span>
+</label>
+`).join('')}
+</div>
 </div>
 </div>
 `;
 } else {
 const squatLoad = Math.round((p?.squatW8 || 125) * (0.75 + (currentWeek * 0.02)));
 const deadliftLoad = Math.round((p?.deadliftW8 || 165) * (0.75 + (currentWeek * 0.02)));
+const squatSetsCount = isVet ? 3 : 4;
 
 card.innerHTML = `
 <div class="flex items-center justify-between border-b border-pats-cardBorder pb-3">
@@ -1383,9 +1786,9 @@ card.innerHTML = `
 Day 3 • Structural Armor (Gym)
 </span>
 <h3 class="text-base sm:text-lg font-black text-white mt-1">
-POSTERIOR CHAIN ARMOR &amp; ECCENTRIC FORCE CAPACITY
+POSTERIOR CHAIN ARMOR & ECCENTRIC FORCE CAPACITY
 </h3>
-<p class="text-xs text-slate-400">Target: Hamstring fascicle lengthening, groin adductor stiffness &amp; rotational power.</p>
+<p class="text-xs text-slate-400">Target: Hamstring fascicle lengthening, groin adductor stiffness & rotational power.</p>
 </div>
 <div class="text-right">
 <span class="text-xs font-mono font-bold text-purple-300 block">Week ${currentWeek} Load</span>
@@ -1393,7 +1796,9 @@ POSTERIOR CHAIN ARMOR &amp; ECCENTRIC FORCE CAPACITY
 </div>
 </div>
 
-<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder flex flex-col sm:flex-row gap-3 items-center">
+<!-- Exercise 1: Back Squat with Checkboxes -->
+<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder space-y-2.5">
+<div class="flex flex-col sm:flex-row gap-3 items-center">
 <div class="w-full sm:w-36 h-24 bg-purple-950/30 rounded-lg border border-purple-800/40 flex items-center justify-center shrink-0">
 <svg viewBox="0 0 100 100" class="w-20 h-20">
 <circle cx="50" cy="20" r="8" fill="#e2e8f0"/>
@@ -1413,8 +1818,23 @@ POSTERIOR CHAIN ARMOR &amp; ECCENTRIC FORCE CAPACITY
 <p class="text-slate-400">• <strong>Hurling Benefit:</strong> First-step tackle driving power and quadriceps deceleration brake.</p>
 </div>
 </div>
+<!-- Set Checkboxes -->
+<div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
+<span class="text-[10px] uppercase font-bold text-pats-gold">Set Log (${squatLoad}kg):</span>
+<div class="flex flex-wrap gap-2 text-xs">
+${Array.from({ length: squatSetsCount }, (_, i) => `
+<label class="flex items-center gap-1 bg-pats-bg px-2.5 py-1 rounded border border-pats-cardBorder cursor-pointer text-[11px] text-slate-300">
+<input type="checkbox" onchange="toggleExCheck('${sessKey}_squat_set${i+1}')" ${exerciseChecks[`${sessKey}_squat_set${i+1}`] ? 'checked' : ''} class="accent-purple-500 rounded">
+<span>Set ${i+1}</span>
+</label>
+`).join('')}
+</div>
+</div>
+</div>
 
-<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder flex flex-col sm:flex-row gap-3 items-center">
+<!-- Exercise 2: Romanian Deadlift with Checkboxes -->
+<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder space-y-2.5">
+<div class="flex flex-col sm:flex-row gap-3 items-center">
 <div class="w-full sm:w-36 h-24 bg-purple-950/30 rounded-lg border border-purple-800/40 flex items-center justify-center shrink-0">
 <svg viewBox="0 0 100 100" class="w-20 h-20">
 <circle cx="35" cy="25" r="8" fill="#e2e8f0"/>
@@ -1434,25 +1854,46 @@ POSTERIOR CHAIN ARMOR &amp; ECCENTRIC FORCE CAPACITY
 <p class="text-slate-400">• <strong>Hurling Benefit:</strong> Insures against sprinting tears when reaching low for a sliotar on the run.</p>
 </div>
 </div>
+<!-- Set Checkboxes -->
+<div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
+<span class="text-[10px] uppercase font-bold text-pats-gold">Set Log (${deadliftLoad}kg):</span>
+<div class="flex flex-wrap gap-2 text-xs">
+${[1, 2, 3].map(i => `
+<label class="flex items-center gap-1 bg-pats-bg px-2.5 py-1 rounded border border-pats-cardBorder cursor-pointer text-[11px] text-slate-300">
+<input type="checkbox" onchange="toggleExCheck('${sessKey}_rdl_set${i}')" ${exerciseChecks[`${sessKey}_rdl_set${i}`] ? 'checked' : ''} class="accent-purple-500 rounded">
+<span>Set ${i}</span>
+</label>
+`).join('')}
+</div>
+</div>
+</div>
 
-<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder">
-<div class="flex items-center justify-between text-xs mb-1">
+<!-- Exercise 3: Landmine Rotational Punch with Checkboxes -->
+<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder space-y-2">
+<div class="flex items-center justify-between text-xs">
 <h4 class="font-bold text-white">3. Landmine Rotational Striking Punch</h4>
 <span class="font-mono text-emerald-400 font-bold">3x8 / side</span>
 </div>
 <p class="text-xs text-slate-300">• <strong>Cue:</strong> Drive through back hip and pivot to transfer rotational torque into shoulder and core.</p>
+<div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
+<span class="text-[10px] uppercase font-bold text-emerald-400">Set Log:</span>
+<div class="flex flex-wrap gap-2 text-xs">
+${[1, 2, 3].map(i => `
+<label class="flex items-center gap-1 bg-pats-bg px-2.5 py-1 rounded border border-pats-cardBorder cursor-pointer text-[11px] text-slate-300">
+<input type="checkbox" onchange="toggleExCheck('${sessKey}_landmine_set${i}')" ${exerciseChecks[`${sessKey}_landmine_set${i}`] ? 'checked' : ''} class="accent-emerald-500 rounded">
+<span>Set ${i} (L/R)</span>
+</label>
+`).join('')}
+</div>
+</div>
 </div>
 `;
 }
 }
 
-function onHurlerChange(hId) {
-selectedPlayerId = hId;
-const p = players.find(x => x.id === hId);
-if (p) {
-document.getElementById('player-badge-num').textContent = `#${p.num}`;
-renderSession();
-}
+function toggleExCheck(key) {
+exerciseChecks[key] = !exerciseChecks[key];
+localStorage.setItem('stpats_exercise_checks', JSON.stringify(exerciseChecks));
 }
 
 function populateHurlerSelect() {
@@ -1461,7 +1902,7 @@ if (!select) return;
 
 select.innerHTML = players.map(p => `
 <option value="${p.id}" ${p.id === selectedPlayerId ? 'selected' : ''}>
-#${p.num} ${p.name} (${p.line}) ${p.vet ? '• Vet Shield' : ''} [${p.status}]
+[Pod ${p.pod || 1}] #${p.num} ${p.name} (${p.line}) ${p.vet ? '• Vet Shield' : ''} [${p.status}]
 </option>
 `).join('');
 }
@@ -1499,7 +1940,7 @@ return `${m < 10 ? '0' : ''}${m}:${sec < 10 ? '0' : ''}${sec}`;
 }
 
 /* =========================================================================
-7. DYNAMIC FUEL & NUTRITION ENGINE
+9. DYNAMIC FUEL & NUTRITION ENGINE
 ========================================================================= */
 function recalculateFuel() {
 const weight = parseFloat(document.getElementById('fuel-weight')?.value || 82);
@@ -1623,7 +2064,7 @@ ${formatMin(sessionMinutes + duration + 15)} (Post)
 }
 
 /* =========================================================================
-8. COMPREHENSIVE DUBLIN JUNIOR MATCH DAY KPIS & ANALYTICS ENGINE
+10. DUBLIN JUNIOR MATCH DAY KPIS & ANALYTICS ENGINE
 ========================================================================= */
 function incMatchMetric(key, delta) {
 if (matchStats[key] === undefined) matchStats[key] = 0;
@@ -1810,7 +2251,7 @@ document.body.removeChild(a);
 }
 
 /* =========================================================================
-9. MANAGEMENT COMMAND DESK (Squad Roster & W8 Retest Tables)
+11. MANAGEMENT COMMAND DESK (Squad Roster & W8 Retest Tables)
 ========================================================================= */
 function unlockCoachDesk() {
 const pin = document.getElementById('coach-pin').value;
@@ -1848,13 +2289,15 @@ if (!tbody) return;
 const filtered = players.filter(p =>
 p.name.toLowerCase().includes(filterText.toLowerCase()) ||
 p.line.toLowerCase().includes(filterText.toLowerCase()) ||
-p.num.toString().includes(filterText)
+p.num.toString().includes(filterText) ||
+(p.pod && `pod ${p.pod}`.includes(filterText.toLowerCase()))
 );
 
 tbody.innerHTML = filtered.map(p => `
 <tr class="hover:bg-pats-card/50 transition-colors">
 <td class="py-3 px-3">
 <div class="flex items-center gap-2">
+<span class="px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-600/50 text-emerald-300 text-[9px] font-bold font-mono">Pod ${p.pod || 1}</span>
 <span class="font-extrabold text-pats-gold text-xs">#${p.num}</span>
 <span class="font-bold text-white text-xs">${p.name}</span>
 ${p.vet ? '<span class="px-1.5 py-0.5 rounded bg-amber-950 border border-amber-600/50 text-amber-300 text-[9px] font-bold">VET 32+</span>' : ''}
