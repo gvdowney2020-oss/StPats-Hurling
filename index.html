@@ -93,7 +93,7 @@ P
 <h1 class="text-xs uppercase tracking-widest text-pats-gold font-bold flex items-center gap-1.5">
 St Pat's GAA
 <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-<span class="text-[10px] text-emerald-400 font-medium normal-case">Junior A Hurling</span>
+<span class="text-[10px] text-emerald-400 font-medium normal-case">Junior Hurling</span>
 </h1>
 <p class="text-[11px] text-emerald-200/60 font-medium">Workload, Nutrition &amp; Match Hub</p>
 </div>
@@ -154,7 +154,7 @@ Active View: 2. Block 1 Preseason
 ST PAT'S ANNUAL CHAMPIONSHIP ROADMAP
 </h2>
 <p class="text-xs text-slate-400 mt-0.5 mb-4">
-Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload &rarr; Block 2 (6-Wk League Peak) &rarr; Deload &rarr; Block 3 (Championship Peak)
+Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload ; Block 2 (6-Wk League + <strong class="text-emerald-300">Mid-Jan Hurling Integration</strong>) &rarr; Deload &rarr; Block 3 (Championship Peak)
 </p>
 
 <!-- 8-Stage Grid (Interactive Tap to load full conditioning programme) -->
@@ -172,7 +172,7 @@ Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload &rarr; Block 2 (6-W
 <span class="text-[10px] uppercase font-bold text-emerald-300">NOV – DEC</span>
 <div class="mt-1">
 <h4 class="text-xs font-bold text-emerald-200">2. Block 1: Preseason</h4>
-<p class="text-[11px] text-emerald-300/80">8 Wks • 3 Progression Phases</p>
+<p class="text-[11px] text-emerald-300/80">8 Wks • Foundation Engine</p>
 </div>
 </div>
 <!-- 3. Retest Week -->
@@ -188,15 +188,15 @@ Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload &rarr; Block 2 (6-W
 <span class="text-[10px] uppercase font-bold text-pats-gold">EARLY JAN</span>
 <div class="mt-1">
 <h4 class="text-xs font-bold text-white">4. Deload Week</h4>
-<p class="text-[11px] text-slate-400">-40% Volume (Neural Recovery)</p>
+<p class="text-[11px] text-slate-400">-40% Volume (Pre-Hurling Rest)</p>
 </div>
 </div>
-<!-- 5. Block 2: League -->
+<!-- 5. Block 2: League & Hurling Integration -->
 <div onclick="selectRoadmapStage(5)" id="roadmap-card-5" class="roadmap-card p-3 rounded-xl bg-pats-card border border-pats-cardBorder flex flex-col justify-between">
-<span class="text-[10px] uppercase font-bold text-pats-gold">JAN – FEB</span>
+<span class="text-[10px] uppercase font-bold text-pats-gold">MID-JAN – FEB</span>
 <div class="mt-1">
-<h4 class="text-xs font-bold text-white">5. Block 2: League</h4>
-<p class="text-[11px] text-slate-400">6 Wks • 3 Progression Phases</p>
+<h4 class="text-xs font-bold text-white">5. Block 2: League &amp; Hurling</h4>
+<p class="text-[11px] text-emerald-400 font-medium">Hurling Integration • Running Modified</p>
 </div>
 </div>
 <!-- 6. Deload & Peak -->
@@ -212,7 +212,7 @@ Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload &rarr; Block 2 (6-W
 <span class="text-[10px] uppercase font-bold text-emerald-400">APR – MAY</span>
 <div class="mt-1">
 <h4 class="text-xs font-bold text-white">7. Block 3: Champ</h4>
-<p class="text-[11px] text-slate-400">6 Wks • 3 Progression Phases</p>
+<p class="text-[11px] text-slate-400">6 Wks • Match Ball-in-Play</p>
 </div>
 </div>
 <!-- 8. Champ Peak -->
@@ -249,7 +249,7 @@ class="w-full mt-0.5 bg-pats-card border border-pats-cardBorder text-white text-
 <div class="p-3 rounded-xl bg-pats-card/80 border border-amber-900/40 text-xs flex items-start gap-2.5">
 <span class="text-pats-gold text-sm leading-none mt-0.5">●</span>
 <div>
-<span class="font-bold text-pats-gold uppercase tracking-wide text-[10px] block">Staff Directive</span>
+<span class="font-bold text-pats-gold uppercase tracking-wide text-[10px] block" id="staff-directive-title">Staff Directive</span>
 <p id="staff-directive-text" class="text-slate-300 text-xs mt-0.5 leading-relaxed">
 Block 1 Preseason (8 Weeks): Follow the weekly progressive overload targets. Complete your 4 Durability Pillars before pitch sessions to protect soft tissues.
 </p>
@@ -264,7 +264,7 @@ Block 1 Preseason (8 Weeks): Follow the weekly progressive overload targets. Com
 <h3 class="text-sm font-extrabold uppercase tracking-wide text-white flex items-center gap-1.5">
 <span>🛡️</span> 4 Durability Pillars — Tissue Insurance
 </h3>
-<p class="text-[11px] text-slate-400">Non-negotiable prehab. Log before pitch running to protect hamstrings, adductors &amp; rotator cuffs.</p>
+<p class="text-[11px] text-slate-400">Non-negotiable prehab. Essential before all pitch and hurling sessions to protect hamstrings, groins &amp; rotator cuffs.</p>
 </div>
 <span id="durability-pct" class="text-xs font-mono font-bold text-pats-gold bg-pats-card px-2.5 py-0.5 rounded-full border border-pats-cardBorder">
 0% Logged
@@ -355,16 +355,23 @@ Block 1 Preseason (8 Weeks): Follow the weekly progressive overload targets. Com
 <section class="space-y-3">
 <!-- 1. Block Selector -->
 <div class="space-y-1">
+<div class="flex items-center justify-between">
 <label class="text-[10px] uppercase font-bold text-pats-gold tracking-wider">1. Annual Macrocycle Block Selector:</label>
+<span id="hurling-mode-indicator" class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-700/60">
+Nov–Dec: Pre-Hurling Running Engine
+</span>
+</div>
 <div class="grid grid-cols-3 gap-1.5 bg-pats-card p-1 rounded-xl border border-pats-cardBorder text-xs">
 <button onclick="setBlock(1)" id="btn-block-1" class="py-2 px-2 rounded-lg font-bold uppercase transition-all bg-emerald-500 text-black tactile-btn">
 Block 1: Preseason (8 Wks)
 </button>
-<button onclick="setBlock(2)" id="btn-block-2" class="py-2 px-2 rounded-lg font-bold uppercase transition-all text-slate-300 hover:text-white tactile-btn">
-Block 2: League Peak (6 Wks)
+<button onclick="setBlock(2)" id="btn-block-2" class="py-2 px-2 rounded-lg font-bold uppercase transition-all text-slate-300 hover:text-white tactile-btn flex flex-col items-center">
+<span>Block 2: League &amp; Hurling (6 Wks)</span>
+<span class="text-[8px] text-pats-gold font-normal lowercase">mid-jan hurling integrated</span>
 </button>
-<button onclick="setBlock(3)" id="btn-block-3" class="py-2 px-2 rounded-lg font-bold uppercase transition-all text-slate-300 hover:text-white tactile-btn">
-Block 3: Champ Peak (6 Wks)
+<button onclick="setBlock(3)" id="btn-block-3" class="py-2 px-2 rounded-lg font-bold uppercase transition-all text-slate-300 hover:text-white tactile-btn flex flex-col items-center">
+<span>Block 3: Champ Peak (6 Wks)</span>
+<span class="text-[8px] text-emerald-400 font-normal lowercase">match speed &amp; breakaways</span>
 </button>
 </div>
 </div>
@@ -382,15 +389,18 @@ Block 3: Champ Peak (6 Wks)
 
 <!-- 3. Day Microcycle Selector (Day 1: Aerobic, Day 2: Anaerobic, Day 3: Injury Prevention Gym) -->
 <div class="space-y-1">
+<div class="flex items-center justify-between">
 <label class="text-[10px] uppercase font-bold text-pats-gold tracking-wider">3. Session Microcycle Day:</label>
+<span id="running-mode-subtext" class="text-[10px] text-slate-400 italic">Running load calibrated for pitch Hurling drills</span>
+</div>
 <div class="grid grid-cols-3 gap-1.5 bg-pats-card p-1 rounded-xl border border-pats-cardBorder text-xs">
 <button onclick="setDay(1)" id="btn-day-1" class="py-2 px-2 rounded-lg font-bold uppercase transition-all bg-emerald-500 text-black flex flex-col items-center tactile-btn">
-<span>Day 1</span>
-<span class="text-[9px] font-normal opacity-90">Aerobic Running</span>
+<span id="btn-day-1-title">Day 1</span>
+<span id="btn-day-1-sub" class="text-[9px] font-normal opacity-90">Aerobic Running</span>
 </button>
 <button onclick="setDay(2)" id="btn-day-2" class="py-2 px-2 rounded-lg font-bold uppercase transition-all text-slate-300 hover:text-white flex flex-col items-center tactile-btn">
-<span>Day 2</span>
-<span class="text-[9px] font-normal opacity-75">Anaerobic Running</span>
+<span id="btn-day-2-title">Day 2</span>
+<span id="btn-day-2-sub" class="text-[9px] font-normal opacity-75">Anaerobic Running</span>
 </button>
 <button onclick="setDay(3)" id="btn-day-3" class="py-2 px-2 rounded-lg font-bold uppercase transition-all text-slate-300 hover:text-white flex flex-col items-center tactile-btn">
 <span>Day 3</span>
@@ -402,7 +412,7 @@ Block 3: Champ Peak (6 Wks)
 
 <!-- SESSION WORKLOAD DISPLAY CONTAINER -->
 <section id="session-display-card" class="panel-glass rounded-2xl p-4 sm:p-5 border border-pats-cardBorder space-y-4">
-<!-- Rendered via JS -->
+<!-- Rendered via JS based on Block, Week and Day -->
 </section>
 
 </div>
@@ -414,11 +424,11 @@ Block 3: Champ Peak (6 Wks)
 <section class="panel-glass rounded-2xl p-4 sm:p-5 border border-pats-cardBorder space-y-4">
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-pats-cardBorder pb-3">
 <div>
-<h2 class="text-base sm:text-lg font-extrabold text-white flex items-center gap-2">
+<h2 class="text-base sm:lg font-extrabold text-white flex items-center gap-2">
 <span>⚡</span> Dynamic Hurler Fuel &amp; Diet Engine
 </h2>
 <p class="text-xs text-slate-400">
-Input session start time and bodyweight. Meal timing and food quantities adapt automatically.
+Input session start time and bodyweight. Meal timing and food quantities adapt automatically for pitch training, match days, or gym workouts.
 </p>
 </div>
 <span class="px-2.5 py-1 rounded-full bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-xs font-mono font-bold w-fit">
@@ -432,9 +442,9 @@ GAA Glycogen &amp; Tendon Protocol
 <label class="block text-[10px] uppercase font-bold text-pats-gold">Event Type</label>
 <select id="fuel-event-type" onchange="recalculateFuel()"
 class="w-full mt-1 bg-pats-bg border border-pats-cardBorder rounded-lg px-2 py-1.5 text-xs text-white font-semibold outline-none focus:border-pats-gold cursor-pointer">
-<option value="training">Hard Pitch Session</option>
-<option value="match">Championship Match</option>
-<option value="gym">Gym &amp; Prehab Only</option>
+<option value="training">Hard Hurling / Pitch Session</option>
+<option value="match">Championship / League Match</option>
+<option value="gym">Gym ; Prehab Only</option>
 <option value="rest">Deload / Rest Day</option>
 </select>
 </div>
@@ -450,7 +460,7 @@ class="w-full mt-1 bg-pats-bg border border-pats-cardBorder rounded-lg px-2 py-1
 <select id="fuel-duration" onchange="recalculateFuel()"
 class="w-full mt-1 bg-pats-bg border border-pats-cardBorder rounded-lg px-2 py-1.5 text-xs text-white font-semibold outline-none focus:border-pats-gold cursor-pointer">
 <option value="60">60 Minutes</option>
-<option value="75" selected>75 Minutes</option>
+<option value="75" selected>75 Minutes (Pitch &amp; Skills)</option>
 <option value="90">90 Minutes (Match &amp; ET)</option>
 </select>
 </div>
@@ -907,14 +917,14 @@ Squad Roster &amp; Exercise Logs
 </button>
 <button onclick="setCoachSubTab('testing')" id="subtab-testing"
 class="py-2.5 px-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all text-slate-300 hover:text-white tactile-btn">
-Testing: Baseline &rarr; W8 Retest
+Testing: Baseline ; W8 Retest
 </button>
 </div>
 
 <!-- Controls: Search + Add Hurler + Export CSV -->
 <div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center justify-between">
 <div class="relative flex-1">
-<input type="text" id="hurler-search" oninput="filterRoster(this.value)" placeholder="Search hurler by name, jersey or line..."
+<input type="text" id="hurler-search" oninput="filterRoster(this.value)" placeholder="Search hurler by name, jersey, line or pod..."
 class="w-full bg-pats-card border border-pats-cardBorder rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 outline-none focus:border-pats-gold">
 <span class="absolute left-3 top-2.5 text-xs text-slate-500">🔍</span>
 </div>
@@ -942,7 +952,7 @@ class="w-full bg-pats-card border border-pats-cardBorder rounded-xl pl-9 pr-3 py
 </tr>
 </thead>
 <tbody id="roster-tbody" class="divide-y divide-pats-cardBorder/60">
-<!-- Dynamically populated from 37 hurlers list -->
+<!-- Dynamically populated from 49 hurlers list (Pods 1-6) -->
 </tbody>
 </table>
 </div>
@@ -1012,7 +1022,7 @@ class="w-full bg-pats-card border border-pats-cardBorder rounded-xl pl-9 pr-3 py
 </select>
 </div>
 <div>
-<label class="block text-[10px] uppercase font-bold text-slate-400">Veteran Shield (32-40)</label>
+<label class="block text-[10px] uppercase font-bold text-slate-400">Veteran Shield (32-46)</label>
 <select id="modal-vet" class="w-full mt-1 bg-pats-card border border-pats-cardBorder rounded-lg px-3 py-1.5 text-white outline-none focus:border-pats-gold">
 <option value="false">Standard Protocol</option>
 <option value="true">Veteran Shield Active</option>
@@ -1081,7 +1091,7 @@ class="w-full bg-pats-card border border-pats-cardBorder rounded-xl pl-9 pr-3 py
 <!-- ================= APPLICATION JAVASCRIPT STATE ENGINE ================= -->
 <script>
 /* =========================================================================
-1. COMPLETE ST PAT'S JUNIOR A HURLER ROSTER (Pods 1–6 from Training Sheet)
+1. COMPLETE ST PAT'S JUNIOR HURLER ROSTER (Pods 1–6 from Training Sheet)
 ========================================================================= */
 const initialPlayers = [
 // POD 1
@@ -1157,7 +1167,7 @@ let exerciseChecks = JSON.parse(localStorage.getItem('stpats_exercise_checks') |
 /* =========================================================================
 2. TRAINING STATE: BLOCKS, INDIVIDUAL WEEKS, AND 3 DAYS
 ========================================================================= */
-let currentBlock = 1; // 1: Preseason (8 Wks), 2: League (6 Wks), 3: Champ (6 Wks)
+let currentBlock = 1; // 1: Preseason (8 Wks), 2: League & Hurling (6 Wks), 3: Champ (6 Wks)
 let currentWeek = 1; // Individual week index
 let currentDay = 1; // 1: Aerobic Running, 2: Anaerobic Running, 3: Injury Prevention Gym
 let selectedStageNum = 2; // Default active view: Stage 2 (Block 1 Preseason)
@@ -1217,9 +1227,9 @@ prescription: `
 },
 2: {
 title: "2. Block 1 Preseason Conditioning (November – December)",
-subtitle: "8 Weeks • 3 Progression Phases • Aerobic Engine & Structural Armor",
+subtitle: "8 Weeks • 3 Progression Phases • Pure Aerobic Engine & Structural Armor",
 duration: "8 Weeks (Weeks 1–8)",
-objective: "Build immense capillary density, left ventricular stroke volume, and eccentric tissue durability before match scrimmages begin.",
+objective: "Build immense capillary density, left ventricular stroke volume, and eccentric tissue durability before stick-and-ball training begins in mid-January.",
 prescription: `
 <div class="space-y-3 text-xs">
 <div class="bg-[#07130E] border border-emerald-500/40 p-3 rounded-xl space-y-1.5">
@@ -1275,9 +1285,9 @@ prescription: `
 },
 4: {
 title: "4. Scheduled Deload Week (Early January)",
-subtitle: "-40% Volume Reduction • Central Nervous System & Tendon Remodeling",
+subtitle: "-40% Volume Reduction • Central Nervous System Recovery Before Mid-Jan Hurling",
 duration: "1 Week Neural Recovery",
-objective: "Dissipate cumulative systemic fatigue from Block 1 while preserving neuromuscular firing rates and tendon stiffness.",
+objective: "Dissipate cumulative systemic fatigue from Block 1 while preserving neuromuscular firing rates before introducing hurling drills in mid-January.",
 prescription: `
 <div class="space-y-2.5 text-xs">
 <div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder">
@@ -1291,27 +1301,34 @@ prescription: `
 `
 },
 5: {
-title: "5. Block 2: Dublin League Campaign (January – February)",
-subtitle: "6 Weeks • 3 Progression Phases • Match Pace Exposure & Repeat Sprint Ability",
+title: "5. Block 2: Dublin League & Mid-January Hurling Integration (Jan – Feb)",
+subtitle: "6 Weeks • 3 Progression Phases • Hurling Skill Integration & Running Recalibration",
 duration: "6 Weeks (Weeks 1–6)",
-objective: "Condition the squad to sustain explosive accelerations, tackle pressure, and clean stickwork under heavy metabolic acid accumulation during league games.",
+objective: "Integrate the hurley & sliotar directly into conditioning. Isolated dry running is reduced by ~35% and replaced with Ball-in-Play (BIP) striking transitions and conditioned match play to avoid workload spikes.",
 prescription: `
 <div class="space-y-3 text-xs">
-<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
-<span class="font-bold text-white text-xs uppercase block">Phase 1 (W1–2): Match Pace Exposure & Anaerobic Tolerance</span>
-<p class="text-slate-300">• <strong>Pitch Day 1:</strong> 100m Box-to-Box tempo strides (14s run : 20s walk) combined with 4v4 small-sided contact games ($3 \\times 4\\text{ mins}$).</p>
-<p class="text-slate-300">• <strong>Pitch Day 2:</strong> Gaelic Suicide Ladders ($5 \\times 130\\text{m}$ reps under 26s, 75s active recovery walk).</p>
+<div class="p-3 bg-emerald-950/40 rounded-xl border border-emerald-500/50 space-y-1">
+<strong class="text-emerald-300 uppercase text-[10px] block font-mono">⚡ Mid-January Running Adaptation Rule:</strong>
+<p class="text-slate-200 leading-relaxed">
+As technical hurling and match scrimmages begin, linear 'dry' running is modified. High-speed running (HSR) is now achieved through <strong>contested ground-ball sprints, box-to-box clearances with support runs, and small-sided games (SSGs)</strong>. This preserves neuromuscular freshness and protects soft tissue from cumulative volume spikes.
+</p>
 </div>
 <div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
-<span class="font-bold text-white text-xs uppercase block">Phase 2 (W3–4): Repeat Sprint Capacity under Lactic Strain</span>
-<p class="text-slate-300">• <strong>Pitch Day 1:</strong> 15s : 15s Eurofit Shuttles with 180° plant-and-turn (3 blocks of 6 reps @ 74m distance).</p>
-<p class="text-slate-300">• <strong>Pitch Day 2:</strong> Ruck-Breakdown Transition Sprints (65m sprint following contested ground pick-up). 6 reps @ 100% velocity.</p>
-<p class="text-slate-300">• <strong>Conditioning Top-Up:</strong> SkiErg Glycolytic Buffering (3 sets of $4 \\times 15\\text{s}$ sub-1:42 split, 45s rest).</p>
+<span class="font-bold text-white text-xs uppercase block">Phase 1 (W1–2): Hurling Introduction & Match Pace Exposure</span>
+<p class="text-slate-300">• <strong>Day 1 (Aerobic + Hurling):</strong> Box-to-Box Striking Transition Grids (65m clearance strike $\\rightarrow$ 80m support sprint $\\rightarrow$ gather break $\\rightarrow$ strike). 2 sets of 5 reps with 20s recovery walk. Replaces dry laps.</p>
+<p class="text-slate-300">• <strong>Day 2 (Anaerobic + Combat):</strong> Contested Ground Sliotar Pick-up into 45m Sprints under pressure. 5 reps with point finish over the bar.</p>
+<p class="text-slate-300">• <strong>Workload Target:</strong> 3,800m conditioning + 2,400m hurling drills = 6,200m total GPS load.</p>
 </div>
 <div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
-<span class="font-bold text-white text-xs uppercase block">Phase 3 (W5–6): Pre-League Final Taper & Neural Priming</span>
+<span class="font-bold text-white text-xs uppercase block">Phase 2 (W3–4): Repeat Sprint Ability (RSA) in Hurling Rallies</span>
+<p class="text-slate-300">• <strong>Day 1 (Pitch):</strong> 15s : 15s Eurofit Shuttles with sliotar jab-lift at 36m halfway cone. 2 blocks of 7 reps.</p>
+<p class="text-slate-300">• <strong>Day 2 (Pitch):</strong> Conditioned Small-Sided Games ($4 \\times 4\\text{ mins}$ @ 5v5 on $65\\text{m} \\times 45\\text{m}$ pitch). High tackle rate & fast recovery.</p>
+<p class="text-slate-300">• <strong>Conditioning Top-Up:</strong> SkiErg Glycolytic Buffering (2 sets of $4 \\times 15\\text{s}$ sub-1:42 split, zero leg impact).</p>
+</div>
+<div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
+<span class="font-bold text-white text-xs uppercase block">Phase 3 (W5–6): Pre-League Tactical Sharpness & Neural Priming</span>
 <p class="text-slate-300">• <strong>Pitch:</strong> High-speed 30m breakaways with hurley strike on the run. 4 sets of 1 run with full 90s rest.</p>
-<p class="text-slate-300">• <strong>Tactical Integration:</strong> 15-minute high-tempo puck-out pressing transitions.</p>
+<p class="text-slate-300">• <strong>Tactical Integration:</strong> 20-minute high-tempo puck-out pressing transitions and contested break battles.</p>
 </div>
 </div>
 `
@@ -1351,7 +1368,7 @@ prescription: `
 </div>
 <div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
 <span class="font-bold text-white text-xs uppercase block">Phase 2 (W3–4): Lethal Breakaways & Max Acceleration</span>
-<p class="text-slate-300">• <strong>Pitch:</strong> Contrast PAPE Sprints: Heavy Sled Push (10m @ 50% BW) immediately into 25m Unresisted Match Sprint (4 sets, 2.5 mins rest).</p>
+<p class="text-slate-300">• <strong>Pitch:</strong> Contrast PAPE Sprints: Heavy Sled Push (10m @ 50% BW) immediately into 25m Unresisted Match Sprint with Hurley (4 sets, 2.5 mins rest).</p>
 <p class="text-slate-300">• <strong>Conditioning:</strong> Concept2 SkiErg + Sled Combo: 10s SkiErg sprint + 10s sled push (2 sets of 5 reps, 4 mins rest).</p>
 </div>
 <div class="bg-[#07130E] border border-pats-cardBorder p-3 rounded-xl space-y-1.5">
@@ -1490,7 +1507,7 @@ ${prog.prescription}
 }
 
 /* =========================================================================
-8. BLOCKS, WEEKS, AND SESSIONS LOGIC
+8. BLOCKS, WEEKS, AND SESSIONS LOGIC (With Mid-January Hurling Integration)
 ========================================================================= */
 function setBlock(blockNum) {
 currentBlock = blockNum;
@@ -1506,6 +1523,49 @@ btn.className = "py-2 px-2 rounded-lg font-bold uppercase transition-all text-sl
 }
 }
 });
+
+// Update indicator & directive
+const indicator = document.getElementById('hurling-mode-indicator');
+const dirTitle = document.getElementById('staff-directive-title');
+const dirText = document.getElementById('staff-directive-text');
+const day1Sub = document.getElementById('btn-day-1-sub');
+const day2Sub = document.getElementById('btn-day-2-sub');
+const runningSub = document.getElementById('running-mode-subtext');
+
+if (blockNum === 1) {
+if (indicator) {
+indicator.textContent = "Nov–Dec: Pre-Hurling Running Engine";
+indicator.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-700/60";
+}
+if (dirText) {
+dirText.textContent = "Block 1 Preseason (8 Weeks): Pure engine building. Follow the weekly progressive overload targets. Complete your 4 Durability Pillars before pitch running.";
+}
+if (day1Sub) day1Sub.textContent = "Aerobic Running";
+if (day2Sub) day2Sub.textContent = "Anaerobic Running";
+if (runningSub) runningSub.textContent = "Foundation running volume prior to stick work";
+} else if (blockNum === 2) {
+if (indicator) {
+indicator.textContent = "Mid-Jan: Hurling Integration Active ⚡";
+indicator.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-amber-950 text-pats-gold border border-amber-600/70";
+}
+if (dirText) {
+dirText.textContent = "Block 2 (Mid-Jan Launch): Hurling skill & match play active! Pure 'dry' running volume is reduced by ~35% and embedded into Ball-in-Play striking grids and contested games to balance total workload.";
+}
+if (day1Sub) day1Sub.textContent = "Aerobic + Striking";
+if (day2Sub) day2Sub.textContent = "Anaerobic + Combat";
+if (runningSub) runningSub.textContent = "Running adapted for mid-January Hurling drills & games";
+} else {
+if (indicator) {
+indicator.textContent = "Apr–May: Championship Ball-in-Play";
+indicator.className = "text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-900 text-emerald-200 border border-emerald-500/70";
+}
+if (dirText) {
+dirText.textContent = "Block 3 Championship Build: Maximal velocity sprints with sliotar breakaways, high-speed running density, and alactic priming for championship knockouts.";
+}
+if (day1Sub) day1Sub.textContent = "Match Transition";
+if (day2Sub) day2Sub.textContent = "Speed Breakaways";
+if (runningSub) runningSub.textContent = "Championship speed density & match sharpness";
+}
 
 renderWeeksNav();
 renderSession();
@@ -1546,11 +1606,11 @@ if (currentWeek <= 2) desc = `Week ${currentWeek} (Aerobic Base Accumulation & A
 else if (currentWeek <= 5) desc = `Week ${currentWeek} (Threshold Velocity & Eccentric Overload)`;
 else desc = `Week ${currentWeek} (Max Velocity Inoculation & Pre-Retest Peak)`;
 } else if (currentBlock === 2) {
-if (currentWeek <= 2) desc = `Week ${currentWeek} (Match Pace Exposure & Anaerobic Tolerance)`;
-else if (currentWeek <= 4) desc = `Week ${currentWeek} (Repeat Sprint Capacity under Lactic Strain)`;
-else desc = `Week ${currentWeek} (Pre-League Final Taper & Neural Priming)`;
+if (currentWeek <= 2) desc = `Week ${currentWeek} (Mid-Jan: Hurling Launch & Ball-in-Play Transitions)`;
+else if (currentWeek <= 4) desc = `Week ${currentWeek} (Match-Pace Conditioned Games & Lactic Hurling RSA)`;
+else desc = `Week ${currentWeek} (Pre-League Final Taper & Puck-Out Pressing)`;
 } else {
-if (currentWeek <= 2) desc = `Week ${currentWeek} (Championship High-Speed Density)`;
+if (currentWeek <= 2) desc = `Week ${currentWeek} (Championship High-Speed Density & Breakaways)`;
 else if (currentWeek <= 4) desc = `Week ${currentWeek} (Lethal Breakaways & Max Acceleration)`;
 else desc = `Week ${currentWeek} (Championship Peak Supercompensation)`;
 }
@@ -1580,7 +1640,12 @@ const p = players.find(x => x.id === selectedPlayerId) || players[0];
 const isVet = p?.vet;
 const sessKey = `b${currentBlock}_w${currentWeek}_d${currentDay}_${selectedPlayerId}`;
 
+// =========================================================================
+// DAY 1: AEROBIC ENGINE (Pitch) — MODULATED BY CURRENT BLOCK
+// =========================================================================
 if (currentDay === 1) {
+if (currentBlock === 1) {
+// BLOCK 1: PRESEASON FOUNDATION RUNNING (PRE-HURLING)
 const gridLaps = 4 + Math.floor(currentWeek * 0.5);
 const eurofitSets = 2 + Math.floor(currentWeek / 3);
 const eurofitReps = 6 + (currentWeek % 3) * 2;
@@ -1590,12 +1655,12 @@ card.innerHTML = `
 <div class="flex items-center justify-between border-b border-pats-cardBorder pb-3">
 <div>
 <span class="px-2.5 py-0.5 rounded-md bg-emerald-500 text-black font-extrabold text-[10px] uppercase">
-Day 1 • Aerobic Engine (Pitch)
+Block 1 • Day 1 • Aerobic Engine (Pitch)
 </span>
 <h3 class="text-base sm:text-lg font-black text-white mt-1">
-MAXIMAL AEROBIC SPEED (MAS) & PERIMETER RECOVERY
+MAXIMAL AEROBIC SPEED (MAS) &amp; PERIMETER RECOVERY
 </h3>
-<p class="text-xs text-slate-400">Target: Aerobic enzyme density, capillary perfusion & left ventricular volume.</p>
+<p class="text-xs text-slate-400">Target: Aerobic enzyme density, capillary perfusion &amp; left ventricular volume before stick work begins.</p>
 </div>
 <div class="text-right">
 <span class="text-xs font-mono font-bold text-emerald-400 block">${totalDist}m Total</span>
@@ -1603,12 +1668,12 @@ MAXIMAL AEROBIC SPEED (MAS) & PERIMETER RECOVERY
 </div>
 </div>
 
-<!-- Pitch Drill 1 with Checkboxes -->
+<!-- Pitch Drill 1 -->
 <div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder space-y-2.5">
 <div class="flex items-center justify-between text-[11px] font-bold text-slate-300">
 <span class="flex items-center gap-1.5">
 <span class="w-2 h-2 rounded-full bg-pats-gold"></span>
-Drill 1: 145m x 90m MAS Perimeter Box
+Drill 1: 145m x 90m MAS Perimeter Box (Pre-Hurling)
 </span>
 <span class="text-pats-gold font-mono">${gridLaps} Laps Prescribed</span>
 </div>
@@ -1628,9 +1693,8 @@ Drill 1: 145m x 90m MAS Perimeter Box
 </svg>
 <div class="text-xs text-slate-300 space-y-1">
 <p>• <strong>Prescription:</strong> ${gridLaps} continuous laps. Stride long sidelines (145m) in 30s. Jog short end-lines (90m) in 35s.</p>
-<p>• <strong>Heart Rate Target:</strong> 155–172 bpm. Aerobic engine for 65th-minute rucks.</p>
+<p>• <strong>Heart Rate:</strong> 155–172 bpm. Builds the base engine that keeps hurlers winning rucks in the 65th minute.</p>
 </div>
-<!-- Lap Checkboxes -->
 <div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
 <span class="text-[10px] uppercase font-bold text-pats-gold">Lap Check-off:</span>
 <div class="flex flex-wrap gap-2 text-xs">
@@ -1644,7 +1708,7 @@ ${Array.from({ length: gridLaps }, (_, i) => `
 </div>
 </div>
 
-<!-- Pitch Drill 2 with Checkboxes -->
+<!-- Pitch Drill 2 -->
 <div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder space-y-2.5">
 <div class="flex items-center justify-between text-[11px] font-bold text-slate-300">
 <span class="flex items-center gap-1.5">
@@ -1654,11 +1718,10 @@ Drill 2: 15s : 15s Eurofit Shuttles (72m)
 <span class="text-emerald-400 font-mono">${eurofitSets} Sets × ${eurofitReps} Reps (Week ${currentWeek})</span>
 </div>
 <div class="text-xs text-slate-300 space-y-1.5">
-<p>• <strong>Setup:</strong> Cones set at 72m distance (100% MAS standard for St Pat's backs & forwards).</p>
-<p>• <strong>Work:Rest:</strong> 15s hard run to cone $\rightarrow$ 15s walk back recovery. Rest 2.5 mins between sets.</p>
+<p>• <strong>Setup:</strong> Cones set at 72m distance (100% MAS standard for St Pat's backs &amp; forwards).</p>
+<p>• <strong>Work:Rest:</strong> 15s hard run to cone $\\rightarrow$ 15s walk back recovery. Rest 2.5 mins between sets.</p>
 <p>• <strong>Veteran Shield (Age 32-40):</strong> ${isVet ? '<span class="text-pats-gold font-bold">ACTIVE: Drop shuttle to 64m. Cap at 2 sets to avoid tendon shear.</span>' : 'Standard 72m distance.'}</p>
 </div>
-<!-- Set Checkboxes -->
 <div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
 <span class="text-[10px] uppercase font-bold text-emerald-400">Set Check-off:</span>
 <div class="flex flex-wrap gap-2 text-xs">
@@ -1671,20 +1734,133 @@ ${Array.from({ length: eurofitSets }, (_, i) => `
 </div>
 </div>
 </div>
+`;
+} else {
+// BLOCK 2 (MID-JAN ONWARDS): HURLING INTEGRATED AEROBIC RUNNING!
+const strikeSets = 2;
+const strikeReps = 4 + (currentWeek % 3);
+const ssgGames = 3 + Math.floor(currentWeek / 3);
 
-<!-- Rest Interval Timer -->
+card.innerHTML = `
+<div class="flex items-center justify-between border-b border-pats-cardBorder pb-3">
+<div>
+<span class="px-2.5 py-0.5 rounded-md bg-amber-500 text-black font-extrabold text-[10px] uppercase">
+Block 2 (Mid-Jan) • Day 1 • Hurling-Integrated Aerobic Engine
+</span>
+<h3 class="text-base sm:text-lg font-black text-white mt-1">
+BOX-TO-BOX STRIKING GRIDS &amp; CONDITIONED MATCH PLAY
+</h3>
+<p class="text-xs text-slate-300">
+<strong class="text-emerald-400">Workload Modified:</strong> Pure linear dry running cut by 35%. Conditioning now achieved through stick-and-ball transition runs to prevent training spikes.
+</p>
+</div>
+<div class="text-right">
+<span class="text-xs font-mono font-bold text-pats-gold block">3,800m Run + 2,400m Ball</span>
+<span class="text-[10px] text-slate-400">6,200m Total GPS</span>
+</div>
+</div>
+
+<!-- Hurling Integrated Drill 1 -->
+<div class="p-3 bg-pats-card rounded-xl border border-emerald-500/40 space-y-2.5">
+<div class="flex items-center justify-between text-[11px] font-bold text-slate-200">
+<span class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-pats-gold"></span>
+Drill 1: Box-to-Box Striking Transition Shuttles (With Hurley &amp; Sliotar)
+</span>
+<span class="text-emerald-400 font-mono">${strikeSets} Sets × ${strikeReps} Reps</span>
+</div>
+
+<!-- Diagram showing striking & running -->
+<svg viewBox="0 0 400 140" class="w-full h-28 rounded-lg bg-emerald-950/30 border border-emerald-800/40">
+<rect x="20" y="20" width="360" height="100" rx="6" fill="none" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3 3"/>
+<line x1="120" y1="20" x2="120" y2="120" stroke="#475569" stroke-width="1"/>
+<text x="125" y="32" fill="#94a3b8" font-size="8">45m</text>
+<line x1="280" y1="20" x2="280" y2="120" stroke="#475569" stroke-width="1"/>
+<text x="285" y="32" fill="#94a3b8" font-size="8">65m</text>
+
+<!-- Striking vector -->
+<circle cx="50" cy="70" r="4" fill="#fbbf24"/>
+<text x="35" y="60" fill="#fbbf24" font-size="8" font-weight="bold">Player (Strike)</text>
+<path d="M 54 70 Q 180 35 270 65" fill="none" stroke="#fbbf24" stroke-width="2" stroke-dasharray="2 2"/>
+<text x="170" y="45" fill="#fbbf24" font-size="8">65m Ball Flight</text>
+
+<!-- High-Speed Run Follow-up -->
+<path d="M 54 80 L 265 80" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+<text x="140" y="93" fill="#10b981" font-size="8" font-weight="bold">80m High-Speed Sprint Follow-up</text>
+<circle cx="270" cy="75" r="5" fill="#34d399"/>
+<text x="260" y="105" fill="#34d399" font-size="8">Gather break &amp; strike</text>
+</svg>
+
+<div class="text-xs text-slate-300 space-y-1">
+<p>• <strong>Protocol:</strong> Player 1 strikes sliotar 65m downfield $\rightarrow$ immediately follows ball on a 80m sprint $\rightarrow$ gathers break under pressure $\rightarrow$ turns and delivers 60m clearance back to partner.</p>
+<p>• <strong>Work:Rest:</strong> 16s high-speed transition run : 24s active walking recovery. Replaces dry perimeter running.</p>
+<p>• <strong>Veteran Shield (Age 32-40):</strong> ${isVet ? '<span class="text-pats-gold font-bold">ACTIVE: 1 set of 4 reps; then rotate to puck-out support feeder to preserve Achilles.</span>' : 'Standard 2 sets prescribed.'}</p>
+</div>
+
+<!-- Set Checkboxes -->
+<div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
+<span class="text-[10px] uppercase font-bold text-pats-gold">Rep Check-off:</span>
+<div class="flex flex-wrap gap-2 text-xs">
+${Array.from({ length: strikeReps }, (_, i) => `
+<label class="flex items-center gap-1 bg-pats-bg px-2.5 py-1 rounded border border-pats-cardBorder cursor-pointer text-[11px] text-slate-300">
+<input type="checkbox" onchange="toggleExCheck('${sessKey}_strike_rep${i+1}')" ${exerciseChecks[`${sessKey}_strike_rep${i+1}`] ? 'checked' : ''} class="accent-emerald-500 rounded">
+<span>Rep ${i+1}</span>
+</label>
+`).join('')}
+</div>
+</div>
+</div>
+
+<!-- Hurling Integrated Drill 2: Conditioned SSGs -->
+<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder space-y-2.5">
+<div class="flex items-center justify-between text-[11px] font-bold text-slate-300">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+Drill 2: Conditioned Small-Sided Game Conditioning ($4 \\times 4\\text{ mins}$)
+</span>
+<span class="text-emerald-400 font-mono">${ssgGames} Games @ 4v4 Intensity</span>
+</div>
+<div class="text-xs text-slate-300 space-y-1.5">
+<p>• <strong>Pitch Setup:</strong> 65m $\times$ 45m grid with two sets of full goalposts. 4v4 or 5v5 continuous contact.</p>
+<p>• <strong>Rules:</strong> Maximum 2 touches on hurley. If a turnover occurs, all 4 defenders must transition over halfway within 4 seconds. Keeps heart rate $>88\\%\\text{ HR}_{\\max}$ with real match-play collisions.</p>
+<p>• <strong>Rest:</strong> 2 mins active walking &amp; hydration flush between games.</p>
+</div>
+<div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
+<span class="text-[10px] uppercase font-bold text-emerald-400">Game Check-off:</span>
+<div class="flex flex-wrap gap-2 text-xs">
+${Array.from({ length: ssgGames }, (_, i) => `
+<label class="flex items-center gap-1 bg-pats-bg px-2.5 py-1 rounded border border-pats-cardBorder cursor-pointer text-[11px] text-slate-300">
+<input type="checkbox" onchange="toggleExCheck('${sessKey}_ssg_game${i+1}')" ${exerciseChecks[`${sessKey}_ssg_game${i+1}`] ? 'checked' : ''} class="accent-emerald-500 rounded">
+<span>Game ${i+1} (4m)</span>
+</label>
+`).join('')}
+</div>
+</div>
+</div>
+`;
+}
+
+// Add interval timer footer to Day 1
+card.innerHTML += `
 <div class="p-3 rounded-xl bg-pats-card/80 border border-pats-cardBorder flex items-center justify-between">
 <span class="text-xs font-bold text-slate-300">Recovery Interval Timer:</span>
 <div class="flex items-center gap-2">
 <button onclick="runTimer(15)" class="px-2.5 py-1 rounded bg-pats-bg border border-pats-cardBorder text-xs text-pats-gold font-mono hover:bg-pats-card">15s</button>
 <button onclick="runTimer(30)" class="px-2.5 py-1 rounded bg-pats-bg border border-pats-cardBorder text-xs text-pats-gold font-mono hover:bg-pats-card">30s</button>
 <button onclick="runTimer(60)" class="px-2.5 py-1 rounded bg-pats-bg border border-pats-cardBorder text-xs text-pats-gold font-mono hover:bg-pats-card">60s</button>
-<button onclick="runTimer(150)" class="px-2.5 py-1 rounded bg-pats-bg border border-pats-cardBorder text-xs text-pats-gold font-mono hover:bg-pats-card">2.5m</button>
+<button onclick="runTimer(120)" class="px-2.5 py-1 rounded bg-pats-bg border border-pats-cardBorder text-xs text-pats-gold font-mono hover:bg-pats-card">2m</button>
 <span id="timer-display" class="text-sm font-mono font-extrabold text-emerald-400 px-2 py-0.5 bg-pats-bg rounded border border-emerald-500/30">00:00</span>
 </div>
 </div>
 `;
-} else if (currentDay === 2) {
+}
+
+// =========================================================================
+// DAY 2: ANAEROBIC ENGINE (Pitch) — MODULATED BY CURRENT BLOCK
+// =========================================================================
+else if (currentDay === 2) {
+if (currentBlock === 1) {
+// BLOCK 1: PRESEASON DRY REPEAT SPRINT CAPACITY
 const rsaReps = 5 + (currentWeek % 3);
 const suicideReps = 3 + Math.floor(currentWeek / 4);
 
@@ -1692,12 +1868,12 @@ card.innerHTML = `
 <div class="flex items-center justify-between border-b border-pats-cardBorder pb-3">
 <div>
 <span class="px-2.5 py-0.5 rounded-md bg-amber-500 text-black font-extrabold text-[10px] uppercase">
-Day 2 • Anaerobic Engine (Pitch)
+Block 1 • Day 2 • Anaerobic Engine (Pitch)
 </span>
 <h3 class="text-base sm:text-lg font-black text-white mt-1">
-REPEAT SPRINT ABILITY (RSA) & GAELIC SUICIDE LADDERS
+REPEAT SPRINT ABILITY (RSA) &amp; GAELIC SUICIDE LADDERS
 </h3>
-<p class="text-xs text-slate-400">Target: Hydrogen ion buffering, phosphocreatine resynthesis & max velocity repeats.</p>
+<p class="text-xs text-slate-400">Target: Hydrogen ion buffering, phosphocreatine resynthesis &amp; max velocity repeats.</p>
 </div>
 <div class="text-right">
 <span class="text-xs font-mono font-bold text-amber-400 block">High Speed Running</span>
@@ -1705,7 +1881,7 @@ REPEAT SPRINT ABILITY (RSA) & GAELIC SUICIDE LADDERS
 </div>
 </div>
 
-<!-- Drill 1 with Checkboxes -->
+<!-- Drill 1 -->
 <div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder space-y-2.5">
 <div class="flex items-center justify-between text-[11px] font-bold text-slate-300">
 <span class="flex items-center gap-1.5">
@@ -1729,10 +1905,9 @@ Drill 1: 13m → 20m → 45m Gaelic Suicide Ladder
 <path d="M 30 30 L 340 30 L 30 30" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
 </svg>
 <div class="text-xs text-slate-300 space-y-1">
-<p>• <strong>Execution:</strong> Sprint goal line to 13m $\rightarrow$ touch ground $\rightarrow$ turn & sprint to goal $\rightarrow$ turn & sprint to 20m $\rightarrow$ turn to goal $\rightarrow$ turn & sprint through 45m line.</p>
+<p>• <strong>Execution:</strong> Sprint goal line to 13m $\\rightarrow$ touch ground $\\rightarrow$ turn &amp; sprint to goal $\\rightarrow$ turn &amp; sprint to 20m $\\rightarrow$ turn to goal $\\rightarrow$ turn &amp; sprint through 45m line.</p>
 <p>• <strong>Target Time:</strong> Under 29.5s. Rest 90s complete walking rest between reps.</p>
 </div>
-<!-- Suicide Rep Checkboxes -->
 <div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
 <span class="text-[10px] uppercase font-bold text-amber-400">Rep Check-off:</span>
 <div class="flex flex-wrap gap-2 text-xs">
@@ -1746,7 +1921,7 @@ ${Array.from({ length: suicideReps }, (_, i) => `
 </div>
 </div>
 
-<!-- Drill 2 with Checkboxes -->
+<!-- Drill 2 -->
 <div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder space-y-2.5">
 <div class="flex items-center justify-between text-[11px] font-bold text-slate-300">
 <span class="flex items-center gap-1.5">
@@ -1756,11 +1931,10 @@ Drill 2: Ruck-Breakdown Transition Sprints (65m)
 <span class="text-amber-400 font-mono">${rsaReps} Reps @ 100% Intensity</span>
 </div>
 <div class="text-xs text-slate-300 space-y-1">
-<p>• <strong>Protocol:</strong> Drop chest to grass (simulate contesting ground ball) $\rightarrow$ explosive popup on whistle $\rightarrow$ 65m sprint to opposite 45m line.</p>
-<p>• <strong>Rest:</strong> 45s walk back. Replicates turning defense into counter-attack scoring opportunities.</p>
+<p>• <strong>Protocol:</strong> Drop chest to grass (simulate contesting ground ball) $\\rightarrow$ explosive popup on whistle $\\rightarrow$ 65m sprint to opposite 45m line.</p>
+<p>• <strong>Rest:</strong> 45s walk back.</p>
 <p>• <strong>Veteran Shield (Age 32-40):</strong> ${isVet ? '<span class="text-pats-gold font-bold">ACTIVE: Start from tall athletic crouch (no chest drop) to shield spine.</span>' : 'Chest to grass required.'}</p>
 </div>
-<!-- Transition Sprints Checkboxes -->
 <div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
 <span class="text-[10px] uppercase font-bold text-amber-400">Rep Check-off:</span>
 <div class="flex flex-wrap gap-2 text-xs">
@@ -1775,6 +1949,114 @@ ${Array.from({ length: rsaReps }, (_, i) => `
 </div>
 `;
 } else {
+// BLOCK 2 (MID-JAN ONWARDS): HURLING INTEGRATED ANAEROBIC & COMBAT RUNNING!
+const pickReps = 5 + (currentWeek % 3);
+const combatReps = 4 + Math.floor(currentWeek / 3);
+
+card.innerHTML = `
+<div class="flex items-center justify-between border-b border-pats-cardBorder pb-3">
+<div>
+<span class="px-2.5 py-0.5 rounded-md bg-amber-500 text-black font-extrabold text-[10px] uppercase">
+Block 2 (Mid-Jan) • Day 2 • Anaerobic Hurling Combat &amp; Breakaways
+</span>
+<h3 class="text-base sm:text-lg font-black text-white mt-1">
+CONTESTED GROUND PICK-UPS &amp; 45M SCORING RUNS
+</h3>
+<p class="text-xs text-slate-300">
+<strong class="text-pats-gold">Hurling Integrated:</strong> High-lactate buffering while jab-lifting and striking on the run under physical pressure.
+</p>
+</div>
+<div class="text-right">
+<span class="text-xs font-mono font-bold text-amber-400 block">High-Speed Hurling</span>
+<span class="text-[10px] text-slate-400">Lactic Acid Buffering</span>
+</div>
+</div>
+
+<!-- Hurling Anaerobic Drill 1 -->
+<div class="p-3 bg-pats-card rounded-xl border border-amber-500/40 space-y-2.5">
+<div class="flex items-center justify-between text-[11px] font-bold text-slate-200">
+<span class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+Drill 1: Contested Ground Sliotar Pick-up into 45m Breakaway Strike
+</span>
+<span class="text-amber-400 font-mono">${pickReps} Reps @ 100% Intent</span>
+</div>
+
+<svg viewBox="0 0 400 120" class="w-full h-24 rounded-lg bg-amber-950/20 border border-amber-800/40">
+<line x1="30" y1="100" x2="370" y2="100" stroke="#475569" stroke-width="2"/>
+<circle cx="50" cy="100" r="4" fill="#ef4444"/>
+<text x="35" y="115" fill="#ef4444" font-size="8">65m line</text>
+
+<!-- Ruck contest cone -->
+<circle cx="130" cy="100" r="5" fill="#fbbf24"/>
+<text x="110" y="85" fill="#fbbf24" font-size="8">Contested Ground Ball</text>
+
+<!-- Sprint path -->
+<path d="M 50 70 L 130 70" stroke="#f59e0b" stroke-width="2"/>
+<text x="75" y="62" fill="#f59e0b" font-size="8">15m sprint</text>
+
+<!-- Breakaway to goal -->
+<path d="M 130 70 L 330 70" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+<text x="200" y="62" fill="#10b981" font-size="8">45m Breakaway with Sliotar</text>
+
+<!-- Point strike -->
+<circle cx="340" cy="70" r="4" fill="#38bdf8"/>
+<text x="325" y="85" fill="#38bdf8" font-size="8">Score over bar</text>
+</svg>
+
+<div class="text-xs text-slate-300 space-y-1">
+<p>• <strong>Execution:</strong> Two hurlers sprint 15m to a contested ground sliotar $\rightarrow$ physical shoulder contact $\rightarrow$ winner executes clean jab-lift $\rightarrow$ immediate 45m breakaway sprint to slot a point on the run.</p>
+<p>• <strong>Work:Rest:</strong> 12s maximal explosive effort with 60s passive walk recovery between reps.</p>
+<p>• <strong>Hurling Benefit:</strong> Trains nervous system to deliver clean wrist snap and striking accuracy under intense cardiac fatigue.</p>
+</div>
+
+<!-- Rep Checkboxes -->
+<div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
+<span class="text-[10px] uppercase font-bold text-amber-400">Rep Check-off:</span>
+<div class="flex flex-wrap gap-2 text-xs">
+${Array.from({ length: pickReps }, (_, i) => `
+<label class="flex items-center gap-1 bg-pats-bg px-2.5 py-1 rounded border border-pats-cardBorder cursor-pointer text-[11px] text-slate-300">
+<input type="checkbox" onchange="toggleExCheck('${sessKey}_pick_rep${i+1}')" ${exerciseChecks[`${sessKey}_pick_rep${i+1}`] ? 'checked' : ''} class="accent-amber-500 rounded">
+<span>Rep ${i+1}</span>
+</label>
+`).join('')}
+</div>
+</div>
+</div>
+
+<!-- Hurling Anaerobic Drill 2 -->
+<div class="p-3 bg-pats-card rounded-xl border border-pats-cardBorder space-y-2.5">
+<div class="flex items-center justify-between text-[11px] font-bold text-slate-300">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-amber-400"></span>
+Drill 2: 1v1 Channel Pressure &amp; Hook/Block Shuttles
+</span>
+<span class="text-amber-400 font-mono">${combatReps} Sets @ 100% Intent</span>
+</div>
+<div class="text-xs text-slate-300 space-y-1">
+<p>• <strong>Protocol:</strong> Forward attempts 30m run inside a 10m-wide corridor; back pursues from 3m behind to execute hook or block. Reverse roles immediately on return.</p>
+<p>• <strong>Rest:</strong> 75s walk recovery. Builds the repeat sprint ability (RSA) that wins breaking balls in championship games.</p>
+</div>
+<div class="pt-2 border-t border-pats-cardBorder flex flex-wrap items-center justify-between gap-2">
+<span class="text-[10px] uppercase font-bold text-amber-400">Set Check-off:</span>
+<div class="flex flex-wrap gap-2 text-xs">
+${Array.from({ length: combatReps }, (_, i) => `
+<label class="flex items-center gap-1 bg-pats-bg px-2.5 py-1 rounded border border-pats-cardBorder cursor-pointer text-[11px] text-slate-300">
+<input type="checkbox" onchange="toggleExCheck('${sessKey}_combat_set${i+1}')" ${exerciseChecks[`${sessKey}_combat_set${i+1}`] ? 'checked' : ''} class="accent-amber-500 rounded">
+<span>Set ${i+1} (F/B)</span>
+</label>
+`).join('')}
+</div>
+</div>
+</div>
+`;
+}
+}
+
+// =========================================================================
+// DAY 3: INJURY PREVENTION GYM (Structural Armor & Joint Prehab)
+// =========================================================================
+else {
 const squatLoad = Math.round((p?.squatW8 || 125) * (0.75 + (currentWeek * 0.02)));
 const deadliftLoad = Math.round((p?.deadliftW8 || 165) * (0.75 + (currentWeek * 0.02)));
 const squatSetsCount = isVet ? 3 : 4;
@@ -1786,9 +2068,9 @@ card.innerHTML = `
 Day 3 • Structural Armor (Gym)
 </span>
 <h3 class="text-base sm:text-lg font-black text-white mt-1">
-POSTERIOR CHAIN ARMOR & ECCENTRIC FORCE CAPACITY
+POSTERIOR CHAIN ARMOR &amp; ECCENTRIC FORCE CAPACITY
 </h3>
-<p class="text-xs text-slate-400">Target: Hamstring fascicle lengthening, groin adductor stiffness & rotational power.</p>
+<p class="text-xs text-slate-400">Target: Hamstring fascicle lengthening, groin adductor stiffness &amp; rotational striking power.</p>
 </div>
 <div class="text-right">
 <span class="text-xs font-mono font-bold text-purple-300 block">Week ${currentWeek} Load</span>
