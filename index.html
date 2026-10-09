@@ -231,19 +231,39 @@ Kickoff: Late Oct • Block 1 (8-Wk Preseason) &rarr; Deload &rarr; Block 2 (6-W
 </div>
 </section>
 
-<!-- LOGGED HURLER & DIRECTIVE -->
+<!-- LOGGED HURLER & PROTOCOL CONTROL (ONE-CLICK VET TOGGLE) -->
 <section class="panel-glass rounded-2xl p-4 border border-pats-cardBorder space-y-3">
-<div class="flex items-center gap-3">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+
+<div class="flex items-center gap-3 flex-1">
 <div class="w-12 h-12 rounded-xl bg-emerald-950 border border-emerald-500/40 flex items-center justify-center font-extrabold text-pats-gold text-lg shrink-0">
 <span id="player-badge-num">#1</span>
 </div>
 <div class="flex-1">
-<label class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">Logged Hurler</label>
+<div class="flex items-center justify-between">
+<label class="block text-[10px] uppercase font-bold text-slate-400 tracking-wider">Logged Hurler &amp; Assigned Pod</label>
+<span id="player-pod-badge" class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 text-[10px] font-mono font-bold border border-emerald-600/50">Pod 1</span>
+</div>
 <select id="hurler-select" onchange="onHurlerChange(this.value)"
-class="w-full mt-0.5 bg-pats-card border border-pats-cardBorder text-white text-sm font-semibold rounded-lg px-2.5 py-1.5 focus:border-pats-gold outline-none cursor-pointer">
-<!-- Populated via JS -->
+class="w-full mt-1 bg-pats-card border border-pats-cardBorder text-white text-sm font-semibold rounded-lg px-2.5 py-1.5 focus:border-pats-gold outline-none cursor-pointer">
+<!-- Populated via JS with all 49 players -->
 </select>
 </div>
+</div>
+
+<!-- Direct One-Click Veteran Shield Protocol Toggle -->
+<div class="flex items-center gap-2 bg-[#06110D] border border-pats-cardBorder p-2.5 rounded-xl shrink-0">
+<div class="text-left">
+<span class="text-[9px] uppercase font-bold text-slate-400 block tracking-wider">Training Protocol:</span>
+<span id="player-protocol-desc" class="text-[11px] text-slate-300 font-medium">Standard Protocol</span>
+</div>
+<button onclick="toggleCurrentPlayerVet()" id="player-protocol-btn"
+class="tactile-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all border flex items-center gap-1.5 shadow-sm bg-slate-900 border-slate-700 text-slate-300 hover:border-amber-500 hover:text-amber-300">
+<span>🛡️</span>
+<span id="player-protocol-btn-text">Switch to Vet Shield</span>
+</button>
+</div>
+
 </div>
 
 <div class="p-3 rounded-xl bg-pats-card/80 border border-amber-900/40 text-xs flex items-start gap-2.5">
@@ -909,6 +929,20 @@ Unlock
 <!-- Unlocked Coach Console (Matching Screenshots 2, 3, 4) -->
 <div id="coach-unlocked-panel" class="hidden space-y-4">
 
+<!-- Coach Header with Lock Desk Button -->
+<div class="flex items-center justify-between bg-pats-card p-3 rounded-xl border border-pats-cardBorder">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+<div>
+<h3 class="text-xs font-black uppercase text-white tracking-wider">Coach Command Desk</h3>
+<span class="text-[10px] text-emerald-400 font-mono font-medium">Session Active &bull; Management Authorization</span>
+</div>
+</div>
+<button onclick="lockCoachDesk()" class="tactile-btn px-3.5 py-1.5 bg-red-950/80 hover:bg-red-900 border border-red-700/80 text-red-200 text-xs font-extrabold uppercase rounded-lg flex items-center gap-1.5 transition shadow-sm">
+<span>🔒</span> Lock Desk
+</button>
+</div>
+
 <!-- Top Dual-Tab Bar -->
 <div class="grid grid-cols-2 gap-2 bg-pats-card p-1 rounded-xl border border-pats-cardBorder">
 <button onclick="setCoachSubTab('roster')" id="subtab-roster"
@@ -939,15 +973,19 @@ class="w-full bg-pats-card border border-pats-cardBorder rounded-xl pl-9 pr-3 py
 </div>
 </div>
 
-<!-- VIEW A: SQUAD ROSTER TABLE -->
+<!-- VIEW A: SQUAD ROSTER TABLE WITH PODS & DIRECT VET SHIELD CLICKABLE TOGGLE -->
 <div id="view-squad-roster" class="panel-glass rounded-2xl border border-pats-cardBorder overflow-hidden">
 <div class="overflow-x-auto">
-<table class="w-full text-left text-xs">
+<table class="w-full text-left text-xs min-w-[760px]">
 <thead class="bg-pats-card border-b border-pats-cardBorder text-[10px] uppercase font-bold text-slate-400 tracking-wider">
 <tr>
 <th class="py-3 px-3">HURLER &amp; NUMBER</th>
+<th class="py-3 px-2 text-center">POD</th>
 <th class="py-3 px-3">LINE</th>
+<th class="py-3 px-3 text-center">PROTOCOL (CLICK TO TOGGLE)</th>
 <th class="py-3 px-3 text-center">AVAILABILITY</th>
+<th class="py-3 px-3 text-center">EXERCISES DONE</th>
+<th class="py-3 px-3 text-center">COMPLETION</th>
 <th class="py-3 px-3 text-right">ACTIONS</th>
 </tr>
 </thead>
@@ -965,6 +1003,7 @@ class="w-full bg-pats-card border border-pats-cardBorder rounded-xl pl-9 pr-3 py
 <thead class="bg-pats-card border-b border-pats-cardBorder text-[10px] uppercase font-bold text-slate-400 tracking-wider">
 <tr>
 <th class="py-3 px-3">HURLER</th>
+<th class="py-3 px-2 text-center">POD</th>
 <th class="py-3 px-3">LINE</th>
 <th class="py-3 px-3">1.2KM BRONCO (BASE &rarr; W8)</th>
 <th class="py-3 px-3">20M SPRINT (BASE &rarr; W8)</th>
@@ -998,10 +1037,21 @@ class="w-full bg-pats-card border border-pats-cardBorder rounded-xl pl-9 pr-3 py
 <label class="block text-[10px] uppercase font-bold text-slate-400">Full Name</label>
 <input type="text" id="modal-name" class="w-full mt-1 bg-pats-card border border-pats-cardBorder rounded-lg px-3 py-1.5 text-white outline-none focus:border-pats-gold">
 </div>
-<div class="grid grid-cols-2 gap-2">
+<div class="grid grid-cols-3 gap-2">
 <div>
 <label class="block text-[10px] uppercase font-bold text-slate-400">Jersey #</label>
 <input type="number" id="modal-num" class="w-full mt-1 bg-pats-card border border-pats-cardBorder rounded-lg px-3 py-1.5 text-white outline-none focus:border-pats-gold">
+</div>
+<div>
+<label class="block text-[10px] uppercase font-bold text-slate-400">Pod</label>
+<select id="modal-pod" class="w-full mt-1 bg-pats-card border border-pats-cardBorder rounded-lg px-3 py-1.5 text-white outline-none focus:border-pats-gold">
+<option value="1">Pod 1</option>
+<option value="2">Pod 2</option>
+<option value="3">Pod 3</option>
+<option value="4">Pod 4</option>
+<option value="5">Pod 5</option>
+<option value="6">Pod 6</option>
+</select>
 </div>
 <div>
 <label class="block text-[10px] uppercase font-bold text-slate-400">Pitch Line</label>
@@ -1022,7 +1072,7 @@ class="w-full bg-pats-card border border-pats-cardBorder rounded-xl pl-9 pr-3 py
 </select>
 </div>
 <div>
-<label class="block text-[10px] uppercase font-bold text-slate-400">Veteran Shield (32-40)</label>
+<label class="block text-[10px] uppercase font-bold text-slate-400">Protocol (Default: Standard)</label>
 <select id="modal-vet" class="w-full mt-1 bg-pats-card border border-pats-cardBorder rounded-lg px-3 py-1.5 text-white outline-none focus:border-pats-gold">
 <option value="false">Standard Protocol</option>
 <option value="true">Veteran Shield Active</option>
@@ -1040,50 +1090,16 @@ class="w-full bg-pats-card border border-pats-cardBorder rounded-xl pl-9 pr-3 py
 <input type="number" id="modal-deadlift" class="w-full mt-1 bg-pats-card border border-pats-cardBorder rounded-lg px-3 py-1.5 text-white outline-none focus:border-pats-gold">
 </div>
 </div>
+
+<div>
+<label class="block text-[10px] uppercase font-bold text-slate-400">Exercises Completed (out of 25)</label>
+<input type="number" id="modal-completed-ex" min="0" max="25" class="w-full mt-1 bg-pats-card border border-pats-cardBorder rounded-lg px-3 py-1.5 text-white outline-none focus:border-pats-gold font-mono">
+</div>
 </div>
 
 <div class="flex justify-end gap-2 pt-2 border-t border-pats-cardBorder">
 <button onclick="closeHurlerModal()" class="px-3 py-1.5 rounded-lg bg-pats-card border border-pats-cardBorder text-slate-300 text-xs hover:text-white">Cancel</button>
-<button onclick="saveHurlerProfile()" class="px-4 py-1.5 rounded-lg bg-pats-gold text-black font-bold text-xs hover:bg-pats-goldLight">Save Hurler</button>
-</div>
-</div>
-</div>
-
-<!-- ================= RETEST LOG MODAL ================= -->
-<div id="test-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-3">
-<div class="panel-glass rounded-2xl border border-pats-cardBorder max-w-sm w-full p-5 space-y-4">
-<div class="flex items-center justify-between border-b border-pats-cardBorder pb-2">
-<div>
-<h3 class="text-sm font-bold text-white uppercase">Log W8 Retest Scores</h3>
-<p id="test-modal-player-name" class="text-xs text-pats-gold font-bold">#1 Alan Quinn</p>
-</div>
-<button onclick="closeTestModal()" class="text-slate-400 hover:text-white text-lg">&times;</button>
-</div>
-
-<div class="space-y-3 text-xs">
-<div>
-<label class="block text-[10px] uppercase font-bold text-slate-400">1.2km Bronco Time (mm:ss)</label>
-<input type="text" id="test-modal-bronco" placeholder="e.g. 4:32" class="w-full mt-1 bg-pats-card border border-pats-cardBorder rounded-lg px-3 py-1.5 text-white outline-none focus:border-pats-gold font-mono">
-</div>
-<div>
-<label class="block text-[10px] uppercase font-bold text-slate-400">20m Sprint Time (s)</label>
-<input type="number" step="0.01" id="test-modal-sprint" placeholder="e.g. 3.02" class="w-full mt-1 bg-pats-card border border-pats-cardBorder rounded-lg px-3 py-1.5 text-white outline-none focus:border-pats-gold font-mono">
-</div>
-<div class="grid grid-cols-2 gap-2">
-<div>
-<label class="block text-[10px] uppercase font-bold text-slate-400">Squat W8 (kg)</label>
-<input type="number" id="test-modal-squat" class="w-full mt-1 bg-pats-card border border-pats-cardBorder rounded-lg px-3 py-1.5 text-white outline-none focus:border-pats-gold font-mono">
-</div>
-<div>
-<label class="block text-[10px] uppercase font-bold text-slate-400">Deadlift W8 (kg)</label>
-<input type="number" id="test-modal-deadlift" class="w-full mt-1 bg-pats-card border border-pats-cardBorder rounded-lg px-3 py-1.5 text-white outline-none focus:border-pats-gold font-mono">
-</div>
-</div>
-</div>
-
-<div class="flex justify-end gap-2 pt-2 border-t border-pats-cardBorder">
-<button onclick="closeTestModal()" class="px-3 py-1.5 rounded-lg bg-pats-card border border-pats-cardBorder text-slate-300 text-xs hover:text-white">Cancel</button>
-<button onclick="saveTestScores()" class="px-4 py-1.5 rounded-lg bg-emerald-500 text-black font-bold text-xs hover:bg-emerald-400">Save Retest</button>
+<button onclick="saveHurlerProfile()" class="px-4 py-1.5 rounded-lg bg-emerald-500 text-black font-bold text-xs hover:bg-emerald-400">Save Hurler</button>
 </div>
 </div>
 </div>
@@ -1091,78 +1107,81 @@ class="w-full bg-pats-card border border-pats-cardBorder rounded-xl pl-9 pr-3 py
 <!-- ================= APPLICATION JAVASCRIPT STATE ENGINE ================= -->
 <script>
 /* =========================================================================
-1. COMPLETE ST PAT'S JUNIOR A HURLER ROSTER (Pods 1–6 from Training Sheet)
+1. COMPLETE ST PAT'S JUNIOR HURLER ROSTER (Pods 1–6 from Training Sheet)
+NOTE: STANDARD PROTOCOL (vet: false) IS SET AS DEFAULT FOR ALL PLAYERS.
+ANY PLAYER CAN BE CHANGED TO VETERAN SHIELD WITH A SINGLE CLICK.
 ========================================================================= */
 const initialPlayers = [
 // POD 1
-{ id: "p1", num: 1, name: "Alan Quinn", pod: 1, line: "Backs", status: "FIT", vet: true, broncoBase: "5:08", broncoW8: "4:52", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-{ id: "p2", num: 2, name: "Dan Burke", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "5:02", broncoW8: "4:46", sprintBase: 3.15, sprintW8: 3.05, squatBase: 130, squatW8: 130, deadliftBase: 175, deadliftW8: 175 },
-{ id: "p3", num: 3, name: "Brian Powell", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "4:58", broncoW8: "4:42", sprintBase: 3.12, sprintW8: 3.02, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-{ id: "p4", num: 4, name: "Paul McCarthy", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "5:12", broncoW8: "4:56", sprintBase: 3.16, sprintW8: 3.06, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-{ id: "p5", num: 5, name: "Stephen Lohan", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "5:05", broncoW8: "4:50", sprintBase: 3.14, sprintW8: 3.04, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-{ id: "p6", num: 6, name: "Cian Darcy", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "4:55", broncoW8: "4:39", sprintBase: 3.09, sprintW8: 2.99, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
-{ id: "p7", num: 7, name: "Paddy Gleeson", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "5:15", broncoW8: "4:59", sprintBase: 3.18, sprintW8: 3.08, squatBase: 120, squatW8: 125, deadliftBase: 160, deadliftW8: 165 },
-{ id: "p8", num: 8, name: "Conor Tighe", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "5:10", broncoW8: "4:54", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-{ id: "p9", num: 9, name: "James Stanbridge", pod: 1, line: "Backs", status: "FIT", vet: false, broncoBase: "5:18", broncoW8: "5:02", sprintBase: 3.20, sprintW8: 3.10, squatBase: 120, squatW8: 120, deadliftBase: 160, deadliftW8: 160 },
+{ id: "p1", num: 1, name: "Alan Quinn", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 22, broncoBase: "5:08", broncoW8: "4:52", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p2", num: 2, name: "Dan Burke", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 20, broncoBase: "5:02", broncoW8: "4:46", sprintBase: 3.15, sprintW8: 3.05, squatBase: 130, squatW8: 130, deadliftBase: 175, deadliftW8: 175 },
+{ id: "p3", num: 3, name: "Brian Powell", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 24, broncoBase: "4:58", broncoW8: "4:42", sprintBase: 3.12, sprintW8: 3.02, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
+{ id: "p4", num: 4, name: "Paul McCarthy", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 19, broncoBase: "5:12", broncoW8: "4:56", sprintBase: 3.16, sprintW8: 3.06, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p5", num: 5, name: "Stephen Lohan", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 21, broncoBase: "5:05", broncoW8: "4:50", sprintBase: 3.14, sprintW8: 3.04, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p6", num: 6, name: "Cian Darcy", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 23, broncoBase: "4:55", broncoW8: "4:39", sprintBase: 3.09, sprintW8: 2.99, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
+{ id: "p7", num: 7, name: "Paddy Gleeson", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 18, broncoBase: "5:15", broncoW8: "4:59", sprintBase: 3.18, sprintW8: 3.08, squatBase: 120, squatW8: 125, deadliftBase: 160, deadliftW8: 165 },
+{ id: "p8", num: 8, name: "Conor Tighe", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 20, broncoBase: "5:10", broncoW8: "4:54", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p9", num: 9, name: "James Stanbridge", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 17, broncoBase: "5:18", broncoW8: "5:02", sprintBase: 3.20, sprintW8: 3.10, squatBase: 120, squatW8: 120, deadliftBase: 160, deadliftW8: 160 },
 
 // POD 2
-{ id: "p10", num: 10, name: "Conor Henry", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:48", broncoW8: "4:32", sprintBase: 3.15, sprintW8: 3.05, squatBase: 130, squatW8: 130, deadliftBase: 170, deadliftW8: 170 },
-{ id: "p11", num: 11, name: "Kieron Keary", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:52", broncoW8: "4:36", sprintBase: 3.11, sprintW8: 3.01, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
-{ id: "p12", num: 12, name: "Dan Taylor", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:50", broncoW8: "4:35", sprintBase: 3.10, sprintW8: 3.00, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-{ id: "p13", num: 13, name: "Tiernan O Rourke", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:44", broncoW8: "4:29", sprintBase: 3.08, sprintW8: 2.98, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-{ id: "p14", num: 14, name: "Donnacha Liston", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:56", broncoW8: "4:40", sprintBase: 3.14, sprintW8: 3.04, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
-{ id: "p15", num: 15, name: "Jack Fitzgerald", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:58", broncoW8: "4:42", sprintBase: 3.12, sprintW8: 3.02, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-{ id: "p16", num: 16, name: "Jacob Turner", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "5:04", broncoW8: "4:48", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-{ id: "p17", num: 17, name: "Conor Donovan", pod: 2, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:59", broncoW8: "4:44", sprintBase: 3.13, sprintW8: 3.03, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p10", num: 10, name: "Conor Henry", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 24, broncoBase: "4:48", broncoW8: "4:32", sprintBase: 3.15, sprintW8: 3.05, squatBase: 130, squatW8: 130, deadliftBase: 170, deadliftW8: 170 },
+{ id: "p11", num: 11, name: "Kieron Keary", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 22, broncoBase: "4:52", broncoW8: "4:36", sprintBase: 3.11, sprintW8: 3.01, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
+{ id: "p12", num: 12, name: "Dan Taylor", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 23, broncoBase: "4:50", broncoW8: "4:35", sprintBase: 3.10, sprintW8: 3.00, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
+{ id: "p13", num: 13, name: "Tiernan O Rourke", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 25, broncoBase: "4:44", broncoW8: "4:29", sprintBase: 3.08, sprintW8: 2.98, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
+{ id: "p14", num: 14, name: "Donnacha Liston", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 21, broncoBase: "4:56", broncoW8: "4:40", sprintBase: 3.14, sprintW8: 3.04, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
+{ id: "p15", num: 15, name: "Jack Fitzgerald", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 22, broncoBase: "4:58", broncoW8: "4:42", sprintBase: 3.12, sprintW8: 3.02, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p16", num: 16, name: "Jacob Turner", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 19, broncoBase: "5:04", broncoW8: "4:48", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p17", num: 17, name: "Conor Donovan", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 20, broncoBase: "4:59", broncoW8: "4:44", sprintBase: 3.13, sprintW8: 3.03, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
 
 // POD 3
-{ id: "p18", num: 18, name: "Cormac Kelly", pod: 3, line: "Backs", status: "FIT", vet: false, broncoBase: "5:06", broncoW8: "4:50", sprintBase: 3.15, sprintW8: 3.05, squatBase: 120, squatW8: 120, deadliftBase: 160, deadliftW8: 160 },
-{ id: "p19", num: 19, name: "Ciaran Darcy", pod: 3, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:54", broncoW8: "4:38", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-{ id: "p20", num: 20, name: "Martin Fanning", pod: 3, line: "Forwards", status: "FIT", vet: true, broncoBase: "5:14", broncoW8: "4:59", sprintBase: 3.22, sprintW8: 3.12, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-{ id: "p21", num: 21, name: "Tim Kelly", pod: 3, line: "Backs", status: "FIT", vet: false, broncoBase: "5:08", broncoW8: "4:52", sprintBase: 3.16, sprintW8: 3.06, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-{ id: "p22", num: 22, name: "Donagh Crean", pod: 3, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:51", broncoW8: "4:36", sprintBase: 3.11, sprintW8: 3.01, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-{ id: "p23", num: 23, name: "Aidan Walsh", pod: 3, line: "Forwards", status: "FIT", vet: false, broncoBase: "4:57", broncoW8: "4:41", sprintBase: 3.09, sprintW8: 2.99, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-{ id: "p24", num: 24, name: "Mathew O Connor", pod: 3, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:02", broncoW8: "4:46", sprintBase: 3.13, sprintW8: 3.03, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
-{ id: "p25", num: 25, name: "Eoghen Delaney", pod: 3, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:00", broncoW8: "4:45", sprintBase: 3.12, sprintW8: 3.02, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p18", num: 18, name: "Cormac Kelly", pod: 3, line: "Backs", status: "FIT", vet: false, completedExercises: 19, broncoBase: "5:06", broncoW8: "4:50", sprintBase: 3.15, sprintW8: 3.05, squatBase: 120, squatW8: 120, deadliftBase: 160, deadliftW8: 160 },
+{ id: "p19", num: 19, name: "Ciaran Darcy", pod: 3, line: "Midfield", status: "FIT", vet: false, completedExercises: 23, broncoBase: "4:54", broncoW8: "4:38", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p20", num: 20, name: "Martin Fanning", pod: 3, line: "Forwards", status: "FIT", vet: false, completedExercises: 18, broncoBase: "5:14", broncoW8: "4:59", sprintBase: 3.22, sprintW8: 3.12, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p21", num: 21, name: "Tim Kelly", pod: 3, line: "Backs", status: "FIT", vet: false, completedExercises: 19, broncoBase: "5:08", broncoW8: "4:52", sprintBase: 3.16, sprintW8: 3.06, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p22", num: 22, name: "Donagh Crean", pod: 3, line: "Midfield", status: "FIT", vet: false, completedExercises: 22, broncoBase: "4:51", broncoW8: "4:36", sprintBase: 3.11, sprintW8: 3.01, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p23", num: 23, name: "Aidan Walsh", pod: 3, line: "Forwards", status: "FIT", vet: false, completedExercises: 24, broncoBase: "4:57", broncoW8: "4:41", sprintBase: 3.09, sprintW8: 2.99, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
+{ id: "p24", num: 24, name: "Mathew O Connor", pod: 3, line: "Forwards", status: "FIT", vet: false, completedExercises: 21, broncoBase: "5:02", broncoW8: "4:46", sprintBase: 3.13, sprintW8: 3.03, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
+{ id: "p25", num: 25, name: "Eoghen Delaney", pod: 3, line: "Forwards", status: "FIT", vet: false, completedExercises: 20, broncoBase: "5:00", broncoW8: "4:45", sprintBase: 3.12, sprintW8: 3.02, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
 
 // POD 4
-{ id: "p26", num: 26, name: "Mick O Donoghue", pod: 4, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:05", broncoW8: "4:49", sprintBase: 3.12, sprintW8: 3.04, squatBase: 130, squatW8: 130, deadliftBase: 170, deadliftW8: 170 },
-{ id: "p27", num: 27, name: "Jack Burridge", pod: 4, line: "Forwards", status: "FIT", vet: false, broncoBase: "4:59", broncoW8: "4:43", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-{ id: "p28", num: 28, name: "Paul Roche", pod: 4, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:03", broncoW8: "4:47", sprintBase: 3.14, sprintW8: 3.04, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-{ id: "p29", num: 29, name: "Kev Barry", pod: 4, line: "Backs", status: "FIT", vet: false, broncoBase: "5:09", broncoW8: "4:53", sprintBase: 3.16, sprintW8: 3.06, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-{ id: "p30", num: 30, name: "Cillian Brett", pod: 4, line: "Forwards", status: "FIT", vet: false, broncoBase: "4:53", broncoW8: "4:37", sprintBase: 3.08, sprintW8: 2.98, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-{ id: "p31", num: 31, name: "Dylan Duke", pod: 4, line: "Forwards", status: "FIT", vet: false, broncoBase: "4:56", broncoW8: "4:40", sprintBase: 3.11, sprintW8: 3.01, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-{ id: "p32", num: 32, name: "Finn Masterson", pod: 4, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:49", broncoW8: "4:33", sprintBase: 3.09, sprintW8: 2.99, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-{ id: "p33", num: 33, name: "Daniel McNamara", pod: 4, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:06", broncoW8: "4:50", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p26", num: 26, name: "Mick O Donoghue", pod: 4, line: "Forwards", status: "FIT", vet: false, completedExercises: 21, broncoBase: "5:05", broncoW8: "4:49", sprintBase: 3.12, sprintW8: 3.04, squatBase: 130, squatW8: 130, deadliftBase: 170, deadliftW8: 170 },
+{ id: "p27", num: 27, name: "Jack Burridge", pod: 4, line: "Forwards", status: "FIT", vet: false, completedExercises: 22, broncoBase: "4:59", broncoW8: "4:43", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p28", num: 28, name: "Paul Roche", pod: 4, line: "Forwards", status: "FIT", vet: false, completedExercises: 19, broncoBase: "5:03", broncoW8: "4:47", sprintBase: 3.14, sprintW8: 3.04, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p29", num: 29, name: "Kev Barry", pod: 4, line: "Backs", status: "FIT", vet: false, completedExercises: 18, broncoBase: "5:09", broncoW8: "4:53", sprintBase: 3.16, sprintW8: 3.06, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p30", num: 30, name: "Cillian Brett", pod: 4, line: "Forwards", status: "FIT", vet: false, completedExercises: 24, broncoBase: "4:53", broncoW8: "4:37", sprintBase: 3.08, sprintW8: 2.98, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
+{ id: "p31", num: 31, name: "Dylan Duke", pod: 4, line: "Forwards", status: "FIT", vet: false, completedExercises: 21, broncoBase: "4:56", broncoW8: "4:40", sprintBase: 3.11, sprintW8: 3.01, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p32", num: 32, name: "Finn Masterson", pod: 4, line: "Midfield", status: "FIT", vet: false, completedExercises: 23, broncoBase: "4:49", broncoW8: "4:33", sprintBase: 3.09, sprintW8: 2.99, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p33", num: 33, name: "Daniel McNamara", pod: 4, line: "Forwards", status: "FIT", vet: false, completedExercises: 18, broncoBase: "5:06", broncoW8: "4:50", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
 
 // POD 5
-{ id: "p34", num: 34, name: "John Hanley", pod: 5, line: "Backs", status: "FIT", vet: true, broncoBase: "5:12", broncoW8: "4:57", sprintBase: 3.20, sprintW8: 3.10, squatBase: 130, squatW8: 130, deadliftBase: 170, deadliftW8: 170 },
-{ id: "p35", num: 35, name: "Ciaran Sinnott", pod: 5, line: "Backs", status: "FIT", vet: false, broncoBase: "5:04", broncoW8: "4:48", sprintBase: 3.14, sprintW8: 3.04, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-{ id: "p36", num: 36, name: "Hansi Fischer-Kerrane", pod: 5, line: "Backs", status: "FIT", vet: false, broncoBase: "5:07", broncoW8: "4:51", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 170, deadliftW8: 170 },
-{ id: "p37", num: 37, name: "Ethan Ryan", pod: 5, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:47", broncoW8: "4:31", sprintBase: 3.07, sprintW8: 2.97, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-{ id: "p38", num: 38, name: "Colum McQuaile", pod: 5, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:53", broncoW8: "4:37", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-{ id: "p39", num: 39, name: "Senan Mythen", pod: 5, line: "Forwards", status: "FIT", vet: false, broncoBase: "4:58", broncoW8: "4:42", sprintBase: 3.12, sprintW8: 3.02, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
-{ id: "p40", num: 40, name: "Conor Heffernan", pod: 5, line: "Backs", status: "FIT", vet: false, broncoBase: "5:09", broncoW8: "4:53", sprintBase: 3.17, sprintW8: 3.07, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-{ id: "p41", num: 41, name: "Jakob Connolly", pod: 5, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:01", broncoW8: "4:45", sprintBase: 3.11, sprintW8: 3.01, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p34", num: 34, name: "John Hanley", pod: 5, line: "Backs", status: "FIT", vet: false, completedExercises: 18, broncoBase: "5:12", broncoW8: "4:57", sprintBase: 3.20, sprintW8: 3.10, squatBase: 130, squatW8: 130, deadliftBase: 170, deadliftW8: 170 },
+{ id: "p35", num: 35, name: "Ciaran Sinnott", pod: 5, line: "Backs", status: "FIT", vet: false, completedExercises: 20, broncoBase: "5:04", broncoW8: "4:48", sprintBase: 3.14, sprintW8: 3.04, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p36", num: 36, name: "Hansi Fischer-Kerrane", pod: 5, line: "Backs", status: "FIT", vet: false, completedExercises: 19, broncoBase: "5:07", broncoW8: "4:51", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 170, deadliftW8: 170 },
+{ id: "p37", num: 37, name: "Ethan Ryan", pod: 5, line: "Midfield", status: "FIT", vet: false, completedExercises: 25, broncoBase: "4:47", broncoW8: "4:31", sprintBase: 3.07, sprintW8: 2.97, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
+{ id: "p38", num: 38, name: "Colum McQuaile", pod: 5, line: "Midfield", status: "FIT", vet: false, completedExercises: 22, broncoBase: "4:53", broncoW8: "4:37", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p39", num: 39, name: "Senan Mythen", pod: 5, line: "Forwards", status: "FIT", vet: false, completedExercises: 21, broncoBase: "4:58", broncoW8: "4:42", sprintBase: 3.12, sprintW8: 3.02, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
+{ id: "p40", num: 40, name: "Conor Heffernan", pod: 5, line: "Backs", status: "FIT", vet: false, completedExercises: 18, broncoBase: "5:09", broncoW8: "4:53", sprintBase: 3.17, sprintW8: 3.07, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p41", num: 41, name: "Jakob Connolly", pod: 5, line: "Forwards", status: "FIT", vet: false, completedExercises: 22, broncoBase: "5:01", broncoW8: "4:45", sprintBase: 3.11, sprintW8: 3.01, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
 
 // POD 6
-{ id: "p42", num: 42, name: "Brian Kennedy", pod: 6, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:00", broncoW8: "4:44", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-{ id: "p43", num: 43, name: "Donal O' Riordan", pod: 6, line: "Backs", status: "FIT", vet: false, broncoBase: "5:06", broncoW8: "4:50", sprintBase: 3.16, sprintW8: 3.06, squatBase: 135, squatW8: 140, deadliftBase: 180, deadliftW8: 185 },
-{ id: "p44", num: 44, name: "Hugh Feeney", pod: 6, line: "Backs", status: "FIT", vet: false, broncoBase: "5:01", broncoW8: "4:45", sprintBase: 3.15, sprintW8: 3.05, squatBase: 140, squatW8: 140, deadliftBase: 185, deadliftW8: 185 },
-{ id: "p45", num: 45, name: "Cathal Carty", pod: 6, line: "Backs", status: "FIT", vet: false, broncoBase: "5:11", broncoW8: "4:55", sprintBase: 3.19, sprintW8: 3.09, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-{ id: "p46", num: 46, name: "Sean Kennedy", pod: 6, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:46", broncoW8: "4:30", sprintBase: 3.06, sprintW8: 2.96, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-{ id: "p47", num: 47, name: "Moses Harley", pod: 6, line: "Forwards", status: "FIT", vet: false, broncoBase: "4:54", broncoW8: "4:38", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-{ id: "p48", num: 48, name: "Senan Ryan", pod: 6, line: "Midfield", status: "FIT", vet: false, broncoBase: "4:50", broncoW8: "4:34", sprintBase: 3.09, sprintW8: 2.99, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-{ id: "p49", num: 49, name: "Jack Edwards", pod: 6, line: "Forwards", status: "FIT", vet: false, broncoBase: "5:02", broncoW8: "4:46", sprintBase: 3.12, sprintW8: 3.02, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 }
+{ id: "p42", num: 42, name: "Brian Kennedy", pod: 6, line: "Forwards", status: "FIT", vet: false, completedExercises: 20, broncoBase: "5:00", broncoW8: "4:44", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p43", num: 43, name: "Donal O' Riordan", pod: 6, line: "Backs", status: "FIT", vet: false, completedExercises: 21, broncoBase: "5:06", broncoW8: "4:50", sprintBase: 3.16, sprintW8: 3.06, squatBase: 135, squatW8: 140, deadliftBase: 180, deadliftW8: 185 },
+{ id: "p44", num: 44, name: "Hugh Feeney", pod: 6, line: "Backs", status: "FIT", vet: false, completedExercises: 23, broncoBase: "5:01", broncoW8: "4:45", sprintBase: 3.15, sprintW8: 3.05, squatBase: 140, squatW8: 140, deadliftBase: 185, deadliftW8: 185 },
+{ id: "p45", num: 45, name: "Cathal Carty", pod: 6, line: "Backs", status: "FIT", vet: false, completedExercises: 17, broncoBase: "5:11", broncoW8: "4:55", sprintBase: 3.19, sprintW8: 3.09, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
+{ id: "p46", num: 46, name: "Sean Kennedy", pod: 6, line: "Midfield", status: "FIT", vet: false, completedExercises: 25, broncoBase: "4:46", broncoW8: "4:30", sprintBase: 3.06, sprintW8: 2.96, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
+{ id: "p47", num: 47, name: "Moses Harley", pod: 6, line: "Forwards", status: "FIT", vet: false, completedExercises: 21, broncoBase: "4:54", broncoW8: "4:38", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p48", num: 48, name: "Senan Ryan", pod: 6, line: "Midfield", status: "FIT", vet: false, completedExercises: 24, broncoBase: "4:50", broncoW8: "4:34", sprintBase: 3.09, sprintW8: 2.99, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
+{ id: "p49", num: 49, name: "Jack Edwards", pod: 6, line: "Forwards", status: "FIT", vet: false, completedExercises: 20, broncoBase: "5:02", broncoW8: "4:46", sprintBase: 3.12, sprintW8: 3.02, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 }
 ];
 
-let players = JSON.parse(localStorage.getItem('stpats_roster_v3') || JSON.stringify(initialPlayers));
+// Load from storage or default to initialPlayers (v4 ensures fresh standard protocol defaults)
+let players = JSON.parse(localStorage.getItem('stpats_roster_v4') || JSON.stringify(initialPlayers));
 let selectedPlayerId = players[0]?.id || "p1";
 let editingPlayerId = null;
 let testingPlayerId = null;
 
 // Track exercise checkbox completions for active session
-let exerciseChecks = JSON.parse(localStorage.getItem('stpats_exercise_checks') || '{}');
+let exerciseChecks = JSON.parse(localStorage.getItem('stpats_exercise_checks_v4') || '{}');
 
 /* =========================================================================
 2. TRAINING STATE: BLOCKS, INDIVIDUAL WEEKS, AND 3 DAYS
@@ -1408,6 +1427,7 @@ prescription: `
 ========================================================================= */
 window.addEventListener('DOMContentLoaded', () => {
 populateHurlerSelect();
+updateProtocolToggleUI();
 renderWeeksNav();
 renderSession();
 renderRosterTable();
@@ -1476,7 +1496,7 @@ badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping
 }
 
 container.innerHTML = `
-<div class="p-4 rounded-xl bg-pats-card/90 border border-emerald-500/40 space-y-3 animate-fadeIn">
+<div class="p-4 rounded-xl bg-pats-card/90 border border-emerald-500/40 space-y-3">
 <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-pats-cardBorder pb-2.5 gap-2">
 <div>
 <span class="px-2 py-0.5 rounded bg-pats-bg border border-pats-cardBorder text-pats-gold font-mono text-[10px] font-bold uppercase">
@@ -2175,18 +2195,8 @@ ${[1, 2, 3].map(i => `
 
 function toggleExCheck(key) {
 exerciseChecks[key] = !exerciseChecks[key];
-localStorage.setItem('stpats_exercise_checks', JSON.stringify(exerciseChecks));
-}
-
-function populateHurlerSelect() {
-const select = document.getElementById('hurler-select');
-if (!select) return;
-
-select.innerHTML = players.map(p => `
-<option value="${p.id}" ${p.id === selectedPlayerId ? 'selected' : ''}>
-[Pod ${p.pod || 1}] #${p.num} ${p.name} (${p.line}) ${p.vet ? '• Vet Shield' : ''} [${p.status}]
-</option>
-`).join('');
+localStorage.setItem('stpats_exercise_checks_v4', JSON.stringify(exerciseChecks));
+renderRosterTable(document.getElementById('hurler-search')?.value || '');
 }
 
 function toggleDurability() {
@@ -2195,6 +2205,78 @@ const checked = Array.from(chks).filter(c => c.checked).length;
 const pct = Math.round((checked / chks.length) * 100);
 const display = document.getElementById('durability-pct');
 if (display) display.textContent = `${pct}% Logged`;
+
+// Log to active hurler
+if (selectedPlayerId) {
+exerciseChecks[`durability_${selectedPlayerId}`] = checked;
+localStorage.setItem('stpats_exercise_checks_v4', JSON.stringify(exerciseChecks));
+renderRosterTable(document.getElementById('hurler-search')?.value || '');
+}
+}
+
+function onHurlerChange(hId) {
+selectedPlayerId = hId;
+const p = players.find(x => x.id === hId);
+if (p) {
+document.getElementById('player-badge-num').textContent = `#${p.num}`;
+const podEl = document.getElementById('player-pod-badge');
+if (podEl) podEl.textContent = `Pod ${p.pod || 1}`;
+updateProtocolToggleUI();
+renderSession();
+}
+}
+
+/* DIRECT ONE-CLICK TOGGLE BETWEEN STANDARD & VET SHIELD */
+function toggleCurrentPlayerVet() {
+toggleHurlerVet(selectedPlayerId);
+}
+
+function toggleHurlerVet(hId) {
+const p = players.find(x => x.id === hId);
+if (p) {
+p.vet = !p.vet;
+saveRosterToStorage();
+populateHurlerSelect();
+renderRosterTable(document.getElementById('hurler-search')?.value || '');
+if (selectedPlayerId === hId) {
+updateProtocolToggleUI();
+renderSession();
+}
+}
+}
+
+function updateProtocolToggleUI() {
+const p = players.find(x => x.id === selectedPlayerId);
+if (!p) return;
+
+const descEl = document.getElementById('player-protocol-desc');
+const btnEl = document.getElementById('player-protocol-btn');
+const btnText = document.getElementById('player-protocol-btn-text');
+
+if (p.vet) {
+if (descEl) descEl.innerHTML = `<span class="text-amber-400 font-bold">Veteran Shield (32–40) Active</span>`;
+if (btnEl) {
+btnEl.className = "tactile-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all border flex items-center gap-1.5 shadow-sm bg-amber-950 border-amber-500 text-amber-300 hover:bg-amber-900";
+}
+if (btnText) btnText.textContent = "Switch to Standard";
+} else {
+if (descEl) descEl.innerHTML = `<span class="text-emerald-400 font-bold">Standard Protocol Active</span>`;
+if (btnEl) {
+btnEl.className = "tactile-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all border flex items-center gap-1.5 shadow-sm bg-slate-900 border-slate-700 text-slate-300 hover:border-amber-500 hover:text-amber-300";
+}
+if (btnText) btnText.textContent = "Switch to Vet Shield";
+}
+}
+
+function populateHurlerSelect() {
+const select = document.getElementById('hurler-select');
+if (!select) return;
+
+select.innerHTML = players.map(p => `
+<option value="${p.id}" ${p.id === selectedPlayerId ? 'selected' : ''}>
+#${p.num} ${p.name} [Pod ${p.pod || 1}] (${p.line}) — ${p.vet ? 'VET SHIELD 32+' : 'Standard Protocol'}
+</option>
+`).join('');
 }
 
 let timerInterval = null;
@@ -2274,8 +2356,8 @@ timelineContainer.innerHTML = `
 ${formatMin(sessionMinutes - 480)}
 </span>
 <div>
-<h4 class="font-bold text-white text-xs">Breakfast • Foundation Glycogen &amp; Tendon Support</h4>
-<p class="text-[11px] text-slate-400">Slow-digesting complex carbohydrates + complete leucine pulse.</p>
+<h4 class="font-bold text-white text-xs">Breakfast • Glycogen Foundation</h4>
+<p class="text-[11px] text-slate-400">Slow-release carbohydrates + high-leucine protein pulse.</p>
 </div>
 </div>
 <div class="text-right text-xs font-mono text-emerald-400 shrink-0">
@@ -2290,11 +2372,11 @@ ${formatMin(sessionMinutes - 240)}
 </span>
 <div>
 <h4 class="font-bold text-white text-xs">Pre-Training Lunch • Cellular Hydration</h4>
-<p class="text-[11px] text-slate-400">Lean poultry/beef with easily absorbed basmati rice &amp; electrolyte water.</p>
+<p class="text-[11px] text-slate-400">Easily absorbed basmati rice, lean poultry & electrolyte fluid.</p>
 </div>
 </div>
 <div class="text-right text-xs font-mono text-emerald-400 shrink-0">
-<strong>${riceLunchGrams}g</strong> Basmati Rice + <strong>${Math.round(weight * 1.9)}g</strong> Chicken Breast + <strong>750ml</strong> Water
+<strong>${riceLunchGrams}g</strong> Basmati Rice + <strong>${Math.round(weight * 1.9)}g</strong> Chicken + <strong>750ml</strong> Water
 </div>
 </div>
 
@@ -2305,7 +2387,7 @@ ${formatMin(sessionMinutes - 60)} (T-60m)
 </span>
 <div>
 <h4 class="font-bold text-emerald-200 text-xs">Keith Baar Tendon Collagen Protocol</h4>
-<p class="text-[11px] text-emerald-300/80">Crucial for hamstring origin, patellar tendon &amp; Achilles cross-linking.</p>
+<p class="text-[11px] text-emerald-300/80">Protects biceps femoris origin, patellar tendon & Achilles architecture.</p>
 </div>
 </div>
 <div class="text-right text-xs font-mono text-emerald-300 shrink-0">
@@ -2320,7 +2402,7 @@ ${formatMin(sessionMinutes - 30)} (T-30m)
 </span>
 <div>
 <h4 class="font-bold text-white text-xs">Pre-Pitch High-Glycemic Priming</h4>
-<p class="text-[11px] text-slate-400">Rapid glucose entry without gastrointestinal heaviness.</p>
+<p class="text-[11px] text-slate-400">Fast blood glucose entry without gastrointestinal heaviness.</p>
 </div>
 </div>
 <div class="text-right text-xs font-mono text-pats-gold shrink-0">
@@ -2334,7 +2416,7 @@ ${formatMin(sessionMinutes - 30)} (T-30m)
 ${formatMin(sessionMinutes + duration + 15)} (Post)
 </span>
 <div>
-<h4 class="font-bold text-white text-xs">Immediate Glycogen Reload &amp; Muscle Protein Synthesis</h4>
+<h4 class="font-bold text-white text-xs">Immediate Glycogen Reload & Muscle Protein Synthesis</h4>
 <p class="text-[11px] text-slate-400">Blunts cortisol and accelerates 24hr recovery clock.</p>
 </div>
 </div>
@@ -2346,7 +2428,7 @@ ${formatMin(sessionMinutes + duration + 15)} (Post)
 }
 
 /* =========================================================================
-10. DUBLIN JUNIOR MATCH DAY KPIS & ANALYTICS ENGINE
+10. MATCH DAY ANALYTICS
 ========================================================================= */
 function incMatchMetric(key, delta) {
 if (matchStats[key] === undefined) matchStats[key] = 0;
@@ -2367,11 +2449,9 @@ renderMatchDisplay();
 
 function toggleMatchHalf(val) {
 matchStats.half = val;
-const badge = document.getElementById('match-live-badge');
-if (badge) {
-if (val === 'H1') badge.textContent = "1st Half Active";
-else if (val === 'H2') badge.textContent = "2nd Half Active";
-else badge.textContent = "Extra Time";
+const b = document.getElementById('match-live-badge');
+if (b) {
+b.textContent = val === 'H1' ? '1st Half Active' : val === 'H2' ? '2nd Half Active' : 'Extra Time';
 }
 }
 
@@ -2387,8 +2467,6 @@ renderMatchDisplay();
 
 function renderMatchDisplay() {
 const s = matchStats;
-
-// St Pat's Scoreboard
 const totalPoints = s.patsPointsPlay + s.patsPointsFree;
 const totalSum = (s.patsGoals * 3) + totalPoints;
 
@@ -2399,7 +2477,6 @@ if (gDisp) gDisp.textContent = s.patsGoals;
 if (pDisp) pDisp.textContent = totalPoints;
 if (tDisp) tDisp.textContent = `(${totalSum})`;
 
-// Values in tactile grids
 const setVal = (id, v) => {
 const el = document.getElementById(id);
 if (el) el.textContent = v;
@@ -2424,7 +2501,6 @@ setVal('val-wr-lostpossession', s.wr_lostpossession);
 setVal('val-foul-zone', s.foul_zone);
 setVal('val-foul-open', s.foul_open);
 
-// KPI Gauges
 const ownWon = s.own_puck_clean + s.own_puck_break + s.own_puck_short;
 const ownTotal = ownWon + s.own_puck_lost;
 const puckPct = ownTotal > 0 ? Math.round((ownWon / ownTotal) * 100) : 0;
@@ -2545,6 +2621,29 @@ alert('Incorrect Coach PIN. Default is pats1884');
 }
 }
 
+function lockCoachDesk() {
+document.getElementById('coach-unlocked-panel').classList.add('hidden');
+document.getElementById('coach-lock-screen').classList.remove('hidden');
+const pinInput = document.getElementById('coach-pin');
+if (pinInput) pinInput.value = '';
+}
+
+function getPlayerExerciseStats(p) {
+const total = p.totalExercises || 25;
+let dynamicChecks = 0;
+Object.keys(exerciseChecks).forEach(k => {
+if (k.includes(p.id) && exerciseChecks[k]) {
+dynamicChecks++;
+}
+});
+
+const base = p.completedExercises !== undefined ? p.completedExercises : 20;
+const completed = Math.min(total, Math.max(0, base + Math.min(5, dynamicChecks)));
+const pct = Math.round((completed / total) * 100);
+
+return { completed, total, pct };
+}
+
 function setCoachSubTab(subTab) {
 const btnRoster = document.getElementById('subtab-roster');
 const btnTesting = document.getElementById('subtab-testing');
@@ -2575,22 +2674,51 @@ p.num.toString().includes(filterText) ||
 (p.pod && `pod ${p.pod}`.includes(filterText.toLowerCase()))
 );
 
-tbody.innerHTML = filtered.map(p => `
+tbody.innerHTML = filtered.map(p => {
+const stats = getPlayerExerciseStats(p);
+let pctBadgeClass = "bg-emerald-950/80 border-emerald-600/70 text-emerald-300";
+if (stats.pct < 50) pctBadgeClass = "bg-red-950/80 border-red-600/70 text-red-300";
+else if (stats.pct < 75) pctBadgeClass = "bg-amber-950/80 border-amber-600/70 text-amber-300";
+
+return `
 <tr class="hover:bg-pats-card/50 transition-colors">
 <td class="py-3 px-3">
 <div class="flex items-center gap-2">
-<span class="px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-600/50 text-emerald-300 text-[9px] font-bold font-mono">Pod ${p.pod || 1}</span>
 <span class="font-extrabold text-pats-gold text-xs">#${p.num}</span>
 <span class="font-bold text-white text-xs">${p.name}</span>
-${p.vet ? '<span class="px-1.5 py-0.5 rounded bg-amber-950 border border-amber-600/50 text-amber-300 text-[9px] font-bold">VET 32+</span>' : ''}
 </div>
 </td>
+<td class="py-3 px-2 text-center">
+<span class="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-600/50 text-emerald-300 text-[10px] font-bold font-mono">Pod ${p.pod || 1}</span>
+</td>
 <td class="py-3 px-3 text-slate-300 font-medium">${p.line}</td>
+<td class="py-3 px-3 text-center">
+<!-- Clickable Protocol Toggle: Defaults to Standard, click to toggle Vet Shield -->
+<button onclick="toggleHurlerVet('${p.id}')"
+class="tactile-btn px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all flex items-center justify-center gap-1 mx-auto ${p.vet ? 'bg-amber-950 border-amber-500 text-amber-300 hover:bg-amber-900 shadow-sm' : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-amber-500 hover:text-amber-300'}">
+<span>${p.vet ? '⚡' : '🛡️'}</span>
+<span>${p.vet ? 'Vet Shield (32+)' : 'Standard Protocol'}</span>
+</button>
+</td>
 <td class="py-3 px-3 text-center">
 <button onclick="toggleHurlerStatus('${p.id}')"
 class="px-2.5 py-1 rounded text-[10px] font-bold ${p.status === 'FIT' ? 'bg-emerald-950 border border-emerald-500 text-emerald-300' : 'bg-red-950 border border-red-500 text-red-300'}">
 ${p.status}
 </button>
+</td>
+<td class="py-3 px-3 text-center font-mono">
+<span class="font-bold text-white text-xs">${stats.completed}</span>
+<span class="text-slate-500 text-[11px]">/${stats.total}</span>
+</td>
+<td class="py-3 px-3 text-center">
+<div class="flex flex-col items-center gap-1">
+<span class="px-2 py-0.5 rounded-full border text-[10px] font-mono font-bold ${pctBadgeClass}">
+${stats.pct}%
+</span>
+<div class="w-16 h-1.5 bg-pats-bg rounded-full overflow-hidden border border-pats-cardBorder">
+<div class="h-full ${stats.pct >= 75 ? 'bg-emerald-400' : stats.pct >= 50 ? 'bg-amber-400' : 'bg-red-400'}" style="width: ${stats.pct}%"></div>
+</div>
+</div>
 </td>
 <td class="py-3 px-3 text-right">
 <div class="flex items-center justify-end gap-1.5">
@@ -2599,7 +2727,8 @@ ${p.status}
 </div>
 </td>
 </tr>
-`).join('');
+`;
+}).join('');
 }
 
 function renderTestingTable() {
@@ -2616,6 +2745,9 @@ return `
 <td class="py-3 px-3 font-sans">
 <span class="font-extrabold text-pats-gold">#${p.num}</span>
 <span class="font-bold text-white ml-1">${p.name}</span>
+</td>
+<td class="py-3 px-2 text-center">
+<span class="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-600/50 text-emerald-300 text-[10px] font-bold font-mono">Pod ${p.pod || 1}</span>
 </td>
 <td class="py-3 px-3 text-slate-300 font-sans">${p.line}</td>
 <td class="py-3 px-3 text-slate-300">${p.broncoBase} &rarr; ${p.broncoW8}</td>
@@ -2660,11 +2792,13 @@ editingPlayerId = null;
 document.getElementById('hurler-modal-title').textContent = "Add New Hurler";
 document.getElementById('modal-name').value = '';
 document.getElementById('modal-num').value = players.length + 1;
+document.getElementById('modal-pod').value = '1';
 document.getElementById('modal-line').value = 'Backs';
 document.getElementById('modal-status').value = 'FIT';
 document.getElementById('modal-vet').value = 'false';
 document.getElementById('modal-squat').value = 120;
 document.getElementById('modal-deadlift').value = 160;
+document.getElementById('modal-completed-ex').value = 20;
 document.getElementById('hurler-modal').classList.remove('hidden');
 }
 
@@ -2676,11 +2810,13 @@ if (!p) return;
 document.getElementById('hurler-modal-title').textContent = `Edit Hurler #${p.num}`;
 document.getElementById('modal-name').value = p.name;
 document.getElementById('modal-num').value = p.num;
+document.getElementById('modal-pod').value = p.pod || 1;
 document.getElementById('modal-line').value = p.line;
 document.getElementById('modal-status').value = p.status;
 document.getElementById('modal-vet').value = p.vet ? 'true' : 'false';
 document.getElementById('modal-squat').value = p.squatW8;
 document.getElementById('modal-deadlift').value = p.deadliftW8;
+document.getElementById('modal-completed-ex').value = p.completedExercises !== undefined ? p.completedExercises : 20;
 document.getElementById('hurler-modal').classList.remove('hidden');
 }
 
@@ -2691,11 +2827,13 @@ document.getElementById('hurler-modal').classList.add('hidden');
 function saveHurlerProfile() {
 const name = document.getElementById('modal-name').value.trim();
 const num = parseInt(document.getElementById('modal-num').value) || 99;
+const pod = parseInt(document.getElementById('modal-pod').value) || 1;
 const line = document.getElementById('modal-line').value;
 const status = document.getElementById('modal-status').value;
 const vet = document.getElementById('modal-vet').value === 'true';
 const squat = parseFloat(document.getElementById('modal-squat').value) || 120;
 const deadlift = parseFloat(document.getElementById('modal-deadlift').value) || 160;
+const completedEx = parseInt(document.getElementById('modal-completed-ex').value) || 20;
 
 if (!name) {
 alert("Please enter player name");
@@ -2707,20 +2845,25 @@ const p = players.find(x => x.id === editingPlayerId);
 if (p) {
 p.name = name;
 p.num = num;
+p.pod = pod;
 p.line = line;
 p.status = status;
 p.vet = vet;
 p.squatW8 = squat;
 p.deadliftW8 = deadlift;
+p.completedExercises = completedEx;
 }
 } else {
 const newPlayer = {
 id: 'p_' + Date.now(),
 num,
+pod,
 name,
 line,
 status,
 vet,
+completedExercises: completedEx,
+totalExercises: 25,
 broncoBase: "--:--",
 broncoW8: "--:--",
 sprintBase: 3.15,
@@ -2738,6 +2881,7 @@ closeHurlerModal();
 renderRosterTable();
 renderTestingTable();
 populateHurlerSelect();
+updateProtocolToggleUI();
 renderSession();
 }
 
@@ -2783,13 +2927,14 @@ renderSession();
 }
 
 function saveRosterToStorage() {
-localStorage.setItem('stpats_roster_v2', JSON.stringify(players));
+localStorage.setItem('stpats_roster_v4', JSON.stringify(players));
 }
 
 function exportCSV() {
-let csv = "Jersey,Name,Line,Status,VeteranShield,BroncoBase,BroncoW8,SprintBase,SprintW8,SquatBase,SquatW8,DeadliftBase,DeadliftW8\n";
+let csv = "Jersey,Name,Line,Pod,Status,Protocol,ExercisesCompleted,CompletionPct,BroncoBase,BroncoW8,SprintBase,SprintW8,SquatBase,SquatW8,DeadliftBase,DeadliftW8\n";
 players.forEach(p => {
-csv += `${p.num},"${p.name}",${p.line},${p.status},${p.vet},"${p.broncoBase}","${p.broncoW8}",${p.sprintBase},${p.sprintW8},${p.squatBase},${p.squatW8},${p.deadliftBase},${p.deadliftW8}\n`;
+const stats = getPlayerExerciseStats(p);
+csv += `${p.num},"${p.name}",${p.line},${p.pod || 1},${p.status},${p.vet ? 'Veteran Shield' : 'Standard Protocol'},${stats.completed},${stats.pct}%,"${p.broncoBase}","${p.broncoW8}",${p.sprintBase},${p.sprintW8},${p.squatBase},${p.squatW8},${p.deadliftBase},${p.deadliftW8}\n`;
 });
 const blob = new Blob([csv], { type: 'text/csv' });
 const url = URL.createObjectURL(blob);
