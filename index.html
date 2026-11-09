@@ -1,2486 +1,777 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full bg-[#040907] text-slate-100 antialiased selection:bg-amber-400 selection:text-emerald-950">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>St Pat's Hurling — High Performance SaaS Platform</title>
-  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
-          },
-          colors: {
-            lab: {
-              bg: '#0A0D10',          // Onyx Carbon Core
-              surface: '#12171E',     // Polished Titanium Glass
-              surfaceHover: '#18202A',
-              border: '#1F2633',      // Precision Hairline
-              borderLight: '#2D3748',
-              mint: '#00F298',        // Electric Kinetic Mint
-              mintDark: '#00C77B',
-              gold: '#FFB800',        // Competition Gold
-              goldMuted: '#B28200',
-              cyan: '#00D8F6',        // Speed Cyan
-              danger: '#FF4757',      // Laser Crimson
-              text: '#F0F4F8',        // Pure Titanium White
-              muted: '#7E8B9B'        // Neutral Slate
-            }
-          },
-          boxShadow: {
-            'mint-glow': '0 0 20px -3px rgba(0, 242, 152, 0.35)',
-            'mint-glow-sm': '0 0 10px -1px rgba(0, 242, 152, 0.25)',
-            'gold-glow': '0 0 20px -3px rgba(255, 184, 0, 0.35)',
-            'card-glass': '0 8px 32px 0 rgba(0, 0, 0, 0.45)',
-          }
-        }
-      }
-    }
-  </script>
+  <title>St Pat's Hurling — High Performance Platform</title>
+  
   <style>
-    body {
-      background-color: #0A0D10;
-      color: #F0F4F8;
-      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-      -webkit-tap-highlight-color: transparent;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background-color: #040907;
+      color: #F1F5F9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      min-height: 100%;
+      -webkit-font-smoothing: antialiased;
     }
-    .panel-lab {
-      background: linear-gradient(180deg, rgba(18, 23, 30, 0.94) 0%, rgba(12, 16, 21, 0.98) 100%);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid #1F2633;
+    a, button { cursor: pointer; user-select: none; }
+    button:active { transform: scale(0.97); }
+
+    /* Layout Utilities */
+    .container { max-width: 1100px; margin: 0 auto; padding: 12px; }
+    .panel-glass {
+      background: linear-gradient(180deg, rgba(12, 30, 23, 0.95) 0%, rgba(7, 19, 14, 0.98) 100%);
+      border: 1px solid #163629;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
     }
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    .flex-between { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    .hidden { display: none !important; }
+
+    /* Top Navigation */
+    header {
+      position: sticky; top: 0; z-index: 40;
+      background: rgba(4, 9, 7, 0.96);
+      border-bottom: 1px solid #163629;
+      padding: 10px 14px;
+      backdrop-filter: blur(10px);
     }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+    .brand-wrap { display: flex; align-items: center; gap: 10px; }
+    .brand-crest {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: linear-gradient(135deg, #F5C544, #B45309);
+      color: #040907; font-weight: 900; font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 14px rgba(245, 197, 68, 0.3);
     }
-    .tactile-btn {
-      transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
-      cursor: pointer;
-      user-select: none;
+    .nav-tabs {
+      display: flex; gap: 4px; background: #07130E;
+      padding: 4px; border-radius: 10px; border: 1px solid #163629;
     }
-    .tactile-btn:active {
-      transform: scale(0.97);
+    .nav-btn {
+      background: transparent; border: none; color: #718C80;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      padding: 6px 12px; border-radius: 6px; transition: 0.15s;
     }
-    .roadmap-card {
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      cursor: pointer;
+    .nav-btn.active { background: #F5C544; color: #040907; font-weight: 800; }
+
+    /* Athlete Bar */
+    .jersey-tag {
+      width: 38px; height: 38px; border-radius: 8px;
+      background: #0C1E17; border: 1px solid #214F3D;
+      color: #00F298; font-weight: 900; font-size: 14px;
+      font-family: monospace; display: flex; align-items: center; justify-content: center;
     }
-    .roadmap-card:hover {
-      border-color: #00F298;
-      transform: translateY(-2px);
+    select, input[type="text"], input[type="password"] {
+      background: #07130E; border: 1px solid #163629; color: #FFF;
+      padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;
     }
-    .roadmap-card.active-stage {
-      border: 1.5px solid #00F298 !important;
-      background: linear-gradient(180deg, rgba(0, 242, 152, 0.14) 0%, rgba(18, 23, 30, 0.95) 100%) !important;
-      box-shadow: 0 0 18px -2px rgba(0, 242, 152, 0.4);
+    select:focus, input:focus { outline: none; border-color: #00F298; }
+    .toggle-shield-btn {
+      background: #07130E; border: 1px solid #163629; color: #718C80;
+      padding: 6px 12px; border-radius: 6px; font-size: 10px; font-weight: 800;
+      text-transform: uppercase;
+    }
+    .toggle-shield-btn.vet-on {
+      background: rgba(120, 53, 15, 0.4); border-color: #F5C544; color: #F5C544;
+    }
+
+    /* Rest Timer */
+    .timer-wrap {
+      display: flex; align-items: center; gap: 8px;
+      background: #06110D; border: 1px solid #163629;
+      padding: 4px 8px; border-radius: 8px;
+    }
+    .timer-clock { font-family: monospace; font-size: 15px; font-weight: 900; color: #00F298; }
+    .timer-btn {
+      background: #163629; border: none; color: #E2E8F0;
+      font-family: monospace; font-size: 10px; font-weight: 700;
+      padding: 3px 6px; border-radius: 4px;
+    }
+
+    /* Microcycle Sub-Strip */
+    .week-strip { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px; }
+    .week-btn {
+      background: #07130E; border: 1px solid #163629; color: #718C80;
+      font-size: 11px; font-weight: 800; padding: 5px 10px; border-radius: 6px;
+    }
+    .week-btn.active { background: #F5C544; color: #040907; border-color: #F5C544; }
+
+    .day-selector-btn {
+      flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid #163629;
+      background: #07130E; color: #718C80; font-size: 11px; font-weight: 800;
+      text-transform: uppercase; text-align: center;
+    }
+    .day-selector-btn.active { background: #00F298; color: #040907; border-color: #00F298; }
+
+    /* Cards & Checkbox Rows */
+    .checkbox-chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .checkbox-chip-row label {
+      background: #07130E; border: 1px solid #163629; padding: 4px 8px;
+      border-radius: 4px; font-size: 11px; font-family: monospace;
+      color: #CBD5E1; display: flex; align-items: center; gap: 4px; cursor: pointer;
+    }
+    .checkbox-chip-row label:hover { border-color: #00F298; }
+
+    /* Drill Block */
+    .drill-block {
+      background: #07130E; border: 1px solid #163629;
+      border-radius: 10px; padding: 12px; margin-top: 10px;
+    }
+    .drill-title { font-weight: 800; font-size: 12px; color: #FFF; }
+    .drill-badge { font-family: monospace; font-size: 11px; font-weight: 700; color: #F5C544; }
+
+    /* Table Styles */
+    table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 8px; }
+    th { padding: 8px; border-bottom: 1px solid #163629; color: #718C80; text-transform: uppercase; font-size: 10px; text-align: left; }
+    td { padding: 8px; border-bottom: 1px solid rgba(22, 54, 41, 0.4); }
+    .status-badge {
+      display: inline-block; padding: 2px 6px; border-radius: 4px;
+      font-size: 9px; font-weight: 800; font-family: monospace;
+    }
+    .badge-fit { background: #064E3B; color: #34D399; border: 1px solid #059669; }
+    .badge-vet { background: #78350F; color: #FDE68A; border: 1px solid #D97706; }
+
+    .btn-lock {
+      background: rgba(153, 27, 27, 0.3); border: 1px solid #991B1B;
+      color: #FCA5A5; font-size: 10px; font-weight: 800; padding: 5px 10px;
+      border-radius: 6px; text-transform: uppercase;
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col bg-lab-bg text-lab-text antialiased selection:bg-lab-mint selection:text-black">
+<body>
 
-  <!-- ================= TOP APP HEADER & NAVIGATION ================= -->
-  <header class="sticky top-0 z-40 bg-lab-bg/95 backdrop-blur-md border-b border-lab-border px-3.5 py-3">
-    <div class="max-w-6xl mx-auto flex flex-col gap-2.5">
-      <!-- Title & Live Status -->
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-lab-mint to-emerald-600 flex items-center justify-center text-black font-black text-sm shadow-mint-glow-sm">
-            P
+  <!-- Top Navigation -->
+  <header>
+    <div class="container flex-between" style="padding:0;">
+      <div class="brand-wrap">
+        <div class="brand-crest">P</div>
+        <div>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <span style="font-size:10px; font-weight:900; color:#F5C544; letter-spacing:0.8px;">ST PAT'S GAA</span>
+            <span style="font-size:9px; background:#163629; color:#00F298; padding:1px 5px; border-radius:4px; font-weight:800;">Junior Hurling</span>
           </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h1 class="text-xs font-black uppercase tracking-widest text-white">St Pat's GAA</h1>
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-lab-surface border border-lab-border text-lab-mint">
-                <span class="w-1.5 h-1.5 rounded-full bg-lab-mint animate-pulse"></span>
-                Junior Hurling
-              </span>
-            </div>
-            <p class="text-[10px] text-lab-muted font-medium mt-0.5">Donabate High Performance System (Wed Gym &bull; Sun Double Run)</p>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2 text-[11px]">
-          <span class="px-2.5 py-1 rounded-lg bg-lab-surface border border-lab-border text-lab-gold font-mono text-[10px] font-bold">
-            ⚡ KICKOFF: WED 4TH NOV
-          </span>
+          <div style="font-size:12px; font-weight:800; color:#FFF;">High Performance Platform</div>
         </div>
       </div>
 
-      <!-- 4 Core Navigation Tabs -->
-      <nav class="grid grid-cols-4 gap-1.5 bg-[#0C1015] p-1 rounded-xl border border-lab-border">
-        <button onclick="switchTab('player-floor')" id="nav-player-floor"
-          class="nav-tab py-2 px-1 text-center font-extrabold text-xs uppercase tracking-wide rounded-lg transition-all bg-lab-mint text-black shadow-mint-glow-sm">
-          Player Floor
-        </button>
-        <button onclick="switchTab('fuel')" id="nav-fuel"
-          class="nav-tab py-2 px-1 text-center font-bold text-xs uppercase tracking-wide rounded-lg text-lab-muted hover:text-white transition-all">
-          Fuel &amp; Diet
-        </button>
-        <button onclick="switchTab('match-day')" id="nav-match-day"
-          class="nav-tab py-2 px-1 text-center font-bold text-xs uppercase tracking-wide rounded-lg text-lab-muted hover:text-white transition-all">
-          Match Day
-        </button>
-        <button onclick="switchTab('management')" id="nav-management"
-          class="nav-tab py-2 px-1 text-center font-bold text-xs uppercase tracking-wide rounded-lg text-lab-muted hover:text-white transition-all flex items-center justify-center gap-1">
-          <span>🔒</span> Coach
-        </button>
+      <nav class="nav-tabs">
+        <button id="nav-player" class="nav-btn active" onclick="switchPortal('player')">Player Floor</button>
+        <button id="nav-match" class="nav-btn" onclick="switchPortal('match')">Match Day</button>
+        <button id="nav-coach" class="nav-btn" onclick="switchPortal('coach')">Coach Desk</button>
       </nav>
     </div>
   </header>
 
-  <!-- ================= MAIN CONTENT WRAPPER ================= -->
-  <main class="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-5 space-y-6">
+  <main class="container">
 
-    <!-- ========================================================================= -->
-    <!-- TAB 1: PLAYER FLOOR                                                       -->
-    <!-- ========================================================================= -->
-    <div id="tab-content-player-floor" class="space-y-5">
+    <!-- PORTAL 1: PLAYER FLOOR -->
+    <div id="portal-player">
 
-      <!-- ANNUAL MACROCYCLE ROADMAP -->
-      <section class="panel-lab rounded-2xl p-4 sm:p-5 border border-lab-border shadow-card-glass">
-        <div class="flex items-center justify-between mb-2 flex-wrap gap-2">
-          <div class="flex items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded-md bg-lab-mint text-black font-black text-[9.5px] tracking-wider uppercase">
-              Annual Macrocycle
-            </span>
-            <span class="text-[10px] text-lab-muted font-mono">Tap stage for conditioning programme</span>
-          </div>
-          <span id="roadmap-active-badge" class="flex items-center gap-1.5 text-xs text-lab-mint font-semibold font-mono">
-            <span class="w-2 h-2 rounded-full bg-lab-mint animate-ping"></span>
-            Active: 2. Block 1 Preseason (Wed Gym + Sun Double Running)
-          </span>
-        </div>
-        <h2 class="text-base sm:text-lg font-black text-white tracking-tight">
-          ST PAT'S ANNUAL CHAMPIONSHIP ROADMAP
-        </h2>
-        <p class="text-xs text-lab-muted mt-0.5 mb-4">
-          Kickoff: Wed 4th Nov • 2 Wks Intro Loading &rarr; Testing Post-W2 (Injury Safe) &rarr; Block 1 (6 Wks) &rarr; Block 2 (Mid-Jan Hurling) &rarr; Champ Peak
-        </p>
-
-        <!-- 8-Stage Grid -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <!-- 1. Intro Loading & W2 Test -->
-          <div onclick="selectRoadmapStage(1)" id="roadmap-card-1" class="roadmap-card p-3 rounded-xl bg-lab-surface border border-lab-border flex flex-col justify-between">
-            <span class="text-[10px] uppercase font-mono font-bold text-lab-gold">START WED 4 NOV</span>
-            <div class="mt-1">
-              <h4 class="text-xs font-bold text-white">1. Intro &amp; W2 Test</h4>
-              <p class="text-[11px] text-lab-muted">2 Wks Prep &rarr; Test Bronco, 3RM &amp; 20m</p>
-            </div>
-          </div>
-          <!-- 2. Block 1 Preseason (6 Weeks) -->
-          <div onclick="selectRoadmapStage(2)" id="roadmap-card-2" class="roadmap-card active-stage p-3 rounded-xl bg-lab-surface border border-lab-mint flex flex-col justify-between shadow-lg">
-            <span class="text-[10px] uppercase font-mono font-bold text-lab-mint">NOV – DEC</span>
-            <div class="mt-1">
-              <h4 class="text-xs font-bold text-emerald-200">2. Block 1: Preseason</h4>
-              <p class="text-[11px] text-emerald-300/80">Wed Gym &bull; Sun Double Run (Aerobic+Anaerobic)</p>
-            </div>
-          </div>
-          <!-- 3. Retest Week -->
-          <div onclick="selectRoadmapStage(3)" id="roadmap-card-3" class="roadmap-card p-3 rounded-xl bg-lab-surface border border-lab-border flex flex-col justify-between">
-            <span class="text-[10px] uppercase font-mono font-bold text-lab-gold">POST-W6</span>
-            <div class="mt-1">
-              <h4 class="text-xs font-bold text-white">3. Retest Week</h4>
-              <p class="text-[11px] text-lab-muted">Progress Delta Audit</p>
-            </div>
-          </div>
-          <!-- 4. Deload Week -->
-          <div onclick="selectRoadmapStage(4)" id="roadmap-card-4" class="roadmap-card p-3 rounded-xl bg-lab-surface border border-lab-border flex flex-col justify-between">
-            <span class="text-[10px] uppercase font-mono font-bold text-lab-gold">EARLY JAN</span>
-            <div class="mt-1">
-              <h4 class="text-xs font-bold text-white">4. Deload Week</h4>
-              <p class="text-[11px] text-lab-muted">-40% Volume (Neural Recovery)</p>
-            </div>
-          </div>
-          <!-- 5. Block 2: League & Hurling -->
-          <div onclick="selectRoadmapStage(5)" id="roadmap-card-5" class="roadmap-card p-3 rounded-xl bg-lab-surface border border-lab-border flex flex-col justify-between">
-            <span class="text-[10px] uppercase font-mono font-bold text-lab-gold">MID-JAN – FEB</span>
-            <div class="mt-1">
-              <h4 class="text-xs font-bold text-white">5. Block 2: League & Hurling</h4>
-              <p class="text-[11px] text-lab-mint font-medium">Mid-Jan Hurling • Running Modified</p>
-            </div>
-          </div>
-          <!-- 6. Deload & Peak -->
-          <div onclick="selectRoadmapStage(6)" id="roadmap-card-6" class="roadmap-card p-3 rounded-xl bg-lab-surface border border-lab-border flex flex-col justify-between">
-            <span class="text-[10px] uppercase font-mono font-bold text-lab-gold">MID-FEB</span>
-            <div class="mt-1">
-              <h4 class="text-xs font-bold text-white">6. Deload & Peak</h4>
-              <p class="text-[11px] text-lab-muted">Early March League Campaign</p>
-            </div>
-          </div>
-          <!-- 7. Block 3: Champ -->
-          <div onclick="selectRoadmapStage(7)" id="roadmap-card-7" class="roadmap-card p-3 rounded-xl bg-lab-surface border border-lab-border flex flex-col justify-between">
-            <span class="text-[10px] uppercase font-mono font-bold text-lab-mint">APR – MAY</span>
-            <div class="mt-1">
-              <h4 class="text-xs font-bold text-white">7. Block 3: Champ</h4>
-              <p class="text-[11px] text-lab-muted">6 Wks • Match Ball-in-Play</p>
-            </div>
-          </div>
-          <!-- 8. Champ Peak -->
-          <div onclick="selectRoadmapStage(8)" id="roadmap-card-8" class="roadmap-card p-3 rounded-xl bg-lab-surface border border-lab-border flex flex-col justify-between">
-            <span class="text-[10px] uppercase font-mono font-bold text-lab-gold">SUMMER 2027</span>
-            <div class="mt-1">
-              <h4 class="text-xs font-bold text-white">8. Champ Peak</h4>
-              <p class="text-[11px] text-lab-muted">Championship Taper & Peak</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Dynamic Roadmap Section Display -->
-        <div id="roadmap-programme-display" class="mt-4 pt-4 border-t border-lab-border space-y-3">
-          <!-- Injected via JS based on selected stage -->
-        </div>
-      </section>
-
-      <!-- LOGGED HURLER & PROTOCOL CONTROL -->
-      <section class="panel-lab rounded-2xl p-4 border border-lab-border space-y-3">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          
-          <div class="flex items-center gap-3 flex-1">
-            <div class="w-12 h-12 rounded-xl bg-lab-surface border border-lab-borderLight flex items-center justify-center font-mono font-black text-lab-mint text-lg shrink-0">
-              <span id="player-badge-num">#1</span>
-            </div>
-            <div class="flex-1">
-              <div class="flex items-center justify-between">
-                <label class="block text-[10px] uppercase font-bold text-lab-muted tracking-wider">Logged Hurler &amp; Assigned Pod</label>
-                <span id="player-pod-badge" class="px-2 py-0.5 rounded bg-[#0A1410] text-lab-mint text-[10px] font-mono font-bold border border-lab-mint/40">Pod 1</span>
-              </div>
-              <select id="hurler-select" onchange="onHurlerChange(this.value)"
-                class="w-full mt-1 bg-lab-surface border border-lab-border text-white text-sm font-semibold rounded-lg px-2.5 py-1.5 focus:border-lab-mint outline-none cursor-pointer">
-                <!-- Populated via JS -->
-              </select>
-            </div>
-          </div>
-
-          <!-- Direct One-Click Veteran Shield Protocol Toggle -->
-          <div class="flex items-center gap-2 bg-[#0C1015] border border-lab-border p-2.5 rounded-xl shrink-0">
-            <div class="text-left">
-              <span class="text-[9px] uppercase font-bold text-lab-muted block tracking-wider">Protocol Mode:</span>
-              <span id="player-protocol-desc" class="text-[11px] text-slate-300 font-medium">Standard Protocol</span>
-            </div>
-            <button onclick="toggleCurrentPlayerVet()" id="player-protocol-btn"
-              class="tactile-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all border flex items-center gap-1.5 shadow-sm bg-lab-surface border-lab-borderLight text-slate-300 hover:border-lab-gold hover:text-lab-gold">
-              <span>🛡️</span>
-              <span id="player-protocol-btn-text">Switch to Vet Shield</span>
-            </button>
-          </div>
-
-        </div>
-
-        <div class="p-3 rounded-xl bg-lab-surface/80 border border-lab-border text-xs flex items-start gap-2.5">
-          <span class="text-lab-mint text-sm leading-none mt-0.5">•</span>
-          <div>
-            <span class="font-bold text-lab-mint uppercase tracking-wide text-[10px] block" id="staff-directive-title">Donabate Preseason S&amp;C Directive (Kickoff: Wed 4th Nov)</span>
-            <p id="staff-directive-text" class="text-slate-300 text-xs mt-0.5 leading-relaxed">
-              Preseason starts Wednesday 4th November with gym structural hypertrophy. Full squad fitness testing is scheduled after two weeks of introductory work so the body and soft tissues are accustomed to the workload, protecting against hamstring and groin strains. Pitch running takes place on Sundays (both Aerobic and Anaerobic engines combined).
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- 4 DURABILITY PILLARS CHECKLIST -->
-      <section class="panel-lab rounded-2xl p-4 border border-lab-border space-y-3">
-        <div class="flex items-center justify-between">
-          <div>
-            <h3 class="text-sm font-black uppercase tracking-wide text-white flex items-center gap-2">
-              <span class="text-lab-mint">🛡️</span> 4 Durability Pillars — Tissue Insurance
-            </h3>
-            <p class="text-[11px] text-lab-muted">Non-negotiable prehab. Essential before all pitch and hurling sessions to protect hamstrings, groins &amp; rotator cuffs.</p>
-          </div>
-          <span id="durability-pct" class="text-xs font-mono font-bold text-lab-mint bg-lab-surface px-2.5 py-0.5 rounded-full border border-lab-border">
-            0% Logged
-          </span>
-        </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <!-- 1. Nordics -->
-          <div class="p-3 rounded-xl bg-lab-surface border border-lab-border">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-white">1. Nordics</span>
-              <span class="text-[10px] text-lab-mint font-mono font-bold">3x5 Reps</span>
-            </div>
-            <p class="text-[10px] text-lab-muted mb-2">Biceps femoris length</p>
-            <div class="flex gap-2 font-mono">
-              <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer">
-                <input type="checkbox" id="chk-dura-nordic-1" onchange="toggleDurabilityPillarBox('nordic', 1, this.checked)" class="pillar-chk accent-emerald-400 rounded"> S1
-              </label>
-              <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer">
-                <input type="checkbox" id="chk-dura-nordic-2" onchange="toggleDurabilityPillarBox('nordic', 2, this.checked)" class="pillar-chk accent-emerald-400 rounded"> S2
-              </label>
-              <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer">
-                <input type="checkbox" id="chk-dura-nordic-3" onchange="toggleDurabilityPillarBox('nordic', 3, this.checked)" class="pillar-chk accent-emerald-400 rounded"> S3
-              </label>
-            </div>
-          </div>
-          <!-- 2. Copenhagens -->
-          <div class="p-3 rounded-xl bg-lab-surface border border-lab-border">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-white">2. Copenhagens</span>
-              <span class="text-[10px] text-lab-mint font-mono font-bold">3x20s/leg</span>
-            </div>
-            <p class="text-[10px] text-lab-muted mb-2">Groin &amp; adductor health</p>
-            <div class="flex gap-2 font-mono">
-              <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer">
-                <input type="checkbox" id="chk-dura-copenhagen-1" onchange="toggleDurabilityPillarBox('copenhagen', 1, this.checked)" class="pillar-chk accent-emerald-400 rounded"> S1
-              </label>
-              <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer">
-                <input type="checkbox" id="chk-dura-copenhagen-2" onchange="toggleDurabilityPillarBox('copenhagen', 2, this.checked)" class="pillar-chk accent-emerald-400 rounded"> S2
-              </label>
-              <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer">
-                <input type="checkbox" id="chk-dura-copenhagen-3" onchange="toggleDurabilityPillarBox('copenhagen', 3, this.checked)" class="pillar-chk accent-emerald-400 rounded"> S3
-              </label>
-            </div>
-          </div>
-          <!-- 3. Max Sprint -->
-          <div class="p-3 rounded-xl bg-lab-surface border border-lab-border">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-white">3. Max Sprint</span>
-              <span class="text-[10px] text-lab-mint font-mono font-bold">3x30m @ 100%</span>
-            </div>
-            <p class="text-[10px] text-lab-muted mb-2">Neural speed vaccine</p>
-            <div class="flex gap-2 font-mono">
-              <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer">
-                <input type="checkbox" id="chk-dura-sprint-1" onchange="toggleDurabilityPillarBox('sprint', 1, this.checked)" class="pillar-chk accent-emerald-400 rounded"> S1
-              </label>
-              <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer">
-                <input type="checkbox" id="chk-dura-sprint-2" onchange="toggleDurabilityPillarBox('sprint', 2, this.checked)" class="pillar-chk accent-emerald-400 rounded"> S2
-              </label>
-              <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer">
-                <input type="checkbox" id="chk-dura-sprint-3" onchange="toggleDurabilityPillarBox('sprint', 3, this.checked)" class="pillar-chk accent-emerald-400 rounded"> S3
-              </label>
-            </div>
-          </div>
-          <!-- 4. Rear Cuff -->
-          <div class="p-3 rounded-xl bg-lab-surface border border-lab-border">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-white">4. Rear Cuff</span>
-              <span class="text-[10px] text-lab-mint font-mono font-bold">3x15 Reps</span>
-            </div>
-            <p class="text-[10px] text-lab-muted mb-2">Shoulder striking armor</p>
-            <div class="flex gap-2 font-mono">
-              <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer">
-                <input type="checkbox" id="chk-dura-cuff-1" onchange="toggleDurabilityPillarBox('cuff', 1, this.checked)" class="pillar-chk accent-emerald-400 rounded"> S1
-              </label>
-              <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer">
-                <input type="checkbox" id="chk-dura-cuff-2" onchange="toggleDurabilityPillarBox('cuff', 2, this.checked)" class="pillar-chk accent-emerald-400 rounded"> S2
-              </label>
-              <label class="flex items-center gap-1 text-[11px] text-slate-300 cursor-pointer">
-                <input type="checkbox" id="chk-dura-cuff-3" onchange="toggleDurabilityPillarBox('cuff', 3, this.checked)" class="pillar-chk accent-emerald-400 rounded"> S3
-              </label>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- PERIODIZATION DRILL-DOWN: BLOCKS -> WEEKS -> DAYS -->
-      <section class="space-y-3">
-        <!-- 1. Block Selector -->
-        <div class="space-y-1">
-          <div class="flex items-center justify-between">
-            <label class="text-[10px] uppercase font-bold text-lab-muted tracking-wider">1. Annual Macrocycle Block:</label>
-            <span id="hurling-mode-indicator" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-lab-surface text-lab-mint border border-lab-mint/30">
-              Starts Wed 4 Nov: 6-Wk Preseason (Wed Gym + Sun Double Running)
-            </span>
-          </div>
-          <div class="grid grid-cols-3 gap-1.5 bg-[#0C1015] p-1 rounded-xl border border-lab-border text-xs">
-            <button onclick="setBlock(1)" id="btn-block-1" class="py-2 px-2 rounded-lg font-extrabold uppercase transition-all bg-lab-mint text-black tactile-btn shadow-mint-glow-sm">
-              Block 1: Preseason (6 Wks)
-            </button>
-            <button onclick="setBlock(2)" id="btn-block-2" class="py-2 px-2 rounded-lg font-bold uppercase transition-all text-lab-muted hover:text-white tactile-btn flex flex-col items-center">
-              <span>Block 2: League & Hurling (6 Wks)</span>
-              <span class="text-[8px] text-lab-gold font-normal lowercase">mid-jan hurling integrated</span>
-            </button>
-            <button onclick="setBlock(3)" id="btn-block-3" class="py-2 px-2 rounded-lg font-bold uppercase transition-all text-lab-muted hover:text-white tactile-btn flex flex-col items-center">
-              <span>Block 3: Champ Peak (6 Wks)</span>
-              <span class="text-[8px] text-lab-mint font-normal lowercase">match speed & breakaways</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- 2. Individual Week Selector (6 WEEKS IN BLOCK 1) -->
-        <div class="space-y-1">
-          <div class="flex items-center justify-between">
-            <label class="text-[10px] uppercase font-bold text-lab-muted tracking-wider">2. Individual Training Week:</label>
-            <span id="current-week-label" class="text-[11px] text-lab-mint font-semibold font-mono">Week 1 (Kickoff: Wed 4 Nov • Intro Prep)</span>
-          </div>
-          <div id="week-selector-container" class="flex gap-1.5 overflow-x-auto no-scrollbar py-1">
-            <!-- Dynamically populated week buttons -->
-          </div>
-        </div>
-
-        <!-- 3. Day Microcycle Selector (Wed Gym & Sun Double Running) -->
-        <div class="space-y-1">
-          <div class="flex items-center justify-between">
-            <label class="text-[10px] uppercase font-bold text-lab-muted tracking-wider">3. Weekly Schedule (Wednesdays &amp; Sundays):</label>
-            <span id="running-mode-subtext" class="text-[10px] text-lab-gold font-mono font-bold">Wed: Gym Armor &bull; Sun: Double Pitch Running</span>
-          </div>
-          <div class="grid grid-cols-2 gap-2 bg-[#0C1015] p-1.5 rounded-xl border border-lab-border text-xs">
-            <button onclick="setDay(1)" id="btn-day-1" class="py-2.5 px-3 rounded-lg font-extrabold uppercase transition-all bg-lab-mint text-black flex flex-col items-center tactile-btn shadow-mint-glow-sm">
-              <span class="text-xs">Wednesday: Gym Session</span>
-              <span class="text-[9px] font-mono font-medium opacity-90">Donabate 1.1 / 1.2 Hypertrophy &amp; Armor</span>
-            </button>
-            <button onclick="setDay(2)" id="btn-day-2" class="py-2.5 px-3 rounded-lg font-bold uppercase transition-all text-lab-muted hover:text-white flex flex-col items-center tactile-btn">
-              <span class="text-xs">Sunday: Pitch Running Day</span>
-              <span class="text-[9px] font-mono font-medium opacity-80 text-lab-gold">Combined: Aerobic Engine + Anaerobic Shuttles</span>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- SESSION WORKLOAD DISPLAY CONTAINER -->
-      <section id="session-display-card" class="panel-lab rounded-2xl p-4 sm:p-5 border border-lab-border space-y-4">
-        <!-- Rendered via JS -->
-      </section>
-
-    </div>
-
-    <!-- ========================================================================= -->
-    <!-- TAB 2: FUEL & DIET                                                        -->
-    <!-- ========================================================================= -->
-    <div id="tab-content-fuel" class="hidden space-y-5">
-      <section class="panel-lab rounded-2xl p-4 sm:p-5 border border-lab-border space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-lab-border pb-3">
-          <div>
-            <h2 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
-              <span class="text-lab-mint">⚡</span> Dynamic Hurler Fuel &amp; Diet Engine
-            </h2>
-            <p class="text-xs text-lab-muted">
-              Input session start time and bodyweight. Meal timing and food quantities adapt automatically.
-            </p>
-          </div>
-          <span class="px-2.5 py-1 rounded-full bg-lab-surface border border-lab-mint/40 text-lab-mint text-xs font-mono font-bold w-fit">
-            GAA Glycogen &amp; Tendon Protocol
-          </span>
-        </div>
-
-        <!-- Inputs -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#0C1015] p-3 rounded-xl border border-lab-border">
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-lab-muted">Event Type</label>
-            <select id="fuel-event-type" onchange="recalculateFuel()"
-              class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-2 py-1.5 text-xs text-white font-semibold outline-none focus:border-lab-mint cursor-pointer">
-              <option value="training">Hard Hurling / Pitch Session</option>
-              <option value="match">Championship / League Match</option>
-              <option value="gym">Gym &amp; Prehab Only</option>
-              <option value="rest">Deload / Rest Day</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-lab-muted">Session Start Time</label>
-            <input type="time" id="fuel-start-time" value="19:30" onchange="recalculateFuel()"
-              class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-2 py-1 text-xs text-white font-semibold outline-none focus:border-lab-mint cursor-pointer font-mono">
-          </div>
-
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-lab-muted">Expected Duration</label>
-            <select id="fuel-duration" onchange="recalculateFuel()"
-              class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-2 py-1.5 text-xs text-white font-semibold outline-none focus:border-lab-mint cursor-pointer">
-              <option value="60">60 Minutes</option>
-              <option value="75" selected>75 Minutes (Pitch &amp; Skills)</option>
-              <option value="90">90 Minutes (Match &amp; ET)</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-lab-muted">Athlete Weight (kg)</label>
-            <div class="flex items-center gap-1 mt-1">
-              <input type="number" id="fuel-weight" value="82" min="55" max="115" oninput="recalculateFuel()"
-                class="w-full bg-lab-surface border border-lab-border rounded-lg px-2 py-1 text-xs text-white font-semibold outline-none focus:border-lab-mint font-mono">
-              <span class="text-xs text-lab-muted font-bold">kg</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Calculated Macro Targets -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <div class="p-3 rounded-xl bg-lab-surface border border-lab-border">
-            <span class="text-[10px] uppercase font-bold text-lab-gold">Total Carbohydrates</span>
-            <div class="flex items-baseline gap-1 mt-1">
-              <span id="target-carbs" class="text-2xl font-black text-white font-mono">492</span>
-              <span class="text-xs text-lab-muted font-bold font-mono">g / day</span>
-            </div>
-            <p id="target-carbs-sub" class="text-[10px] text-lab-muted mt-0.5">6.0g per kg bodyweight</p>
-          </div>
-
-          <div class="p-3 rounded-xl bg-lab-surface border border-lab-border">
-            <span class="text-[10px] uppercase font-bold text-lab-mint">Protein Target</span>
-            <div class="flex items-baseline gap-1 mt-1">
-              <span id="target-protein" class="text-2xl font-black text-white font-mono">164</span>
-              <span class="text-xs text-lab-muted font-bold font-mono">g / day</span>
-            </div>
-            <p class="text-[10px] text-lab-muted mt-0.5">2.0g/kg (4 x pulses)</p>
-          </div>
-
-          <div class="p-3 rounded-xl bg-lab-surface border border-lab-border">
-            <span class="text-[10px] uppercase font-bold text-lab-cyan">Healthy Fats</span>
-            <div class="flex items-baseline gap-1 mt-1">
-              <span id="target-fats" class="text-2xl font-black text-white font-mono">82</span>
-              <span class="text-xs text-lab-muted font-bold font-mono">g / day</span>
-            </div>
-            <p class="text-[10px] text-lab-muted mt-0.5">1.0g per kg bodyweight</p>
-          </div>
-
-          <div class="p-3 rounded-xl bg-lab-surface border border-lab-border">
-            <span class="text-[10px] uppercase font-bold text-blue-400">Fluid Volume</span>
-            <div class="flex items-baseline gap-1 mt-1">
-              <span id="target-fluids" class="text-2xl font-black text-white font-mono">3.3</span>
-              <span class="text-xs text-lab-muted font-bold font-mono">L + Sodium</span>
-            </div>
-            <p class="text-[10px] text-lab-muted mt-0.5">40ml/kg baseline + sweat</p>
-          </div>
-        </div>
-
-        <!-- Dynamic Timeline -->
-        <div class="space-y-3 pt-2">
-          <h3 class="text-sm font-black uppercase tracking-wide text-white flex items-center gap-2">
-            <span class="text-lab-gold">⏱️</span> Dynamic Fuel Clock &amp; Exact Food Quantities (Based on <span id="clock-weight-display" class="font-mono text-lab-mint">82</span>kg)
-          </h3>
-
-          <div id="meal-timeline-container" class="space-y-2.5">
-            <!-- Populated via JS -->
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <!-- ========================================================================= -->
-    <!-- TAB 3: MATCH DAY                                                          -->
-    <!-- ========================================================================= -->
-    <div id="tab-content-match-day" class="hidden space-y-5">
-      <section class="panel-lab rounded-2xl border border-lab-border p-4 sm:p-5 shadow-2xl relative overflow-hidden">
-        <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
-          
-          <div class="flex items-center gap-3 w-full lg:w-auto min-w-0">
-            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-lab-surface to-[#0A1015] border border-lab-borderLight flex items-center justify-center text-lab-gold font-mono font-black text-sm shrink-0 shadow-inner">
-              GAA
-            </div>
-            <div class="min-w-0">
-              <div class="flex items-center gap-2 flex-wrap">
-                <span class="text-[9px] sm:text-[10px] bg-lab-gold text-black font-black uppercase px-2 py-0.5 rounded">Dublin Junior Hurling</span>
-                <span id="match-live-badge" class="text-[9px] sm:text-[10px] bg-lab-surface text-lab-mint font-mono font-bold uppercase px-2 py-0.5 rounded border border-lab-mint/30">1st Half Active</span>
-              </div>
-              <div class="flex items-center gap-2 mt-1.5 flex-wrap">
-                <input type="text" id="match-opp-name" value="Opposition Club" onchange="saveMatchState()" class="bg-[#0C1015] border border-lab-border rounded-lg px-2.5 py-1 text-xs sm:text-sm font-bold text-white focus:outline-none focus:border-lab-mint w-40 sm:w-52 transition">
-                <select id="match-half-select" onchange="toggleMatchHalf(this.value)" class="bg-[#0C1015] border border-lab-border rounded-lg px-2 py-1 text-xs font-bold text-lab-gold focus:outline-none cursor-pointer font-mono">
-                  <option value="H1">1st Half</option>
-                  <option value="H2">2nd Half</option>
-                  <option value="ET">Extra Time</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-[#080B0F] border border-lab-border rounded-2xl p-3 sm:p-4 flex items-center gap-4 sm:gap-6 shadow-inner w-full lg:w-auto justify-center">
-            
-            <div class="text-center min-w-[70px]">
-              <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-widest text-lab-mint block">St Pat's</span>
-              <div class="flex items-baseline justify-center gap-1 mt-0.5">
-                <span id="pats-goals-display" class="text-2xl sm:text-3xl font-black text-lab-mint font-mono">0</span>
-                <span class="text-sm font-bold text-lab-muted">-</span>
-                <span id="pats-points-display" class="text-2xl sm:text-3xl font-black text-white font-mono">0</span>
-                <span id="pats-total-display" class="text-[11px] font-mono font-bold text-lab-cyan pl-0.5">(0)</span>
-              </div>
-            </div>
-
-            <div class="text-lab-muted font-mono text-lg sm:text-xl font-black">:</div>
-
-            <div class="text-center min-w-[70px]">
-              <span class="text-[9px] sm:text-[10px] uppercase font-black tracking-widest text-lab-muted block">Opposition</span>
-              <div class="flex items-center gap-1 mt-1 justify-center">
-                <input type="number" id="opp-goals" value="0" min="0" onchange="saveMatchState()" class="w-10 sm:w-11 bg-lab-surface border border-lab-border text-center font-mono font-bold text-white text-sm sm:text-base rounded py-0.5 focus:outline-none focus:border-lab-mint">
-                <span class="text-xs text-lab-muted font-bold">-</span>
-                <input type="number" id="opp-points" value="0" min="0" onchange="saveMatchState()" class="w-10 sm:w-11 bg-lab-surface border border-lab-border text-center font-mono font-bold text-white text-sm sm:text-base rounded py-0.5 focus:outline-none focus:border-lab-mint">
-              </div>
-            </div>
-
-            <div class="border-l border-lab-border pl-3 sm:pl-4 flex flex-col gap-1.5 shrink-0">
-              <button onclick="exportMatchReportCSV()" class="tactile-btn px-2.5 sm:px-3 py-1.5 bg-lab-mint hover:bg-lab-mintDark text-black font-black text-[10px] sm:text-[11px] rounded-lg uppercase tracking-wider shadow-mint-glow-sm">
-                Export Stats
-              </button>
-              <button onclick="resetMatchCounters()" class="tactile-btn px-2.5 sm:px-3 py-1 bg-red-950/40 hover:bg-red-900 border border-red-800 text-red-300 text-[10px] rounded-lg uppercase font-bold">
-                New Match
-              </button>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      <!-- KPI Efficiency Gauges -->
-      <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div class="panel-lab border border-lab-border p-3.5 sm:p-4 rounded-2xl shadow min-w-0">
-          <div class="flex justify-between items-start gap-1">
-            <span class="text-[9px] sm:text-[10px] uppercase font-bold text-lab-muted tracking-wider truncate">Puck-Out Win %</span>
-            <span class="text-[8px] sm:text-[9px] bg-lab-surface text-lab-gold border border-lab-border font-mono px-1 py-0.5 rounded shrink-0">&gt;60%</span>
-          </div>
-          <span id="kpi-puckout-winrate" class="text-xl sm:text-2xl lg:text-3xl font-black text-lab-gold font-mono mt-1 block truncate">0%</span>
-          <span id="kpi-puckout-breakdown" class="text-[10px] sm:text-[11px] text-lab-muted block truncate font-mono">0 Won / 0 Total</span>
-        </div>
-
-        <div class="panel-lab border border-lab-border p-3.5 sm:p-4 rounded-2xl shadow min-w-0">
-          <div class="flex justify-between items-start gap-1">
-            <span class="text-[9px] sm:text-[10px] uppercase font-bold text-lab-muted tracking-wider truncate">Shot Conversion</span>
-            <span class="text-[8px] sm:text-[9px] bg-lab-surface text-lab-mint border border-lab-border font-mono px-1 py-0.5 rounded shrink-0">&gt;55%</span>
-          </div>
-          <span id="kpi-shot-conversion" class="text-xl sm:text-2xl lg:text-3xl font-black text-lab-mint font-mono mt-1 block truncate">0%</span>
-          <span id="kpi-shot-breakdown" class="text-[10px] sm:text-[11px] text-lab-muted block truncate font-mono">0 Scores / 0 Shots</span>
-        </div>
-
-        <div class="panel-lab border border-lab-border p-3.5 sm:p-4 rounded-2xl shadow min-w-0">
-          <div class="flex justify-between items-start gap-1">
-            <span class="text-[9px] sm:text-[10px] uppercase font-bold text-lab-muted tracking-wider truncate">Hooks &amp; Blocks</span>
-            <span class="text-[8px] sm:text-[9px] bg-lab-surface text-slate-300 border border-lab-border font-mono px-1 py-0.5 rounded shrink-0">Work Rate</span>
-          </div>
-          <span id="kpi-workrate-total" class="text-xl sm:text-2xl lg:text-3xl font-black text-white font-mono mt-1 block truncate">0</span>
-          <span class="text-[10px] sm:text-[11px] text-lab-muted block truncate">Dispossessions Won</span>
-        </div>
-
-        <div class="panel-lab border border-red-900/40 p-3.5 sm:p-4 rounded-2xl shadow min-w-0">
-          <div class="flex justify-between items-start gap-1">
-            <span class="text-[9px] sm:text-[10px] uppercase font-bold text-red-400 tracking-wider truncate">Frees Conceded</span>
-            <span class="text-[8px] sm:text-[9px] bg-red-950/60 text-red-300 border border-red-800 font-mono px-1 py-0.5 rounded shrink-0">&lt;50m Danger</span>
-          </div>
-          <span id="kpi-zone-frees" class="text-xl sm:text-2xl lg:text-3xl font-black text-red-400 font-mono mt-1 block truncate">0</span>
-          <span id="kpi-frees-breakdown" class="text-[10px] sm:text-[11px] text-red-300/80 block truncate font-mono">0 Total Frees</span>
-        </div>
-      </section>
-
-      <!-- Sideline Quick-Tap Console (3 Columns) -->
-      <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <!-- 1. Puck-Out Battle -->
-        <div class="panel-lab border border-lab-border rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
-          <div class="border-b border-lab-border pb-2.5">
-            <h3 class="text-sm sm:text-base font-extrabold uppercase text-white tracking-wide truncate">1. Puck-Out Battle</h3>
-            <p class="text-[11px] text-lab-muted mt-0.5">Scraps on breaks &amp; short retention.</p>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div class="bg-[#0C1015] p-2.5 rounded-xl border border-lab-border flex items-center justify-between">
-              <div><span class="text-[11px] text-slate-300 font-bold block">Clean Catch</span><span id="val-own-clean" class="text-lg font-mono font-black text-lab-gold">0</span></div>
-              <div class="flex flex-col gap-1"><button onclick="incMatchMetric('own_puck_clean', 1)" class="tactile-btn w-7 h-7 rounded bg-lab-surface text-white font-bold text-xs">+</button><button onclick="incMatchMetric('own_puck_clean', -1)" class="tactile-btn w-7 h-7 rounded bg-[#080B0F] text-lab-muted text-xs">-</button></div>
-            </div>
-            <div class="bg-[#0C1015] p-2.5 rounded-xl border border-lab-border flex items-center justify-between">
-              <div><span class="text-[11px] text-slate-300 font-bold block">Break Won</span><span id="val-own-break" class="text-lg font-mono font-black text-lab-gold">0</span></div>
-              <div class="flex flex-col gap-1"><button onclick="incMatchMetric('own_puck_break', 1)" class="tactile-btn w-7 h-7 rounded bg-lab-surface text-white font-bold text-xs">+</button><button onclick="incMatchMetric('own_puck_break', -1)" class="tactile-btn w-7 h-7 rounded bg-[#080B0F] text-lab-muted text-xs">-</button></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. Scoring Efficiency -->
-        <div class="panel-lab border border-lab-border rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
-          <div class="border-b border-lab-border pb-2.5">
-            <h3 class="text-sm sm:text-base font-extrabold uppercase text-white tracking-wide truncate">2. Scoring Efficiency</h3>
-            <p class="text-[11px] text-lab-muted mt-0.5">Points &amp; shot conversions.</p>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div class="bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-xl flex items-center justify-between">
-              <div><span class="text-[11px] text-amber-300 font-bold block">Point (Play)</span><span id="val-shot-pt-play" class="text-lg font-mono font-black text-lab-gold">0</span></div>
-              <div class="flex flex-col gap-1"><button onclick="incMatchScore('point_play', 1)" class="tactile-btn w-7 h-7 rounded bg-lab-gold text-black font-black text-xs">+</button><button onclick="incMatchScore('point_play', -1)" class="tactile-btn w-7 h-7 rounded bg-[#080B0F] text-amber-300 text-xs">-</button></div>
-            </div>
-            <div class="bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-xl flex items-center justify-between">
-              <div><span class="text-[11px] text-amber-300 font-bold block">Point (Free)</span><span id="val-shot-pt-free" class="text-lg font-mono font-black text-lab-gold">0</span></div>
-              <div class="flex flex-col gap-1"><button onclick="incMatchScore('point_free', 1)" class="tactile-btn w-7 h-7 rounded bg-lab-gold text-black font-black text-xs">+</button><button onclick="incMatchScore('point_free', -1)" class="tactile-btn w-7 h-7 rounded bg-[#080B0F] text-amber-300 text-xs">-</button></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3. Work Rate & Discipline -->
-        <div class="panel-lab border border-lab-border rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
-          <div class="border-b border-lab-border pb-2.5">
-            <h3 class="text-sm sm:text-base font-extrabold uppercase text-white tracking-wide truncate">3. Work Rate &amp; Discipline</h3>
-            <p class="text-[11px] text-lab-muted mt-0.5">Tackles, hooks &amp; fouls.</p>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div class="bg-[#0C1015] p-2.5 rounded-xl border border-lab-border flex items-center justify-between">
-              <div><span class="text-[11px] text-slate-300 font-bold block">Hooks/Blocks</span><span id="val-wr-hookblock" class="text-lg font-mono font-black text-lab-gold">0</span></div>
-              <div class="flex flex-col gap-1"><button onclick="incMatchMetric('wr_hookblock', 1)" class="tactile-btn w-7 h-7 rounded bg-lab-surface text-white font-bold text-xs">+</button><button onclick="incMatchMetric('wr_hookblock', -1)" class="tactile-btn w-7 h-7 rounded bg-[#080B0F] text-slate-400 text-xs">-</button></div>
-            </div>
-            <div class="bg-red-950/20 p-2.5 rounded-xl border border-red-900/60 flex items-center justify-between">
-              <div><span class="text-[11px] text-red-200 font-bold block">Fouls &lt;50m</span><span id="val-foul-zone" class="text-lg font-mono font-black text-red-400">0</span></div>
-              <div class="flex flex-col gap-1"><button onclick="incMatchMetric('foul_zone', 1)" class="tactile-btn w-7 h-7 rounded bg-red-900/70 text-white font-bold text-xs">+</button><button onclick="incMatchMetric('foul_zone', -1)" class="tactile-btn w-7 h-7 rounded bg-[#080B0F] text-red-400 text-xs">-</button></div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <!-- ========================================================================= -->
-    <!-- TAB 4: MANAGEMENT                                                         -->
-    <!-- ========================================================================= -->
-    <div id="tab-content-management" class="hidden space-y-5">
-      <!-- Passcode Wall -->
-      <div id="coach-lock-screen" class="panel-lab rounded-2xl p-6 sm:p-8 text-center max-w-md mx-auto space-y-4 border border-lab-border">
-        <div class="w-12 h-12 rounded-2xl bg-lab-surface text-lab-gold flex items-center justify-center text-2xl mx-auto border border-lab-borderLight">
-          🔒
-        </div>
-        <div>
-          <h3 class="text-base sm:text-lg font-black text-white uppercase tracking-wide">Coach Command Desk</h3>
-          <p class="text-xs text-lab-muted mt-1">Enter coaching PIN to view squad roster, testing deltas and medical availability.</p>
-        </div>
-        <div class="flex items-center justify-center gap-2">
-          <input type="password" id="coach-pin" placeholder="Enter PIN" value="pats1884"
-            class="bg-lab-surface border border-lab-border text-center font-mono tracking-widest text-white text-sm rounded-lg px-4 py-2 w-36 outline-none focus:border-lab-mint">
-          <button onclick="unlockCoachDesk()" class="px-4 py-2 rounded-lg bg-lab-mint text-black font-extrabold text-xs hover:bg-lab-mintDark transition-all tactile-btn shadow-mint-glow-sm">
-            Unlock
-          </button>
-        </div>
-      </div>
-
-      <!-- Unlocked Coach Console -->
-      <div id="coach-unlocked-panel" class="hidden space-y-4">
-        <div class="flex items-center justify-between bg-lab-surface p-3 rounded-xl border border-lab-border">
-          <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-lab-mint animate-pulse"></span>
+      <!-- Hurler Selection & Timer -->
+      <section class="panel-glass">
+        <div class="flex-between">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <div id="jersey-display" class="jersey-tag">#1</div>
             <div>
-              <h3 class="text-xs font-black uppercase text-white tracking-wider">Coach Command Desk</h3>
-              <span class="text-[10px] text-lab-mint font-mono font-medium">Session Active • Management Authorization</span>
+              <span style="font-size:9px; color:#718C80; font-weight:800; text-transform:uppercase; display:block;">Active Hurler</span>
+              <div style="display:flex; align-items:center; gap:6px; margin-top:2px; flex-wrap:wrap;">
+                <select id="player-dropdown" onchange="onSelectPlayer(this.value)">
+                  <optgroup label="Pod 1">
+                    <option value="1">#1 Alan Quinn (Backs)</option>
+                    <option value="2">#2 Brian Powell (Backs)</option>
+                    <option value="3">#3 Dan Burke (Backs)</option>
+                    <option value="4">#4 Paul McCarthy (Backs)</option>
+                    <option value="5">#5 Stephen Lohan (Backs)</option>
+                    <option value="6">#6 Cian Darcy (Backs)</option>
+                    <option value="7">#7 Paddy Gleeson (Midfield)</option>
+                    <option value="8">#8 Conor Tighe (Forwards)</option>
+                    <option value="9">#9 James Stanbridge (Forwards)</option>
+                  </optgroup>
+                  <optgroup label="Pod 2">
+                    <option value="10">#10 Conor Henry (Forwards)</option>
+                    <option value="11">#11 Kieron Keary (Backs)</option>
+                    <option value="12">#12 Dan Taylor (Midfield)</option>
+                    <option value="13">#13 Tiernan O Rourke (Forwards)</option>
+                    <option value="14">#14 Donnacha Liston (Backs)</option>
+                    <option value="15">#15 Jack Fitzgerald (Backs)</option>
+                    <option value="16">#16 Jacob Turner (Forwards)</option>
+                    <option value="17">#17 Conor Donovan (Forwards)</option>
+                  </optgroup>
+                  <optgroup label="Pod 3">
+                    <option value="18">#18 Cormac Kelly (Backs)</option>
+                    <option value="19">#19 Ciaran Darcy (Midfield)</option>
+                    <option value="20">#20 Martin Fanning (Forwards)</option>
+                    <option value="21">#21 Tim Kelly (Backs)</option>
+                    <option value="22">#22 Donagh Crean (Backs)</option>
+                    <option value="23">#23 Aidan Walsh (Forwards)</option>
+                    <option value="24">#24 Mathew O Connor (Forwards)</option>
+                    <option value="25">#25 Eoghen Delaney (Midfield)</option>
+                  </optgroup>
+                  <optgroup label="Pod 4">
+                    <option value="26">#26 Mick O Donoghue (Forwards)</option>
+                    <option value="27">#27 Jack Burridge (Backs)</option>
+                    <option value="28">#28 Paul Roche (Forwards)</option>
+                    <option value="29">#29 Kev Barry (Backs)</option>
+                    <option value="30">#30 Cillian Brett (Backs)</option>
+                    <option value="31">#31 Dylan Duke (Midfield)</option>
+                    <option value="32">#32 Finn Masterson (Backs)</option>
+                    <option value="33">#33 Daniel McNamara (Forwards)</option>
+                  </optgroup>
+                  <optgroup label="Pod 5">
+                    <option value="34">#34 John Hanley (Backs)</option>
+                    <option value="35">#35 Ciaran Sinnott (Midfield)</option>
+                    <option value="36">#36 Hansi Fischer-Kerrane (Backs)</option>
+                    <option value="37">#37 Ethan Ryan (Forwards)</option>
+                    <option value="38">#38 Colum McQuaile (Midfield)</option>
+                    <option value="39">#39 Senan Mythen (Forwards)</option>
+                    <option value="40">#40 Conor Heffernan (Backs)</option>
+                    <option value="41">#41 Jakob Connolly (Forwards)</option>
+                  </optgroup>
+                  <optgroup label="Pod 6">
+                    <option value="42">#42 Brian Kennedy (Forwards)</option>
+                    <option value="43">#43 Donal O' Riordan (Backs)</option>
+                    <option value="44">#44 Hugh Feeney (Backs)</option>
+                    <option value="45">#45 Cathal Carty (Midfield)</option>
+                    <option value="46">#46 Sean Kennedy (Forwards)</option>
+                    <option value="47">#47 Moses Harley (Backs)</option>
+                    <option value="48">#48 Senan Ryan (Forwards)</option>
+                    <option value="49">#49 Jack Edwards (Backs)</option>
+                  </optgroup>
+                </select>
+                <button id="btn-vet-toggle" class="toggle-shield-btn" onclick="toggleProtocol()">Standard Protocol</button>
+              </div>
             </div>
           </div>
-          <button onclick="lockCoachDesk()" class="tactile-btn px-3.5 py-1.5 bg-red-950/80 hover:bg-red-900 border border-red-700/80 text-red-200 text-xs font-extrabold uppercase rounded-lg flex items-center gap-1.5 transition shadow-sm">
-            <span>🔒</span> Lock Desk
-          </button>
-        </div>
 
-        <!-- Top Dual-Tab Bar -->
-        <div class="grid grid-cols-2 gap-2 bg-[#0C1015] p-1 rounded-xl border border-lab-border">
-          <button onclick="setCoachSubTab('roster')" id="subtab-roster"
-            class="py-2.5 px-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all bg-lab-mint text-black shadow-mint-glow-sm tactile-btn">
-            Squad Roster &amp; Exercise Logs
-          </button>
-          <button onclick="setCoachSubTab('testing')" id="subtab-testing"
-            class="py-2.5 px-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all text-lab-muted hover:text-white tactile-btn">
-            Testing: Baseline &rarr; Retest
-          </button>
-        </div>
-
-        <!-- Controls -->
-        <div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center justify-between">
-          <div class="relative flex-1">
-            <input type="text" id="hurler-search" oninput="filterRoster(this.value)" placeholder="Search hurler by name, jersey, line or pod..."
-              class="w-full bg-lab-surface border border-lab-border rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 outline-none focus:border-lab-mint">
-            <span class="absolute left-3 top-2.5 text-xs text-slate-500">🔍</span>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <button onclick="openAddHurlerModal()" class="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-lab-mint text-black font-extrabold text-xs hover:bg-lab-mintDark transition-all flex items-center justify-center gap-1.5 shadow-mint-glow-sm tactile-btn">
-              <span>+</span> ADD HURLER
-            </button>
-            <button onclick="exportCSV()" class="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-lab-surface border border-lab-border text-lab-gold font-extrabold text-xs hover:bg-lab-surfaceHover transition-all flex items-center justify-center gap-1.5 shadow-sm tactile-btn">
-              <span>📥</span> EXPORT CSV
-            </button>
+          <div class="timer-wrap">
+            <div style="text-align:center;">
+              <span style="font-size:8px; text-transform:uppercase; color:#718C80; font-weight:800; display:block;">Rest</span>
+              <span id="timer-readout" class="timer-clock">00:00</span>
+            </div>
+            <div style="display:flex; gap:3px;">
+              <button class="timer-btn" onclick="startTimer(20)">20s</button>
+              <button class="timer-btn" onclick="startTimer(30)">30s</button>
+              <button class="timer-btn" onclick="startTimer(40)">40s</button>
+              <button class="timer-btn" onclick="startTimer(45)">45s</button>
+              <button class="timer-btn" onclick="resetTimer()" style="color:#F87171;">✕</button>
+            </div>
           </div>
         </div>
 
-        <!-- View A: Squad Roster Table -->
-        <div id="view-squad-roster" class="panel-lab rounded-2xl border border-lab-border overflow-hidden">
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs min-w-[760px]">
-              <thead class="bg-[#0C1015] border-b border-lab-border text-[10px] uppercase font-bold text-lab-muted tracking-wider">
-                <tr>
-                  <th class="py-3 px-3">HURLER &amp; NUMBER</th>
-                  <th class="py-3 px-2 text-center">POD</th>
-                  <th class="py-3 px-3">LINE</th>
-                  <th class="py-3 px-3 text-center">PROTOCOL (CLICK TO TOGGLE)</th>
-                  <th class="py-3 px-3 text-center">AVAILABILITY</th>
-                  <th class="py-3 px-3 text-center">EXERCISES DONE</th>
-                  <th class="py-3 px-3 text-center">COMPLETION</th>
-                  <th class="py-3 px-3 text-right">ACTIONS</th>
-                </tr>
-              </thead>
-              <tbody id="roster-tbody" class="divide-y divide-lab-border/60">
-              </tbody>
-            </table>
+        <div style="margin-top:10px; padding-top:8px; border-top:1px solid rgba(22, 54, 41, 0.6);" class="flex-between">
+          <div>
+            <span style="font-size:9px; color:#F5C544; font-weight:900; text-transform:uppercase; display:block;">6-Week Preseason Architecture</span>
+            <span style="font-size:11px; font-weight:800; color:#FFF;">Kickoff: Wednesday 4th Nov &bull; Double Running Sundays</span>
+          </div>
+          <span style="font-size:9px; font-weight:800; background:#064E3B; border:1px solid #059669; color:#34D399; padding:2px 6px; border-radius:4px; font-family:monospace;">
+            Testing After 2 Weeks (Week 3)
+          </span>
+        </div>
+
+        <!-- Week & Day Selector Strip -->
+        <div style="margin-top:10px; padding-top:8px; border-top:1px solid rgba(22, 54, 41, 0.6);" class="flex-between">
+          <div class="week-strip">
+            <button id="wbtn-1" class="week-btn active" onclick="selectWeek(1)">W1</button>
+            <button id="wbtn-2" class="week-btn" onclick="selectWeek(2)">W2</button>
+            <button id="wbtn-3" class="week-btn" onclick="selectWeek(3)">W3 (Test)</button>
+            <button id="wbtn-4" class="week-btn" onclick="selectWeek(4)">W4</button>
+            <button id="wbtn-5" class="week-btn" onclick="selectWeek(5)">W5</button>
+            <button id="wbtn-6" class="week-btn" onclick="selectWeek(6)">W6</button>
+          </div>
+
+          <div style="display:flex; gap:6px; flex:1; max-width:380px;">
+            <button id="day-btn-sun" class="day-selector-btn active" onclick="selectDay('sun')">Sunday Running</button>
+            <button id="day-btn-wed" class="day-selector-btn" onclick="selectDay('wed')">Wednesday Gym</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Session Progress Card -->
+      <section class="panel-glass flex-between">
+        <div>
+          <span style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Session Exercise Checklist</span>
+          <span style="font-size:11px; color:#718C80; display:block;">Check off sets and reps below to log training volume directly to the Coach Desk.</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-size:10px; color:#718C80; font-weight:700;">Progress:</span>
+          <span id="live-progress-badge" style="background:#07130E; border:1px solid #163629; color:#00F298; font-weight:900; font-family:monospace; padding:3px 10px; border-radius:6px; font-size:12px;">0%</span>
+        </div>
+      </section>
+
+      <!-- SUNDAY DOUBLE RUNNING DRILLS -->
+      <section id="pane-sun" class="panel-glass">
+        <div class="flex-between" style="border-bottom:1px solid #163629; padding-bottom:6px;">
+          <div>
+            <span style="font-size:9px; background:#F5C544; color:#040907; padding:1px 5px; border-radius:4px; font-weight:900; text-transform:uppercase;">Sunday Pitch Session</span>
+            <h3 style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF; margin-top:4px;">Week 1 Double Running Prescriptions</h3>
+          </div>
+          <span style="font-size:10px; color:#00F298; font-family:monospace; font-weight:800;">Aerobic + Anaerobic Engine</span>
+        </div>
+
+        <!-- Part 1: Tempos -->
+        <div class="drill-block">
+          <div class="flex-between">
+            <span class="drill-title">Part 1 — Tempos (20s on : 40s off) — 100m</span>
+            <span class="drill-badge">2 Sets of 6 Reps &bull; Aim: 100m in 20s</span>
+          </div>
+          <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Complete 100m in the 20s work window, followed by 40s walk/passive recovery.</p>
+          
+          <div style="font-size:10px; color:#718C80; font-weight:800; margin-top:6px;">Set 1:</div>
+          <div class="checkbox-chip-row">
+            <label><input type="checkbox" id="chk_t1_1" onchange="syncWorkDone()"> R1</label>
+            <label><input type="checkbox" id="chk_t1_2" onchange="syncWorkDone()"> R2</label>
+            <label><input type="checkbox" id="chk_t1_3" onchange="syncWorkDone()"> R3</label>
+            <label><input type="checkbox" id="chk_t1_4" onchange="syncWorkDone()"> R4</label>
+            <label><input type="checkbox" id="chk_t1_5" onchange="syncWorkDone()"> R5</label>
+            <label><input type="checkbox" id="chk_t1_6" onchange="syncWorkDone()"> R6</label>
+          </div>
+
+          <div style="font-size:10px; color:#718C80; font-weight:800; margin-top:6px;">Set 2:</div>
+          <div class="checkbox-chip-row">
+            <label><input type="checkbox" id="chk_t2_1" onchange="syncWorkDone()"> R1</label>
+            <label><input type="checkbox" id="chk_t2_2" onchange="syncWorkDone()"> R2</label>
+            <label><input type="checkbox" id="chk_t2_3" onchange="syncWorkDone()"> R3</label>
+            <label><input type="checkbox" id="chk_t2_4" onchange="syncWorkDone()"> R4</label>
+            <label><input type="checkbox" id="chk_t2_5" onchange="syncWorkDone()"> R5</label>
+            <label><input type="checkbox" id="chk_t2_6" onchange="syncWorkDone()"> R6</label>
           </div>
         </div>
 
-        <!-- View B: Testing Table -->
-        <div id="view-testing-audit" class="hidden panel-lab rounded-2xl border border-lab-border overflow-hidden">
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs whitespace-nowrap">
-              <thead class="bg-[#0C1015] border-b border-lab-border text-[10px] uppercase font-bold text-lab-muted tracking-wider">
-                <tr>
-                  <th class="py-3 px-3">HURLER</th>
-                  <th class="py-3 px-2 text-center">POD</th>
-                  <th class="py-3 px-3">LINE</th>
-                  <th class="py-3 px-3">1.2KM BRONCO (BASE &rarr; RETEST)</th>
-                  <th class="py-3 px-3">20M SPRINT (BASE &rarr; RETEST)</th>
-                  <th class="py-3 px-3">SQUAT MAX (BASE &rarr; RETEST)</th>
-                  <th class="py-3 px-3">BENCH / DEADLIFT</th>
-                  <th class="py-3 px-3 text-right">ACTION</th>
-                </tr>
-              </thead>
-              <tbody id="testing-tbody" class="divide-y divide-lab-border/60 font-mono">
-              </tbody>
-            </table>
+        <!-- Part 2: Capacity Runs -->
+        <div class="drill-block">
+          <div class="flex-between">
+            <span class="drill-title">Part 2 — Capacity Runs @ 75–80% Intensity</span>
+            <span class="drill-badge">2m on : 45s off &bull; 6 Reps</span>
+          </div>
+          <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Sustained aerobic capacity pacing held across the full 2-minute effort.</p>
+          <div class="checkbox-chip-row">
+            <label><input type="checkbox" id="chk_cap_1" onchange="syncWorkDone()"> Rep 1</label>
+            <label><input type="checkbox" id="chk_cap_2" onchange="syncWorkDone()"> Rep 2</label>
+            <label><input type="checkbox" id="chk_cap_3" onchange="syncWorkDone()"> Rep 3</label>
+            <label><input type="checkbox" id="chk_cap_4" onchange="syncWorkDone()"> Rep 4</label>
+            <label><input type="checkbox" id="chk_cap_5" onchange="syncWorkDone()"> Rep 5</label>
+            <label><input type="checkbox" id="chk_cap_6" onchange="syncWorkDone()"> Rep 6</label>
           </div>
         </div>
-      </div>
+
+        <!-- Part 3: 30:30 High Intensity -->
+        <div class="drill-block">
+          <div class="flex-between">
+            <span class="drill-title">Part 3 — High-Intensity Shuttles (30s on : 30s off)</span>
+            <span class="drill-badge" style="color:#F87171;">10 Reps @ High Intensity</span>
+          </div>
+          <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Repeated sprint tolerance and sharp 180° cuts simulating end-of-half fatigue.</p>
+          <div class="checkbox-chip-row">
+            <label><input type="checkbox" id="chk_hi_1" onchange="syncWorkDone()"> R1</label>
+            <label><input type="checkbox" id="chk_hi_2" onchange="syncWorkDone()"> R2</label>
+            <label><input type="checkbox" id="chk_hi_3" onchange="syncWorkDone()"> R3</label>
+            <label><input type="checkbox" id="chk_hi_4" onchange="syncWorkDone()"> R4</label>
+            <label><input type="checkbox" id="chk_hi_5" onchange="syncWorkDone()"> R5</label>
+            <label><input type="checkbox" id="chk_hi_6" onchange="syncWorkDone()"> R6</label>
+            <label><input type="checkbox" id="chk_hi_7" onchange="syncWorkDone()"> R7</label>
+            <label><input type="checkbox" id="chk_hi_8" onchange="syncWorkDone()"> R8</label>
+            <label><input type="checkbox" id="chk_hi_9" onchange="syncWorkDone()"> R9</label>
+            <label><input type="checkbox" id="chk_hi_10" onchange="syncWorkDone()"> R10</label>
+          </div>
+        </div>
+      </section>
+
+      <!-- WEDNESDAY GYM DRILLS (DONABATE 1.1 & 1.2) -->
+      <section id="pane-wed" class="panel-glass hidden">
+        <div class="flex-between" style="border-bottom:1px solid #163629; padding-bottom:6px;">
+          <div>
+            <span style="font-size:9px; background:#00F298; color:#040907; padding:1px 5px; border-radius:4px; font-weight:900; text-transform:uppercase;">Wednesday Gym Session</span>
+            <h3 style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF; margin-top:4px;">Donabate Compound Armor Matrices</h3>
+          </div>
+          <div style="display:flex; gap:4px; background:#07130E; padding:3px; border-radius:6px; border:1px solid #163629;">
+            <button id="gym-sub-11" onclick="switchGymSub('1.1')" style="background:#00F298; color:#040907; font-weight:800; font-size:10px; border:none; padding:4px 8px; border-radius:4px;">Donabate 1.1 (Squat/Bench)</button>
+            <button id="gym-sub-12" onclick="switchGymSub('1.2')" style="background:transparent; color:#718C80; font-weight:700; font-size:10px; border:none; padding:4px 8px; border-radius:4px;">Donabate 1.2 (RDL/OHP)</button>
+          </div>
+        </div>
+
+        <!-- DONABATE 1.1 -->
+        <div id="subpane-1-1">
+          <div class="drill-block">
+            <div class="flex-between">
+              <span class="drill-title">Block 1: Barbell Back Squat</span>
+              <span class="drill-badge">3 sets x 8 reps @ 70–75% (2111 tempo)</span>
+            </div>
+            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Superset with Single Arm DB Row (3 sets x 8 reps e/s @ 2111 tempo).</p>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_g1_sq_1" onchange="syncWorkDone()"> Squat S1</label>
+              <label><input type="checkbox" id="chk_g1_sq_2" onchange="syncWorkDone()"> Squat S2</label>
+              <label><input type="checkbox" id="chk_g1_sq_3" onchange="syncWorkDone()"> Squat S3</label>
+              <label><input type="checkbox" id="chk_g1_row_1" onchange="syncWorkDone()"> DB Row S1</label>
+              <label><input type="checkbox" id="chk_g1_row_2" onchange="syncWorkDone()"> DB Row S2</label>
+              <label><input type="checkbox" id="chk_g1_row_3" onchange="syncWorkDone()"> DB Row S3</label>
+            </div>
+          </div>
+
+          <div class="drill-block">
+            <div class="flex-between">
+              <span class="drill-title">Block 2: Barbell Bench Press</span>
+              <span class="drill-badge">3 sets x 8 reps (2111 tempo)</span>
+            </div>
+            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Superset with Single Leg Glute Bridge ISO (3x 5x5s e/s) and Lateral Lunges (3x10 e/s).</p>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_g1_bp_1" onchange="syncWorkDone()"> Bench S1</label>
+              <label><input type="checkbox" id="chk_g1_bp_2" onchange="syncWorkDone()"> Bench S2</label>
+              <label><input type="checkbox" id="chk_g1_bp_3" onchange="syncWorkDone()"> Bench S3</label>
+              <label><input type="checkbox" id="chk_g1_gb" onchange="syncWorkDone()"> Glute Bridge ISO</label>
+              <label><input type="checkbox" id="chk_g1_ll" onchange="syncWorkDone()"> Lateral Lunges</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- DONABATE 1.2 -->
+        <div id="subpane-1-2" class="hidden">
+          <div class="drill-block">
+            <div class="flex-between">
+              <span class="drill-title">Block 1: Barbell Romanian Deadlift (BB RDL)</span>
+              <span class="drill-badge">3 sets x 8 reps @ 70–75% (2111 tempo)</span>
+            </div>
+            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Superset with DB Overhead Press (3 sets x 10 reps @ 2111 tempo).</p>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_g2_rdl_1" onchange="syncWorkDone()"> BB RDL S1</label>
+              <label><input type="checkbox" id="chk_g2_rdl_2" onchange="syncWorkDone()"> BB RDL S2</label>
+              <label><input type="checkbox" id="chk_g2_rdl_3" onchange="syncWorkDone()"> BB RDL S3</label>
+              <label><input type="checkbox" id="chk_g2_ohp_1" onchange="syncWorkDone()"> DB OHP S1</label>
+              <label><input type="checkbox" id="chk_g2_ohp_2" onchange="syncWorkDone()"> DB OHP S2</label>
+              <label><input type="checkbox" id="chk_g2_ohp_3" onchange="syncWorkDone()"> DB OHP S3</label>
+            </div>
+          </div>
+
+          <div class="drill-block">
+            <div class="flex-between">
+              <span class="drill-title">Block 2: Chin Up ISO &bull; DB Hack Squat &bull; Ham Curls</span>
+              <span class="drill-badge">3 Tri-Sets</span>
+            </div>
+            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Chin Up ISO (5x5s) paired with DB Hack Squat (8 reps @ 2020) and Banded Prone Ham Curls (10 reps @ 2111).</p>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_g2_chin" onchange="syncWorkDone()"> Chin Up ISO</label>
+              <label><input type="checkbox" id="chk_g2_hack_1" onchange="syncWorkDone()"> Hack Squat S1</label>
+              <label><input type="checkbox" id="chk_g2_hack_2" onchange="syncWorkDone()"> Hack Squat S2</label>
+              <label><input type="checkbox" id="chk_g2_curl_1" onchange="syncWorkDone()"> Ham Curl S1</label>
+              <label><input type="checkbox" id="chk_g2_curl_2" onchange="syncWorkDone()"> Ham Curl S2</label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- PORTAL 2: MATCH DAY CONSOLE -->
+    <div id="portal-match" class="hidden">
+      <section class="panel-glass">
+        <div style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Dublin Junior Match Day KPI Console</div>
+        <div style="font-size:11px; color:#718C80; margin-top:2px;">Live Sideline Match Counters &bull; Touch Optimized</div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; margin-top:12px; text-align:center;">
+          <div style="background:#07130E; border:1px solid #163629; padding:12px; border-radius:8px;">
+            <span style="font-size:10px; color:#718C80; font-weight:800; display:block;">PUCK-OUTS WON</span>
+            <span id="score-puck" style="font-size:24px; font-weight:900; color:#00F298; font-family:monospace; display:block; margin:4px 0;">0</span>
+            <button onclick="incMatchStat('puck')" style="background:#163629; border:none; color:#FFF; padding:4px 12px; border-radius:4px; font-weight:800; font-size:11px;">+ Won</button>
+          </div>
+          <div style="background:#07130E; border:1px solid #163629; padding:12px; border-radius:8px;">
+            <span style="font-size:10px; color:#718C80; font-weight:800; display:block;">POINTS SCORED</span>
+            <span id="score-point" style="font-size:24px; font-weight:900; color:#F5C544; font-family:monospace; display:block; margin:4px 0;">0</span>
+            <button onclick="incMatchStat('point')" style="background:#163629; border:none; color:#FFF; padding:4px 12px; border-radius:4px; font-weight:800; font-size:11px;">+ Point</button>
+          </div>
+          <div style="background:#07130E; border:1px solid #163629; padding:12px; border-radius:8px;">
+            <span style="font-size:10px; color:#718C80; font-weight:800; display:block;">HOOKS &amp; BLOCKS</span>
+            <span id="score-hook" style="font-size:24px; font-weight:900; color:#FFF; font-family:monospace; display:block; margin:4px 0;">0</span>
+            <button onclick="incMatchStat('hook')" style="background:#163629; border:none; color:#FFF; padding:4px 12px; border-radius:4px; font-weight:800; font-size:11px;">+ Tackle</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PORTAL 3: COACH DESK -->
+    <div id="portal-coach" class="hidden">
+
+      <!-- PIN Gate -->
+      <section id="coach-lock-panel" class="panel-glass" style="max-width:320px; margin:24px auto; text-align:center;">
+        <div style="font-size:28px; margin-bottom:6px;">🔒</div>
+        <div style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Coaches Desk Gate</div>
+        <div style="font-size:11px; color:#718C80; margin-bottom:12px;">Enter passcode to unlock squad audits.</div>
+        <input type="password" id="coach-pass-input" placeholder="Enter PIN" style="width:100%; text-align:center; font-family:monospace; margin-bottom:10px;">
+        <button onclick="unlockCoachDesk()" style="width:100%; background:#00F298; color:#040907; font-weight:900; padding:8px; border-radius:6px; border:none; text-transform:uppercase;">Unlock Desk</button>
+        <p id="coach-auth-err" style="color:#F87171; font-size:11px; margin-top:8px;" class="hidden">Incorrect passcode</p>
+      </section>
+
+      <!-- Unlocked Console -->
+      <section id="coach-unlocked-panel" class="hidden">
+        <div class="panel-glass flex-between">
+          <div>
+            <div style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Squad Roster &amp; Live Work Completion Audit</div>
+            <div style="font-size:11px; color:#718C80;">All 49 players &bull; Live updates from Player Floor checks</div>
+          </div>
+          <button class="btn-lock" onclick="lockCoachDesk()">Lock Desk</button>
+        </div>
+
+        <div class="panel-glass" style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Hurler &amp; Jersey</th>
+                <th>Pod</th>
+                <th>Status</th>
+                <th>Protocol</th>
+                <th style="text-align:right;">Completed</th>
+                <th style="text-align:right;">% Work Done</th>
+              </tr>
+            </thead>
+            <tbody id="coach-roster-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
     </div>
 
   </main>
 
-  <!-- ================= EDIT / ADD HURLER MODAL ================= -->
-  <div id="hurler-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="panel-lab rounded-2xl border border-lab-border max-w-md w-full p-5 space-y-4">
-      <div class="flex items-center justify-between border-b border-lab-border pb-2">
-        <h3 id="hurler-modal-title" class="text-sm font-bold text-white uppercase">Add New Hurler</h3>
-        <button onclick="closeHurlerModal()" class="text-lab-muted hover:text-white text-lg">&times;</button>
-      </div>
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="block text-[10px] uppercase font-bold text-lab-muted">Full Name</label>
-          <input type="text" id="modal-name" class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-3 py-1.5 text-white outline-none focus:border-lab-mint">
-        </div>
-        <div class="grid grid-cols-3 gap-2">
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-lab-muted">Jersey #</label>
-            <input type="number" id="modal-num" class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-3 py-1.5 text-white outline-none focus:border-lab-mint font-mono">
-          </div>
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-lab-muted">Pod</label>
-            <select id="modal-pod" class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-3 py-1.5 text-white outline-none focus:border-lab-mint">
-              <option value="1">Pod 1</option>
-              <option value="2">Pod 2</option>
-              <option value="3">Pod 3</option>
-              <option value="4">Pod 4</option>
-              <option value="5">Pod 5</option>
-              <option value="6">Pod 6</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-lab-muted">Pitch Line</label>
-            <select id="modal-line" class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-3 py-1.5 text-white outline-none focus:border-lab-mint">
-              <option value="Backs">Backs</option>
-              <option value="Midfield">Midfield</option>
-              <option value="Forwards">Forwards</option>
-            </select>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-lab-muted">Availability</label>
-            <select id="modal-status" class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-3 py-1.5 text-white outline-none focus:border-lab-mint">
-              <option value="FIT">FIT (Match Ready)</option>
-              <option value="INJURED">INJURED / RESTRICTED</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-lab-muted">Protocol (Default: Standard)</label>
-            <select id="modal-vet" class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-3 py-1.5 text-white outline-none focus:border-lab-mint">
-              <option value="false">Standard Protocol</option>
-              <option value="true">Veteran Shield Active</option>
-            </select>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-lab-muted">Squat 3RM (kg)</label>
-            <input type="number" id="modal-squat" class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-3 py-1.5 text-white outline-none focus:border-lab-mint font-mono">
-          </div>
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-lab-muted">Bench / Deadlift (kg)</label>
-            <input type="number" id="modal-deadlift" class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-3 py-1.5 text-white outline-none focus:border-lab-mint font-mono">
-          </div>
-        </div>
-        <div>
-          <label class="block text-[10px] uppercase font-bold text-lab-muted">Exercises Completed (Base count out of total session sets)</label>
-          <input type="number" id="modal-completed-ex" min="0" max="60" class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-3 py-1.5 text-white outline-none focus:border-lab-mint font-mono">
-        </div>
-      </div>
-      <div class="flex justify-end gap-2 pt-2 border-t border-lab-border">
-        <button onclick="closeHurlerModal()" class="px-3 py-1.5 rounded-lg bg-lab-surface border border-lab-border text-slate-300 text-xs hover:text-white">Cancel</button>
-        <button onclick="saveHurlerProfile()" class="px-4 py-1.5 rounded-lg bg-lab-mint text-black font-extrabold text-xs hover:bg-lab-mintDark shadow-mint-glow-sm">Save Hurler</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= RETEST LOG MODAL ================= -->
-  <div id="test-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-3">
-    <div class="panel-lab rounded-2xl border border-lab-border max-w-sm w-full p-5 space-y-4">
-      <div class="flex items-center justify-between border-b border-lab-border pb-2">
-        <div>
-          <h3 class="text-sm font-bold text-white uppercase">Log Retest Scores</h3>
-          <p id="test-modal-player-name" class="text-xs text-lab-mint font-bold font-mono">#1 Alan Quinn</p>
-        </div>
-        <button onclick="closeTestModal()" class="text-lab-muted hover:text-white text-lg">&times;</button>
-      </div>
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="block text-[10px] uppercase font-bold text-lab-muted">1.2km Bronco Time (mm:ss)</label>
-          <input type="text" id="test-modal-bronco" placeholder="e.g. 4:32" class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-3 py-1.5 text-white outline-none focus:border-lab-mint font-mono">
-        </div>
-        <div>
-          <label class="block text-[10px] uppercase font-bold text-lab-muted">20m Sprint Time (s)</label>
-          <input type="number" step="0.01" id="test-modal-sprint" placeholder="e.g. 3.02" class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-3 py-1.5 text-white outline-none focus:border-lab-mint font-mono">
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-lab-muted">Squat 3RM (kg)</label>
-            <input type="number" id="test-modal-squat" class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-3 py-1.5 text-white outline-none focus:border-lab-mint font-mono">
-          </div>
-          <div>
-            <label class="block text-[10px] uppercase font-bold text-lab-muted">Bench / Deadlift (kg)</label>
-            <input type="number" id="test-modal-deadlift" class="w-full mt-1 bg-lab-surface border border-lab-border rounded-lg px-3 py-1.5 text-white outline-none focus:border-lab-mint font-mono">
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-end gap-2 pt-2 border-t border-lab-border">
-        <button onclick="closeTestModal()" class="px-3 py-1.5 rounded-lg bg-lab-surface border border-lab-border text-slate-300 text-xs hover:text-white">Cancel</button>
-        <button onclick="saveTestScores()" class="px-4 py-1.5 rounded-lg bg-lab-mint text-black font-extrabold text-xs hover:bg-lab-mintDark shadow-mint-glow-sm">Save Retest</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= APPLICATION JAVASCRIPT STATE ENGINE ================= -->
   <script>
-    /* =========================================================================
-       1. COMPLETE ST PAT'S SQUAD ROSTER (Pods 1–6)
-       ========================================================================= */
-    const initialPlayers = [
-      // POD 1
-      { id: "p1", num: 1, name: "Alan Quinn", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:08", broncoW8: "4:52", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-      { id: "p2", num: 2, name: "Dan Burke", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:02", broncoW8: "4:46", sprintBase: 3.15, sprintW8: 3.05, squatBase: 130, squatW8: 130, deadliftBase: 175, deadliftW8: 175 },
-      { id: "p3", num: 3, name: "Brian Powell", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:58", broncoW8: "4:42", sprintBase: 3.12, sprintW8: 3.02, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-      { id: "p4", num: 4, name: "Paul McCarthy", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:12", broncoW8: "4:56", sprintBase: 3.16, sprintW8: 3.06, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-      { id: "p5", num: 5, name: "Stephen Lohan", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:05", broncoW8: "4:50", sprintBase: 3.14, sprintW8: 3.04, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-      { id: "p6", num: 6, name: "Cian Darcy", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:55", broncoW8: "4:39", sprintBase: 3.09, sprintW8: 2.99, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
-      { id: "p7", num: 7, name: "Paddy Gleeson", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:15", broncoW8: "4:59", sprintBase: 3.18, sprintW8: 3.08, squatBase: 120, squatW8: 125, deadliftBase: 160, deadliftW8: 165 },
-      { id: "p8", num: 8, name: "Conor Tighe", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:10", broncoW8: "4:54", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-      { id: "p9", num: 9, name: "James Stanbridge", pod: 1, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:18", broncoW8: "5:02", sprintBase: 3.20, sprintW8: 3.10, squatBase: 120, squatW8: 120, deadliftBase: 160, deadliftW8: 160 },
-
-      // POD 2
-      { id: "p10", num: 10, name: "Conor Henry", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:48", broncoW8: "4:32", sprintBase: 3.15, sprintW8: 3.05, squatBase: 130, squatW8: 130, deadliftBase: 170, deadliftW8: 170 },
-      { id: "p11", num: 11, name: "Kieron Keary", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:52", broncoW8: "4:36", sprintBase: 3.11, sprintW8: 3.01, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
-      { id: "p12", num: 12, name: "Dan Taylor", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:50", broncoW8: "4:35", sprintBase: 3.10, sprintW8: 3.00, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-      { id: "p13", num: 13, name: "Tiernan O Rourke", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:44", broncoW8: "4:29", sprintBase: 3.08, sprintW8: 2.98, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-      { id: "p14", num: 14, name: "Donnacha Liston", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:56", broncoW8: "4:40", sprintBase: 3.14, sprintW8: 3.04, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
-      { id: "p15", num: 15, name: "Jack Fitzgerald", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:58", broncoW8: "4:42", sprintBase: 3.12, sprintW8: 3.02, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-      { id: "p16", num: 16, name: "Jacob Turner", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:04", broncoW8: "4:48", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-      { id: "p17", num: 17, name: "Conor Donovan", pod: 2, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:59", broncoW8: "4:44", sprintBase: 3.13, sprintW8: 3.03, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-
-      // POD 3
-      { id: "p18", num: 18, name: "Cormac Kelly", pod: 3, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:06", broncoW8: "4:50", sprintBase: 3.15, sprintW8: 3.05, squatBase: 120, squatW8: 120, deadliftBase: 160, deadliftW8: 160 },
-      { id: "p19", num: 19, name: "Ciaran Darcy", pod: 3, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:54", broncoW8: "4:38", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-      { id: "p20", num: 20, name: "Martin Fanning", pod: 3, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:14", broncoW8: "4:59", sprintBase: 3.22, sprintW8: 3.12, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-      { id: "p21", num: 21, name: "Tim Kelly", pod: 3, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:08", broncoW8: "4:52", sprintBase: 3.16, sprintW8: 3.06, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-      { id: "p22", num: 22, name: "Donagh Crean", pod: 3, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:51", broncoW8: "4:36", sprintBase: 3.11, sprintW8: 3.01, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-      { id: "p23", num: 23, name: "Aidan Walsh", pod: 3, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:57", broncoW8: "4:41", sprintBase: 3.09, sprintW8: 2.99, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-      { id: "p24", num: 24, name: "Mathew O Connor", pod: 3, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:02", broncoW8: "4:46", sprintBase: 3.13, sprintW8: 3.03, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
-      { id: "p25", num: 25, name: "Eoghen Delaney", pod: 3, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:00", broncoW8: "4:45", sprintBase: 3.12, sprintW8: 3.02, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-
-      // POD 4
-      { id: "p26", num: 26, name: "Mick O Donoghue", pod: 4, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:05", broncoW8: "4:49", sprintBase: 3.12, sprintW8: 3.04, squatBase: 130, squatW8: 130, deadliftBase: 170, deadliftW8: 170 },
-      { id: "p27", num: 27, name: "Jack Burridge", pod: 4, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:59", broncoW8: "4:43", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-      { id: "p28", num: 28, name: "Paul Roche", pod: 4, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:03", broncoW8: "4:47", sprintBase: 3.14, sprintW8: 3.04, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-      { id: "p29", num: 29, name: "Kev Barry", pod: 4, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:09", broncoW8: "4:53", sprintBase: 3.16, sprintW8: 3.06, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-      { id: "p30", num: 30, name: "Cillian Brett", pod: 4, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:53", broncoW8: "4:37", sprintBase: 3.08, sprintW8: 2.98, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-      { id: "p31", num: 31, name: "Dylan Duke", pod: 4, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:56", broncoW8: "4:40", sprintBase: 3.11, sprintW8: 3.01, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-      { id: "p32", num: 32, name: "Finn Masterson", pod: 4, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:49", broncoW8: "4:33", sprintBase: 3.09, sprintW8: 2.99, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-      { id: "p33", num: 33, name: "Daniel McNamara", pod: 4, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:06", broncoW8: "4:50", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-
-      // POD 5
-      { id: "p34", num: 34, name: "John Hanley", pod: 5, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:12", broncoW8: "4:57", sprintBase: 3.20, sprintW8: 3.10, squatBase: 130, squatW8: 130, deadliftBase: 170, deadliftW8: 170 },
-      { id: "p35", num: 35, name: "Ciaran Sinnott", pod: 5, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:04", broncoW8: "4:48", sprintBase: 3.14, sprintW8: 3.04, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-      { id: "p36", num: 36, name: "Hansi Fischer-Kerrane", pod: 5, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:07", broncoW8: "4:51", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 170, deadliftW8: 170 },
-      { id: "p37", num: 37, name: "Ethan Ryan", pod: 5, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:47", broncoW8: "4:31", sprintBase: 3.07, sprintW8: 2.97, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-      { id: "p38", num: 38, name: "Colum McQuaile", pod: 5, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:53", broncoW8: "4:37", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-      { id: "p39", num: 39, name: "Senan Mythen", pod: 5, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:58", broncoW8: "4:42", sprintBase: 3.12, sprintW8: 3.02, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 },
-      { id: "p40", num: 40, name: "Conor Heffernan", pod: 5, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:09", broncoW8: "4:53", sprintBase: 3.17, sprintW8: 3.07, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-      { id: "p41", num: 41, name: "Jakob Connolly", pod: 5, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:01", broncoW8: "4:45", sprintBase: 3.11, sprintW8: 3.01, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-
-      // POD 6
-      { id: "p42", num: 42, name: "Brian Kennedy", pod: 6, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:00", broncoW8: "4:44", sprintBase: 3.15, sprintW8: 3.05, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-      { id: "p43", num: 43, name: "Donal O' Riordan", pod: 6, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:06", broncoW8: "4:50", sprintBase: 3.16, sprintW8: 3.06, squatBase: 135, squatW8: 140, deadliftBase: 180, deadliftW8: 185 },
-      { id: "p44", num: 44, name: "Hugh Feeney", pod: 6, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:01", broncoW8: "4:45", sprintBase: 3.15, sprintW8: 3.05, squatBase: 140, squatW8: 140, deadliftBase: 185, deadliftW8: 185 },
-      { id: "p45", num: 45, name: "Cathal Carty", pod: 6, line: "Backs", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:11", broncoW8: "4:55", sprintBase: 3.19, sprintW8: 3.09, squatBase: 125, squatW8: 125, deadliftBase: 165, deadliftW8: 165 },
-      { id: "p46", num: 46, name: "Sean Kennedy", pod: 6, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:46", broncoW8: "4:30", sprintBase: 3.06, sprintW8: 2.96, squatBase: 135, squatW8: 140, deadliftBase: 175, deadliftW8: 180 },
-      { id: "p47", num: 47, name: "Moses Harley", pod: 6, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:54", broncoW8: "4:38", sprintBase: 3.10, sprintW8: 3.00, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-      { id: "p48", num: 48, name: "Senan Ryan", pod: 6, line: "Midfield", status: "FIT", vet: false, completedExercises: 0, broncoBase: "4:50", broncoW8: "4:34", sprintBase: 3.09, sprintW8: 2.99, squatBase: 130, squatW8: 135, deadliftBase: 170, deadliftW8: 175 },
-      { id: "p49", num: 49, name: "Jack Edwards", pod: 6, line: "Forwards", status: "FIT", vet: false, completedExercises: 0, broncoBase: "5:02", broncoW8: "4:46", sprintBase: 3.12, sprintW8: 3.02, squatBase: 125, squatW8: 130, deadliftBase: 165, deadliftW8: 170 }
+    const SQUAD_DATA = [
+      { id: 1, name: "Alan Quinn", pod: 1, line: "Backs" },
+      { id: 2, name: "Brian Powell", pod: 1, line: "Backs" },
+      { id: 3, name: "Dan Burke", pod: 1, line: "Backs" },
+      { id: 4, name: "Paul McCarthy", pod: 1, line: "Backs" },
+      { id: 5, name: "Stephen Lohan", pod: 1, line: "Backs" },
+      { id: 6, name: "Cian Darcy", pod: 1, line: "Backs" },
+      { id: 7, name: "Paddy Gleeson", pod: 1, line: "Midfield" },
+      { id: 8, name: "Conor Tighe", pod: 1, line: "Forwards" },
+      { id: 9, name: "James Stanbridge", pod: 1, line: "Forwards" },
+      { id: 10, name: "Conor Henry", pod: 2, line: "Forwards" },
+      { id: 11, name: "Kieron Keary", pod: 2, line: "Backs" },
+      { id: 12, name: "Dan Taylor", pod: 2, line: "Midfield" },
+      { id: 13, name: "Tiernan O Rourke", pod: 2, line: "Forwards" },
+      { id: 14, name: "Donnacha Liston", pod: 2, line: "Backs" },
+      { id: 15, name: "Jack Fitzgerald", pod: 2, line: "Backs" },
+      { id: 16, name: "Jacob Turner", pod: 2, line: "Forwards" },
+      { id: 17, name: "Conor Donovan", pod: 2, line: "Forwards" },
+      { id: 18, name: "Cormac Kelly", pod: 3, line: "Backs" },
+      { id: 19, name: "Ciaran Darcy", pod: 3, line: "Midfield" },
+      { id: 20, name: "Martin Fanning", pod: 3, line: "Forwards" },
+      { id: 21, name: "Tim Kelly", pod: 3, line: "Backs" },
+      { id: 22, name: "Donagh Crean", pod: 3, line: "Backs" },
+      { id: 23, name: "Aidan Walsh", pod: 3, line: "Forwards" },
+      { id: 24, name: "Mathew O Connor", pod: 3, line: "Forwards" },
+      { id: 25, name: "Eoghen Delaney", pod: 3, line: "Midfield" },
+      { id: 26, name: "Mick O Donoghue", pod: 4, line: "Forwards" },
+      { id: 27, name: "Jack Burridge", pod: 4, line: "Backs" },
+      { id: 28, name: "Paul Roche", pod: 4, line: "Forwards" },
+      { id: 29, name: "Kev Barry", pod: 4, line: "Backs" },
+      { id: 30, name: "Cillian Brett", pod: 4, line: "Backs" },
+      { id: 31, name: "Dylan Duke", pod: 4, line: "Midfield" },
+      { id: 32, name: "Finn Masterson", pod: 4, line: "Backs" },
+      { id: 33, name: "Daniel McNamara", pod: 4, line: "Forwards" },
+      { id: 34, name: "John Hanley", pod: 5, line: "Backs" },
+      { id: 35, name: "Ciaran Sinnott", pod: 5, line: "Midfield" },
+      { id: 36, name: "Hansi Fischer-Kerrane", pod: 5, line: "Backs" },
+      { id: 37, name: "Ethan Ryan", pod: 5, line: "Forwards" },
+      { id: 38, name: "Colum McQuaile", pod: 5, line: "Midfield" },
+      { id: 39, name: "Senan Mythen", pod: 5, line: "Forwards" },
+      { id: 40, name: "Conor Heffernan", pod: 5, line: "Backs" },
+      { id: 41, name: "Jakob Connolly", pod: 5, line: "Forwards" },
+      { id: 42, name: "Brian Kennedy", pod: 6, line: "Forwards" },
+      { id: 43, name: "Donal O' Riordan", pod: 6, line: "Backs" },
+      { id: 44, name: "Hugh Feeney", pod: 6, line: "Backs" },
+      { id: 45, name: "Cathal Carty", pod: 6, line: "Midfield" },
+      { id: 46, name: "Sean Kennedy", pod: 6, line: "Forwards" },
+      { id: 47, name: "Moses Harley", pod: 6, line: "Backs" },
+      { id: 48, name: "Senan Ryan", pod: 6, line: "Forwards" },
+      { id: 49, name: "Jack Edwards", pod: 6, line: "Backs" }
     ];
 
-    let players = JSON.parse(localStorage.getItem('stpats_roster_v7') || JSON.stringify(initialPlayers));
-    let selectedPlayerId = players[0]?.id || "p1";
-    let editingPlayerId = null;
-    let testingPlayerId = null;
+    let activeHurlerId = 1;
+    let isVetActive = false;
+    let selectedWeek = 1;
+    let selectedDay = 'sun';
+    let selectedGymSub = '1.1';
+    let hurlerCheckLogs = {};
 
-    let exerciseChecks = JSON.parse(localStorage.getItem('stpats_exercise_checks_v7') || '{}');
+    function switchPortal(portal) {
+      document.getElementById('portal-player').classList.toggle('hidden', portal !== 'player');
+      document.getElementById('portal-match').classList.toggle('hidden', portal !== 'match');
+      document.getElementById('portal-coach').classList.toggle('hidden', portal !== 'coach');
 
-    /* =========================================================================
-       2. TRAINING STATE: BLOCKS, WEEKS (6 WKS IN BLOCK 1), AND DAYS
-       ========================================================================= */
-    let currentBlock = 1; // 1: 6-Wk Preseason, 2: 6-Wk League, 3: 6-Wk Champ
-    let currentWeek = 1;
-    let currentDay = 1;
-    let selectedStageNum = 2;
-
-    /* =========================================================================
-       3. MATCH DAY STATS ENGINE
-       ========================================================================= */
-    let matchStats = {
-      oppName: "Opposition Club",
-      half: "H1",
-      patsGoals: 0,
-      patsPointsPlay: 0,
-      patsPointsFree: 0,
-      oppGoals: 0,
-      oppPoints: 0,
-      own_puck_clean: 0,
-      own_puck_break: 0,
-      own_puck_short: 0,
-      own_puck_lost: 0,
-      opp_puck_won: 0,
-      opp_puck_clean: 0,
-      shot_wide: 0,
-      shot_short: 0,
-      shot_blocked: 0,
-      wr_hookblock: 0,
-      wr_turnover: 0,
-      wr_lostpossession: 0,
-      foul_zone: 0,
-      foul_open: 0
-    };
-
-    /* =========================================================================
-       4. ROADMAP SECTION CONDITIONING PROGRAMMES (Including Donabate Testing)
-       ========================================================================= */
-    const ROADMAP_CONDITIONING = {
-      1: {
-        title: "1. Preseason Kickoff & Injury-Safe Testing Setup",
-        subtitle: "Starts Wednesday 4th November &bull; Testing Post-Week 2 (Injury Prevention Protocol)",
-        duration: "Weeks 1–2 Introductory Ramp",
-        objective: "Begin Wednesday 4th Nov with foundational gym movement patterns and introductory Sunday running tempos. Testing is performed AFTER two full weeks of adaptation to ensure connective tissues, hamstrings, and groins are conditioned before maximal testing.",
-        prescription: `
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-            <div class="bg-[#0C1015] border border-lab-mint/40 p-3.5 rounded-xl space-y-2">
-              <span class="text-lab-mint font-bold uppercase text-[11px] block">Weeks 1 &amp; 2: Introductory Tissue Conditioning</span>
-              <p class="text-slate-300 leading-relaxed">• <strong>Wednesdays (Nov 4 &amp; Nov 11):</strong> Donabate Gym structural hypertrophy to nail down squat depth and hinging under controlled loads (70–75%).</p>
-              <p class="text-slate-300 leading-relaxed">• <strong>Sundays (Nov 8 &amp; Nov 15):</strong> Submaximal aerobic tempos and light anaerobic shuttles. Accustoms Achilles tendons and biceps femoris to turf contact without maximal speed strain.</p>
-              <p class="text-slate-300 leading-relaxed">• <strong>Durability Pillars:</strong> Mandatory Nordics and Copenhagens logged 2x/week to reinforce groin and hamstring architecture.</p>
-            </div>
-            <div class="bg-[#0C1015] border border-lab-gold/40 p-3.5 rounded-xl space-y-2">
-              <span class="text-lab-gold font-bold uppercase text-[11px] block">Post-Week 2 Testing Battery (Mid-November)</span>
-              <p class="text-slate-300 leading-relaxed">• <strong>Why Test After 2 Weeks:</strong> Testing unconditioned hurlers on Day 1 causes hamstring tears and groin strain. 2 weeks of loading provides an injury-safe baseline.</p>
-              <p class="text-slate-300 leading-relaxed">• <strong>Strength (3 Rep Max):</strong> Back Squat &amp; Barbell Bench Press.</p>
-              <p class="text-slate-300 leading-relaxed">• <strong>Conditioning:</strong> 1.2km Bronco Shuttle &amp; Aerobic Speed Reserve (ASR).</p>
-              <p class="text-slate-300 leading-relaxed">• <strong>Speed &amp; COD:</strong> 20m Electronic Sprint &amp; 505 Agility.</p>
-            </div>
-          </div>
-        `
-      },
-      2: {
-        title: "2. Block 1 Preseason Loading (Starts Wed 4 Nov, 6 Weeks)",
-        subtitle: "Schedule: Wednesday Gym &bull; Sunday Double Pitch Running",
-        duration: "6 Weeks (Weeks 1–6)",
-        objective: "Hypertrophy capacity, technique standardization, and combined aerobic/anaerobic pitch running on Sundays.",
-        prescription: `
-          <div class="space-y-3 text-xs">
-            <div class="bg-[#0C1015] border border-lab-mint/40 p-3.5 rounded-xl space-y-1.5">
-              <span class="font-bold text-lab-mint text-xs uppercase block">The 2-Day Weekly Microcycle Structure:</span>
-              <p class="text-slate-300">• <strong>Wednesday Gym (Donabate 1.1 / 1.2):</strong> Prehab isometrics, core, plyometrics, Barbell Squat/Bench or RDL/OHP supersets @ 70–75% (2111 tempo).</p>
-              <p class="text-slate-300">• <strong>Sunday Double Running (Pitch):</strong> Begins with full RAMP warm-up (0–21m), follows with <strong>Part 1: Aerobic Engine</strong> (100m Tempos &amp; 70–80m MAS capacity @ 80%), and finishes with <strong>Part 2: Anaerobic Engine</strong> (30s:30s intervals &amp; 40m acceleration sprints).</p>
-              <p class="text-emerald-300/80 font-mono text-[11px] pt-1 border-t border-lab-border">• Testing occurs after Week 2 when the squad is conditioned, eliminating acute soft-tissue tears.</p>
-            </div>
-          </div>
-        `
-      },
-      3: {
-        title: "3. Retest Week (Post-Week 6)",
-        subtitle: "Audit Progress Deltas: Bronco, 20m, 3RM Squat & Bench",
-        duration: "1 Week Audit",
-        objective: "Quantify cardiovascular and force velocity adaptations following the 6-week preseason block.",
-        prescription: `
-          <div class="p-3.5 bg-lab-surface rounded-xl border border-lab-border text-xs text-slate-300">
-            <p>• Tuesday Pitch: Standardized warm-up → 20m electronic sprint → 1.2km Bronco Shuttle retest.</p>
-            <p>• Thursday Gym: 3RM Squat &amp; Bench Press progress audit.</p>
-          </div>
-        `
-      },
-      4: {
-        title: "4. Scheduled Deload Week (Early January)",
-        subtitle: "-40% Volume Reduction • CNS Restoration Ahead of Mid-Jan Hurling",
-        duration: "1 Week Neural Recovery",
-        objective: "Dissipate cumulative systemic fatigue while keeping movement velocity high.",
-        prescription: `
-          <div class="p-3.5 bg-lab-surface rounded-xl border border-lab-border text-xs text-slate-300">
-            <p>• Cut pitch running meterage by 40%. Maintain speed intent (2–3 short fly sprints).</p>
-            <p>• 4 Durability Pillars remain non-negotiable.</p>
-          </div>
-        `
-      },
-      5: {
-        title: "5. Block 2: League & Mid-January Hurling Integration",
-        subtitle: "6 Weeks • Mid-January Hurling Launch • Running Modulated by ~35%",
-        duration: "6 Weeks (Weeks 1–6)",
-        objective: "Integrate hurley & sliotar directly into conditioning, converting linear running into Box-to-Box Striking Grids and SSGs.",
-        prescription: `
-          <div class="p-3.5 bg-[#0A1410] border border-lab-mint/40 rounded-xl text-xs text-slate-300">
-            <p>• Dry running is cut by ~35% as stickwork starts.</p>
-            <p>• Conditioning achieved via Box-to-Box Striking Transitions and 4v4/5v5 small-sided games.</p>
-          </div>
-        `
-      },
-      6: {
-        title: "6. Deload & League Peak (Mid-February)",
-        subtitle: "Pre-Competition Taper for Early March League",
-        duration: "10-Day Taper",
-        objective: "Prime central nervous system and achieve maximum glycogen saturation.",
-        prescription: `
-          <div class="p-3.5 bg-lab-surface rounded-xl border border-lab-border text-xs text-slate-300">
-            <p>• 50% drop in volume. Tactical puck-out rehearsals and flying 20m starts.</p>
-          </div>
-        `
-      },
-      7: {
-        title: "7. Block 3: Championship Build (April – May)",
-        subtitle: "6 Weeks • High-Speed Running (HSR) Density",
-        duration: "6 Weeks (Weeks 1–6)",
-        objective: "Prepare squad for peak championship intensities and high-speed breakaways.",
-        prescription: `
-          <div class="p-3.5 bg-lab-surface rounded-xl border border-lab-border text-xs text-slate-300">
-            <p>• Ball-in-Play (BIP) transitions (>22 km/h exposure) + 505 agility drills.</p>
-          </div>
-        `
-      },
-      8: {
-        title: "8. Championship Peak & Final Taper (Summer 2027)",
-        subtitle: "Supercompensation Peak for Championship Knockouts",
-        duration: "Championship Window",
-        objective: "Maximum neuromuscular freshness, crisp striking, and zero residual fatigue.",
-        prescription: `
-          <div class="p-3.5 bg-lab-surface rounded-xl border border-lab-border text-xs text-slate-300">
-            <p>• 40-minute pitch sessions. Maximum execution of hooks, blocks, and puck-out dominance.</p>
-          </div>
-        `
-      }
-    };
-
-    /* =========================================================================
-       DYNAMIC EXERCISE REGISTRY & ACCURATE WORK DONE ENGINE
-       ========================================================================= */
-    function getExpectedKeysForPlayer(playerId) {
-      const keys = [];
-      // 4 Durability Pillars (3 sets each = 12 items)
-      ['nordic', 'copenhagen', 'sprint', 'cuff'].forEach(pillar => {
-        [1, 2, 3].forEach(setNum => {
-          keys.push(`dura_${pillar}_${setNum}_${playerId}`);
-        });
-      });
-
-      // Wednesday Gym (Donabate 1.1 / 1.2) across 6 weeks
-      for (let w = 1; w <= 6; w++) {
-        const prefix1 = `b1_w${w}_d1_${playerId}`;
-        if (w % 2 !== 0) {
-          // Donabate 1.1
-          keys.push(`${prefix1}_d11_prehab`);
-          keys.push(`${prefix1}_d11_core`);
-          keys.push(`${prefix1}_d11_plyos`);
-          [1, 2, 3].forEach(s => keys.push(`${prefix1}_d11_b1_s${s}`));
-          [1, 2, 3].forEach(s => keys.push(`${prefix1}_d11_b2_s${s}`));
-        } else {
-          // Donabate 1.2
-          keys.push(`${prefix1}_d12_prehab`);
-          keys.push(`${prefix1}_d12_core`);
-          keys.push(`${prefix1}_d12_plyos`);
-          [1, 2, 3].forEach(s => keys.push(`${prefix1}_d12_b1_s${s}`));
-          [1, 2, 3].forEach(s => keys.push(`${prefix1}_d12_b2_s${s}`));
-        }
-
-        // Sunday Double Pitch Running (Part 1 Aerobic + Part 2 Anaerobic)
-        const prefix2 = `b1_w${w}_d2_${playerId}`;
-        [1, 2, 3, 4, 5, 6].forEach(r => keys.push(`${prefix2}_tempo_s1_${r}`));
-        [1, 2, 3, 4, 5, 6, 7, 8].forEach(r => keys.push(`${prefix2}_mas_s1_${r}`));
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].forEach(r => keys.push(`${prefix2}_anaerobic_r${r}`));
-        [1, 2, 3, 4, 5, 6, 7, 8].forEach(r => keys.push(`${prefix2}_sprint40_r${r}`));
-      }
-
-      return keys;
+      document.getElementById('nav-player').className = (portal === 'player') ? 'nav-btn active' : 'nav-btn';
+      document.getElementById('nav-match').className = (portal === 'match') ? 'nav-btn active' : 'nav-btn';
+      document.getElementById('nav-coach').className = (portal === 'coach') ? 'nav-btn active' : 'nav-btn';
     }
 
-    function getPlayerExerciseStats(p) {
-      const expectedKeys = getExpectedKeysForPlayer(p.id);
-      let checkedCount = 0;
-
-      expectedKeys.forEach(k => {
-        if (exerciseChecks[k]) {
-          checkedCount++;
-        }
-      });
-
-      // Total items for current microcycle/week view is 27 items per week + 12 durability pillars = 39 total
-      const totalDenominator = 39;
-      // Add any manual base offset if set by coach
-      const manualBase = p.completedExercises || 0;
-      const actualCompleted = Math.min(totalDenominator, checkedCount + manualBase);
-      const pct = Math.min(100, Math.round((actualCompleted / totalDenominator) * 100));
-
-      return { completed: actualCompleted, total: totalDenominator, pct };
+    function onSelectPlayer(val) {
+      activeHurlerId = parseInt(val, 10);
+      document.getElementById('jersey-display').textContent = '#' + activeHurlerId;
+      loadCheckedBoxes();
+      syncWorkDone();
     }
 
-    /* =========================================================================
-       5. INITIALIZATION ON DOM READY
-       ========================================================================= */
-    window.addEventListener('DOMContentLoaded', () => {
-      populateHurlerSelect();
-      updateProtocolToggleUI();
-      syncDurabilityUIForPlayer();
-      renderWeeksNav();
-      renderSession();
-      renderRosterTable();
-      renderTestingTable();
-      recalculateFuel();
-      renderRoadmapProgramme(selectedStageNum);
-      renderMatchDisplay();
-    });
-
-    /* =========================================================================
-       6. NAVIGATION & TABS
-       ========================================================================= */
-    function switchTab(tabId) {
-      document.querySelectorAll('.nav-tab').forEach(b => {
-        b.classList.remove('bg-lab-mint', 'text-black', 'shadow-mint-glow-sm');
-        b.classList.add('text-lab-muted');
-      });
-      const activeBtn = document.getElementById(`nav-${tabId}`);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-lab-mint', 'text-black', 'shadow-mint-glow-sm');
-        activeBtn.classList.remove('text-lab-muted');
-      }
-
-      ['player-floor', 'fuel', 'match-day', 'management'].forEach(id => {
-        const el = document.getElementById(`tab-content-${id}`);
-        if (el) el.classList.toggle('hidden', id !== tabId);
-      });
-
-      if (tabId === 'management') {
-        renderRosterTable(document.getElementById('hurler-search')?.value || '');
-        renderTestingTable();
-      }
-    }
-
-    /* =========================================================================
-       7. ROADMAP STAGES
-       ========================================================================= */
-    function selectRoadmapStage(stageNum) {
-      selectedStageNum = stageNum;
-
-      for (let i = 1; i <= 8; i++) {
-        const card = document.getElementById(`roadmap-card-${i}`);
-        if (card) {
-          if (i === stageNum) {
-            card.classList.add('active-stage');
-          } else {
-            card.classList.remove('active-stage');
-          }
-        }
-      }
-
-      if (stageNum === 2) setBlock(1);
-      else if (stageNum === 5) setBlock(2);
-      else if (stageNum === 7) setBlock(3);
-
-      renderRoadmapProgramme(stageNum);
-    }
-
-    function renderRoadmapProgramme(stageNum) {
-      const container = document.getElementById('roadmap-programme-display');
-      const badge = document.getElementById('roadmap-active-badge');
-      if (!container) return;
-
-      const prog = ROADMAP_CONDITIONING[stageNum];
-      if (!prog) return;
-
-      if (badge) {
-        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-lab-mint animate-ping"></span> Active: ${prog.title}`;
-      }
-
-      container.innerHTML = `
-        <div class="p-4 rounded-xl bg-lab-surface border border-lab-border space-y-3">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-lab-border pb-2.5 gap-2">
-            <div>
-              <span class="px-2 py-0.5 rounded bg-lab-bg border border-lab-border text-lab-gold font-mono text-[10px] font-bold uppercase">
-                ${prog.duration}
-              </span>
-              <h3 class="text-sm sm:text-base font-extrabold text-white mt-1">
-                ${prog.title}
-              </h3>
-              <p class="text-xs text-emerald-300/90 font-medium">${prog.subtitle}</p>
-            </div>
-            <div class="text-left sm:text-right">
-              <span class="text-[10px] uppercase font-bold text-lab-muted block">Benchmark Standard</span>
-              <span class="text-xs text-lab-mint font-mono font-bold">Donabate High-Performance Standard</span>
-            </div>
-          </div>
-
-          <div class="p-3 rounded-lg bg-[#0C1015] border border-lab-border text-xs text-slate-300">
-            <strong class="text-lab-gold uppercase text-[10px] block mb-1">Physiological &amp; Tactical Objective:</strong>
-            <p class="leading-relaxed">${prog.objective}</p>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <strong class="text-lab-mint uppercase text-[10px] block">Prescription Details:</strong>
-            ${prog.prescription}
-          </div>
-        </div>
-      `;
-    }
-
-    /* =========================================================================
-       8. BLOCKS, WEEKS, AND SESSIONS LOGIC (6 WEEKS IN BLOCK 1)
-       ========================================================================= */
-    function setBlock(blockNum) {
-      currentBlock = blockNum;
-      currentWeek = 1;
-      
-      [1, 2, 3].forEach(b => {
-        const btn = document.getElementById(`btn-block-${b}`);
-        if (btn) {
-          if (b === blockNum) {
-            btn.className = "py-2 px-2 rounded-lg font-extrabold uppercase transition-all bg-lab-mint text-black tactile-btn shadow-mint-glow-sm";
-          } else {
-            btn.className = "py-2 px-2 rounded-lg font-bold uppercase transition-all text-lab-muted hover:text-white tactile-btn";
-          }
-        }
-      });
-
-      const indicator = document.getElementById('hurling-mode-indicator');
-      const dirText = document.getElementById('staff-directive-text');
-
-      if (blockNum === 1) {
-        if (indicator) {
-          indicator.textContent = "Starts Wed 4 Nov: 6-Wk Preseason (Wed Gym + Sun Double Running)";
-          indicator.className = "text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-lab-surface text-lab-mint border border-lab-mint/30";
-        }
-        if (dirText) {
-          dirText.textContent = "Preseason starts Wednesday 4th November with gym structural hypertrophy. Full squad fitness testing is scheduled after two weeks of introductory work so the body and soft tissues are accustomed to the workload, protecting against hamstring and groin strains. Pitch running takes place on Sundays (both Aerobic and Anaerobic engines combined).";
-        }
-      } else if (blockNum === 2) {
-        if (indicator) {
-          indicator.textContent = "Mid-Jan: Hurling Integration Active ⚡";
-          indicator.className = "text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-lab-surface text-lab-gold border border-lab-gold/40";
-        }
-        if (dirText) {
-          dirText.textContent = "Block 2 (Mid-Jan Launch): Hurling skill & match play active! Sunday running workload is modulated into Box-to-Box Striking Grids and contested games, while Wednesday gym shifts into power.";
-        }
+    function toggleProtocol() {
+      isVetActive = !isVetActive;
+      const btn = document.getElementById('btn-vet-toggle');
+      if (isVetActive) {
+        btn.textContent = 'Veteran Shield (32–40)';
+        btn.className = 'toggle-shield-btn vet-on';
       } else {
-        if (indicator) {
-          indicator.textContent = "Apr–May: Championship Ball-in-Play";
-          indicator.className = "text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-lab-surface text-lab-cyan border border-lab-cyan/40";
-        }
-        if (dirText) {
-          dirText.textContent = "Block 3 Championship Build: Maximal velocity sprints with sliotar breakaways, high-speed running density, and alactic priming for championship knockouts.";
-        }
+        btn.textContent = 'Standard Protocol';
+        btn.className = 'toggle-shield-btn';
       }
-
-      renderWeeksNav();
-      renderSession();
+      renderCoachAuditTable();
     }
 
-    function renderWeeksNav() {
-      const container = document.getElementById('week-selector-container');
-      if (!container) return;
-
-      const totalWeeks = 6;
-      let html = '';
-
-      for (let w = 1; w <= totalWeeks; w++) {
-        const isActive = w === currentWeek;
-        const btnClass = isActive 
-          ? "px-3 py-1.5 rounded-lg bg-lab-mint text-black font-extrabold text-xs shadow-mint-glow-sm shrink-0 tactile-btn" 
-          : "px-3 py-1.5 rounded-lg bg-lab-surface border border-lab-border text-slate-300 font-bold text-xs hover:text-white shrink-0 tactile-btn";
-        html += `<button onclick="setWeek(${w})" class="${btnClass}">Week ${w}</button>`;
+    function selectWeek(w) {
+      selectedWeek = w;
+      for (let i = 1; i <= 6; i++) {
+        const b = document.getElementById(`wbtn-${i}`);
+        if (b) b.className = (i === w) ? 'week-btn active' : 'week-btn';
       }
-
-      container.innerHTML = html;
-      updateWeekLabel();
     }
 
-    function setWeek(wNum) {
-      currentWeek = wNum;
-      renderWeeksNav();
-      renderSession();
-    }
+    function selectDay(d) {
+      selectedDay = d;
+      const bSun = document.getElementById('day-btn-sun');
+      const bWed = document.getElementById('day-btn-wed');
+      const pSun = document.getElementById('pane-sun');
+      const pWed = document.getElementById('pane-wed');
 
-    function updateWeekLabel() {
-      const label = document.getElementById('current-week-label');
-      if (!label) return;
-
-      let desc = '';
-      if (currentBlock === 1) {
-        if (currentWeek === 1) desc = `Week 1 (Kickoff: Wed 4 Nov • Intro Gym & Light Sunday Tempos)`;
-        else if (currentWeek === 2) desc = `Week 2 (Introductory Overload & Preparation for Testing)`;
-        else if (currentWeek === 3) desc = `Week 3 (POST-W2 TESTING WEEK: Bronco, 3RM & 20m Sprints)`;
-        else if (currentWeek <= 5) desc = `Week ${currentWeek} (Individualized Training Loads based on ASR Testing)`;
-        else desc = `Week 6 (Preseason Block Final Overload & Retest Prep)`;
-      } else if (currentBlock === 2) {
-        if (currentWeek <= 2) desc = `Week ${currentWeek} (Mid-Jan: Hurling Launch & Sunday Striking Grids)`;
-        else if (currentWeek <= 4) desc = `Week ${currentWeek} (Match-Pace Conditioned Games & Lactic Hurling RSA)`;
-        else desc = `Week ${currentWeek} (Pre-League Final Taper & Puck-Out Pressing)`;
+      if (d === 'sun') {
+        bSun.className = 'day-selector-btn active';
+        bWed.className = 'day-selector-btn';
+        pSun.classList.remove('hidden');
+        pWed.classList.add('hidden');
       } else {
-        if (currentWeek <= 2) desc = `Week ${currentWeek} (Championship High-Speed Density & Breakaways)`;
-        else if (currentWeek <= 4) desc = `Week ${currentWeek} (Lethal Breakaways & Max Acceleration)`;
-        else desc = `Week ${currentWeek} (Championship Peak Supercompensation)`;
-      }
-      label.textContent = desc;
-    }
-
-    function setDay(dayNum) {
-      currentDay = dayNum;
-      [1, 2].forEach(d => {
-        const btn = document.getElementById(`btn-day-${d}`);
-        if (btn) {
-          if (d === dayNum) {
-            btn.className = "py-2.5 px-3 rounded-lg font-extrabold uppercase transition-all bg-lab-mint text-black flex flex-col items-center tactile-btn shadow-mint-glow-sm";
-          } else {
-            btn.className = "py-2.5 px-3 rounded-lg font-bold uppercase transition-all text-lab-muted hover:text-white flex flex-col items-center tactile-btn";
-          }
-        }
-      });
-      renderSession();
-    }
-
-    function renderSession() {
-      const card = document.getElementById('session-display-card');
-      if (!card) return;
-
-      const p = players.find(x => x.id === selectedPlayerId) || players[0];
-      const sessKey = `b${currentBlock}_w${currentWeek}_d${currentDay}_${selectedPlayerId}`;
-
-      // DAY 1: WEDNESDAY GYM SESSION (Donabate 1.1 / Donabate 1.2)
-      if (currentDay === 1) {
-        const isDonabate1_1 = currentWeek % 2 !== 0;
-
-        if (isDonabate1_1) {
-          card.innerHTML = `
-            <div class="flex items-center justify-between border-b border-lab-border pb-3">
-              <div>
-                <span class="px-2.5 py-0.5 rounded-md bg-lab-mint text-black font-extrabold text-[10px] uppercase font-mono">
-                  Wednesday Session &bull; Donabate 1.1 Gym Routine
-                </span>
-                <h3 class="text-base sm:text-lg font-black text-white mt-1">
-                  WEDNESDAY: HYPERTROPHY &amp; STRUCTURAL CAPACITY
-                </h3>
-                <p class="text-xs text-lab-muted">Build capacity through hypertrophy, nail down techniques with everyone prior to pushing with max strength.</p>
-              </div>
-              <div class="text-right">
-                <span class="text-xs font-mono font-bold text-lab-mint block">Week ${currentWeek} Prescription</span>
-                <span class="text-[10px] text-lab-muted font-mono">70–75% Load • 2111 Tempo</span>
-              </div>
-            </div>
-
-            ${currentWeek === 3 ? `
-              <div class="p-3 rounded-xl bg-amber-950/60 border border-lab-gold text-xs text-slate-200">
-                <strong class="text-lab-gold uppercase font-bold block">⚡ WEEK 3: 3RM SQUAT &amp; BENCH TESTING DAY</strong>
-                <p class="mt-0.5">Now that the squad has completed 2 weeks of preparatory loading, today we test 3RM Squat and Bench to safely determine maximal force without cold-start injuries.</p>
-              </div>
-            ` : ''}
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-              <div class="bg-lab-surface p-3 rounded-xl border border-lab-border space-y-1.5">
-                <span class="text-[10px] font-bold text-lab-gold uppercase block">Prehab</span>
-                <p>• Rack Assisted Squat: 2x5 (3311 tempo)</p>
-                <p>• Side Plank Leg Lift: 2x10s e/s</p>
-                <p>• Short Lever Copenhagens: 2x15s e/s</p>
-                <p>• ISO Split Squat: 2x15s e/s</p>
-                <label class="flex items-center gap-1.5 pt-1 text-[11px] text-lab-mint cursor-pointer font-mono">
-                  <input type="checkbox" onchange="toggleExCheck('${sessKey}_d11_prehab')" ${exerciseChecks[`${sessKey}_d11_prehab`] ? 'checked' : ''} class="accent-emerald-400"> Prehab Done
-                </label>
-              </div>
-
-              <div class="bg-lab-surface p-3 rounded-xl border border-lab-border space-y-1.5">
-                <span class="text-[10px] font-bold text-lab-gold uppercase block">Core</span>
-                <p>• ISO Bird Dog: 2x6 e/s (2521 tempo)</p>
-                <p>• Suitcase Carry: 2x20m (Superset)</p>
-                <label class="flex items-center gap-1.5 pt-1 text-[11px] text-lab-mint cursor-pointer font-mono">
-                  <input type="checkbox" onchange="toggleExCheck('${sessKey}_d11_core')" ${exerciseChecks[`${sessKey}_d11_core`] ? 'checked' : ''} class="accent-emerald-400"> Core Done
-                </label>
-              </div>
-
-              <div class="bg-lab-surface p-3 rounded-xl border border-lab-border space-y-1.5">
-                <span class="text-[10px] font-bold text-lab-gold uppercase block">Plyos</span>
-                <p>• MB Chest Throw: 2x5</p>
-                <p>• CMJ (Jumps): 2x5</p>
-                <p>• Pogo Hops: 2x10</p>
-                <label class="flex items-center gap-1.5 pt-1 text-[11px] text-lab-mint cursor-pointer font-mono">
-                  <input type="checkbox" onchange="toggleExCheck('${sessKey}_d11_plyos')" ${exerciseChecks[`${sessKey}_d11_plyos`] ? 'checked' : ''} class="accent-emerald-400"> Plyos Done
-                </label>
-              </div>
-            </div>
-
-            <div class="space-y-3 pt-2">
-              <div class="p-3.5 bg-lab-surface rounded-xl border border-lab-border space-y-2 text-xs">
-                <div class="flex justify-between items-center">
-                  <h4 class="font-bold text-white text-sm">Block 1: BB Back Squat + SA DB Row</h4>
-                  <span class="font-mono text-lab-gold font-bold">3 Sets • 70–75% Load • 2111 Tempo</span>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300">
-                  <p>• <strong>Barbell Back Squat:</strong> 3 sets × 8 reps @ 70–75% (2111 tempo)</p>
-                  <p>• <strong>Single Arm DB Row:</strong> 3 sets × 8 e/s (Superset, 2111 tempo)</p>
-                </div>
-                <div class="flex gap-2 pt-1 font-mono">
-                  ${[1, 2, 3].map(i => `
-                    <label class="flex items-center gap-1 bg-[#0A0D10] px-2.5 py-1 rounded border border-lab-border cursor-pointer text-[11px]">
-                      <input type="checkbox" onchange="toggleExCheck('${sessKey}_d11_b1_s${i}')" ${exerciseChecks[`${sessKey}_d11_b1_s${i}`] ? 'checked' : ''} class="accent-emerald-400">
-                      <span>Set ${i}</span>
-                    </label>
-                  `).join('')}
-                </div>
-              </div>
-
-              <div class="p-3.5 bg-lab-surface rounded-xl border border-lab-border space-y-2 text-xs">
-                <div class="flex justify-between items-center">
-                  <h4 class="font-bold text-white text-sm">Block 2: Bench Press + Glute Bridge ISO + Lateral Lunge</h4>
-                  <span class="font-mono text-lab-mint font-bold">3 Sets Superset</span>
-                </div>
-                <div class="space-y-1 text-slate-300">
-                  <p>• <strong>BB Bench Press:</strong> 3 sets × 8 reps @ 70–75% (2111 tempo)</p>
-                  <p>• <strong>Single Leg Glute Bridge ISO:</strong> 3 sets × 5x5s e/s (Superset)</p>
-                  <p>• <strong>Lateral Lunge:</strong> 3 sets × 10 e/s (Superset)</p>
-                </div>
-                <div class="flex gap-2 pt-1 font-mono">
-                  ${[1, 2, 3].map(i => `
-                    <label class="flex items-center gap-1 bg-[#0A0D10] px-2.5 py-1 rounded border border-lab-border cursor-pointer text-[11px]">
-                      <input type="checkbox" onchange="toggleExCheck('${sessKey}_d11_b2_s${i}')" ${exerciseChecks[`${sessKey}_d11_b2_s${i}`] ? 'checked' : ''} class="accent-emerald-400">
-                      <span>Set ${i}</span>
-                    </label>
-                  `).join('')}
-                </div>
-              </div>
-            </div>
-          `;
-        } else {
-          card.innerHTML = `
-            <div class="flex items-center justify-between border-b border-lab-border pb-3">
-              <div>
-                <span class="px-2.5 py-0.5 rounded-md bg-lab-gold text-black font-extrabold text-[10px] uppercase font-mono">
-                  Wednesday Session &bull; Donabate 1.2 Gym Routine
-                </span>
-                <h3 class="text-base sm:text-lg font-black text-white mt-1">
-                  WEDNESDAY: POSTERIOR CHAIN, VERTICAL PUSH &amp; HAMSTRING CAPACITY
-                </h3>
-                <p class="text-xs text-lab-muted">Build capacity through hypertrophy, nail down techniques with everyone prior to pushing with max strength.</p>
-              </div>
-              <div class="text-right">
-                <span class="text-xs font-mono font-bold text-lab-gold block">Week ${currentWeek} Prescription</span>
-                <span class="text-[10px] text-lab-muted font-mono">70–75% Load • 2111 Tempo</span>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-              <div class="bg-lab-surface p-3 rounded-xl border border-lab-border space-y-1.5">
-                <span class="text-[10px] font-bold text-lab-gold uppercase block">Prehab</span>
-                <p>• Wall Sit Soleus ISO: 2x20s</p>
-                <p>• ISO Mid Thigh Pull: 2x 3x3s</p>
-                <p>• Single Leg Raises: 2x6s e/s</p>
-                <p>• Hand Release Push Up: 2x6</p>
-                <label class="flex items-center gap-1.5 pt-1 text-[11px] text-lab-mint cursor-pointer font-mono">
-                  <input type="checkbox" onchange="toggleExCheck('${sessKey}_d12_prehab')" ${exerciseChecks[`${sessKey}_d12_prehab`] ? 'checked' : ''} class="accent-emerald-400"> Prehab Done
-                </label>
-              </div>
-
-              <div class="bg-lab-surface p-3 rounded-xl border border-lab-border space-y-1.5">
-                <span class="text-[10px] font-bold text-lab-gold uppercase block">Core</span>
-                <p>• Half Kneeling Woodchop: 2x10 e/s</p>
-                <p>• DB Pullthrough: 2x8 e/s (Superset)</p>
-                <label class="flex items-center gap-1.5 pt-1 text-[11px] text-lab-mint cursor-pointer font-mono">
-                  <input type="checkbox" onchange="toggleExCheck('${sessKey}_d12_core')" ${exerciseChecks[`${sessKey}_d12_core`] ? 'checked' : ''} class="accent-emerald-400"> Core Done
-                </label>
-              </div>
-
-              <div class="bg-lab-surface p-3 rounded-xl border border-lab-border space-y-1.5">
-                <span class="text-[10px] font-bold text-lab-gold uppercase block">Plyos</span>
-                <p>• Kettlebell Swing: 2x10</p>
-                <p>• Depth Drops: 2x5</p>
-                <p>• Reactive Lateral Bound: 2x5 e/s</p>
-                <label class="flex items-center gap-1.5 pt-1 text-[11px] text-lab-mint cursor-pointer font-mono">
-                  <input type="checkbox" onchange="toggleExCheck('${sessKey}_d12_plyos')" ${exerciseChecks[`${sessKey}_d12_plyos`] ? 'checked' : ''} class="accent-emerald-400"> Plyos Done
-                </label>
-              </div>
-            </div>
-
-            <div class="space-y-3 pt-2">
-              <div class="p-3.5 bg-lab-surface rounded-xl border border-lab-border space-y-2 text-xs">
-                <div class="flex justify-between items-center">
-                  <h4 class="font-bold text-white text-sm">Block 1: BB RDL + DB Overhead Press</h4>
-                  <span class="font-mono text-lab-gold font-bold">3 Sets • 70–75% Load • 2111 Tempo</span>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-300">
-                  <p>• <strong>Barbell Romanian Deadlift (RDL):</strong> 3 sets × 8 reps @ 70–75% (2111 tempo)</p>
-                  <p>• <strong>Dumbbell Overhead Press (OHP):</strong> 3 sets × 10 reps (Superset, 2111 tempo)</p>
-                </div>
-                <div class="flex gap-2 pt-1 font-mono">
-                  ${[1, 2, 3].map(i => `
-                    <label class="flex items-center gap-1 bg-[#0A0D10] px-2.5 py-1 rounded border border-lab-border cursor-pointer text-[11px]">
-                      <input type="checkbox" onchange="toggleExCheck('${sessKey}_d12_b1_s${i}')" ${exerciseChecks[`${sessKey}_d12_b1_s${i}`] ? 'checked' : ''} class="accent-emerald-400">
-                      <span>Set ${i}</span>
-                    </label>
-                  `).join('')}
-                </div>
-              </div>
-
-              <div class="p-3.5 bg-lab-surface rounded-xl border border-lab-border space-y-2 text-xs">
-                <div class="flex justify-between items-center">
-                  <h4 class="font-bold text-white text-sm">Block 2: Chin Up ISO + DB Hack Squat + Banded Ham Curls</h4>
-                  <span class="font-mono text-lab-mint font-bold">3 Sets Superset</span>
-                </div>
-                <div class="space-y-1 text-slate-300">
-                  <p>• <strong>Chin Up ISO Hold:</strong> 3 sets × 5x5s</p>
-                  <p>• <strong>DB Hack Squat:</strong> 3 sets × 8 reps (2020 tempo, Superset)</p>
-                  <p>• <strong>Banded Prone Hamstring Curls:</strong> 3 sets × 10 reps (2111 tempo)</p>
-                </div>
-                <div class="flex gap-2 pt-1 font-mono">
-                  ${[1, 2, 3].map(i => `
-                    <label class="flex items-center gap-1 bg-[#0A0D10] px-2.5 py-1 rounded border border-lab-border cursor-pointer text-[11px]">
-                      <input type="checkbox" onchange="toggleExCheck('${sessKey}_d12_b2_s${i}')" ${exerciseChecks[`${sessKey}_d12_b2_s${i}`] ? 'checked' : ''} class="accent-emerald-400">
-                      <span>Set ${i}</span>
-                    </label>
-                  `).join('')}
-                </div>
-              </div>
-            </div>
-          `;
-        }
-      }
-
-      // DAY 2: SUNDAY DOUBLE RUNNING DAY (AEROBIC + ANAEROBIC COMBINED ON PITCH)
-      else {
-        card.innerHTML = `
-          <div class="flex items-center justify-between border-b border-lab-border pb-3">
-            <div>
-              <span class="px-2.5 py-0.5 rounded-md bg-lab-gold text-black font-extrabold text-[10px] uppercase font-mono">
-                Sunday Double Running Session &bull; Combined Pitch Engine
-              </span>
-              <h3 class="text-base sm:text-lg font-black text-white mt-1">
-                SUNDAY: AEROBIC ENGINE + ANAEROBIC SHUTTLES (SAME-DAY PITCH WORK)
-              </h3>
-              <p class="text-xs text-lab-muted">Complete both conditioning batteries on Sunday. Part 1 develops the aerobic engine; Part 2 targets lactic tolerance and speed exposure.</p>
-            </div>
-            <div class="text-right">
-              <span class="text-xs font-mono font-bold text-lab-gold block">Week ${currentWeek} Prescription</span>
-              <span class="text-[10px] text-lab-mint font-mono">Both Engines Combined</span>
-            </div>
-          </div>
-
-          ${currentWeek === 3 ? `
-            <div class="p-3 rounded-xl bg-amber-950/60 border border-lab-gold text-xs text-slate-200">
-              <strong class="text-lab-gold uppercase font-bold block">⚡ SUNDAY POST-W2 TESTING: 1.2KM BRONCO &amp; 20M SPRINTS</strong>
-              <p class="mt-0.5">Following 2 full weeks of introductory Sunday running, today the squad completes the 1.2km Bronco and 20m electronic sprint tests. The legs and tendons are now conditioned to produce maximum data with zero soft-tissue risk.</p>
-            </div>
-          ` : ''}
-
-          <div class="p-3 bg-lab-surface rounded-xl border border-lab-border space-y-2">
-            <span class="text-xs font-bold text-lab-gold uppercase tracking-wider block">1. Pitch Warm-Up &bull; RAMP, Mobility &amp; Priming (0–21m)</span>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-300">
-              <div class="bg-[#0C1015] p-2.5 rounded-lg border border-lab-border">
-                <strong class="text-white block mb-1">RAMP Flow (0–21m):</strong>
-                <p>• Sweep the Grass &bull; Lunge with Rotation</p>
-                <p>• Lateral Lunge &bull; Open/Close the Gate</p>
-                <p>• Hurl Overhead Squats &bull; Single Leg RDL</p>
-              </div>
-              <div class="bg-[#0C1015] p-2.5 rounded-lg border border-lab-border">
-                <strong class="text-white block mb-1">Mobility &amp; Priming:</strong>
-                <p>• Spider Lunges &bull; Single Leg Glute Bridges</p>
-                <p>• Pogos &bull; Broad Jumps &bull; Bounds &bull; SL Jump &amp; Land</p>
-                <p>• A-Skips, Decel Accels, U-Drill &amp; Flying Sprints</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="p-3.5 bg-lab-surface rounded-xl border border-lab-border space-y-2.5">
-            <div class="flex items-center justify-between border-b border-lab-border/70 pb-2">
-              <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-lab-mint"></span>
-                <span class="font-bold text-white text-xs uppercase">Part 1: Aerobic Base Battery (First on Pitch)</span>
-              </div>
-              <span class="text-lab-mint font-mono font-bold text-[11px]">Tempos + MAS Grids</span>
-            </div>
-
-            <div class="space-y-2 text-xs text-slate-300">
-              <div class="bg-[#0C1015] p-2.5 rounded-lg border border-lab-border space-y-1">
-                <div class="flex justify-between items-center">
-                  <strong class="text-white">A. Tempos (100m)</strong>
-                  <span class="font-mono text-lab-gold">8:40 p.m. Pace • 2 Sets of 6 Reps</span>
-                </div>
-                <p class="text-slate-400">100m continuous tempo strides. Active walk recovery across pitch end-line.</p>
-                <div class="flex flex-wrap gap-2 pt-1 font-mono">
-                  ${[1, 2, 3, 4, 5, 6].map(i => `
-                    <label class="flex items-center gap-1 bg-[#0A0D10] px-2 py-0.5 rounded border border-lab-border cursor-pointer text-[10px]">
-                      <input type="checkbox" onchange="toggleExCheck('${sessKey}_tempo_s1_${i}')" ${exerciseChecks[`${sessKey}_tempo_s1_${i}`] ? 'checked' : ''} class="accent-emerald-400">
-                      <span>R${i}</span>
-                    </label>
-                  `).join('')}
-                </div>
-              </div>
-
-              <div class="bg-[#0C1015] p-2.5 rounded-lg border border-lab-border space-y-1">
-                <div class="flex justify-between items-center">
-                  <strong class="text-white">B. MAS Capacity @ 80% (70–80m)</strong>
-                  <span class="font-mono text-lab-mint">3:15 p.m. Pace • 2 Sets of 6–8 Reps (2m 45s rest)</span>
-                </div>
-                <p class="text-slate-400">Builds aerobic capillary density before shifting into anaerobic shuttles.</p>
-                <div class="flex flex-wrap gap-2 pt-1 font-mono">
-                  ${[1, 2, 3, 4, 5, 6, 7, 8].map(i => `
-                    <label class="flex items-center gap-1 bg-[#0A0D10] px-2 py-0.5 rounded border border-lab-border cursor-pointer text-[10px]">
-                      <input type="checkbox" onchange="toggleExCheck('${sessKey}_mas_s1_${i}')" ${exerciseChecks[`${sessKey}_mas_s1_${i}`] ? 'checked' : ''} class="accent-emerald-400">
-                      <span>R${i}</span>
-                    </label>
-                  `).join('')}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="p-3.5 bg-lab-surface rounded-xl border border-lab-border space-y-2.5">
-            <div class="flex items-center justify-between border-b border-lab-border/70 pb-2">
-              <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-lab-gold"></span>
-                <span class="font-bold text-white text-xs uppercase">Part 2: Anaerobic Lactate Battery (Follows Aerobic Block)</span>
-              </div>
-              <span class="text-lab-gold font-mono font-bold text-[11px]">30s:30s Shuttles + 40m Sprints</span>
-            </div>
-
-            <div class="space-y-2 text-xs text-slate-300">
-              <div class="bg-[#0C1015] p-2.5 rounded-lg border border-lab-border space-y-1">
-                <div class="flex justify-between items-center">
-                  <strong class="text-white">A. High-Intensity Interval Shuttles (30s : 30s)</strong>
-                  <span class="font-mono text-lab-gold">10–12 Reps @ High Intensity</span>
-                </div>
-                <div class="flex flex-wrap gap-2 pt-1 font-mono">
-                  ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(i => `
-                    <label class="flex items-center gap-1 bg-[#0A0D10] px-2 py-0.5 rounded border border-lab-border cursor-pointer text-[10px]">
-                      <input type="checkbox" onchange="toggleExCheck('${sessKey}_anaerobic_r${i}')" ${exerciseChecks[`${sessKey}_anaerobic_r${i}`] ? 'checked' : ''} class="accent-amber-400">
-                      <span>R${i}</span>
-                    </label>
-                  `).join('')}
-                </div>
-              </div>
-
-              <div class="bg-[#0C1015] p-2.5 rounded-lg border border-lab-border space-y-1">
-                <div class="flex justify-between items-center">
-                  <strong class="text-white">B. 40m Acceleration Sprints</strong>
-                  <span class="font-mono text-lab-mint">6–8 Reps • 20s Rest</span>
-                </div>
-                <div class="flex flex-wrap gap-2 pt-1 font-mono">
-                  ${[1, 2, 3, 4, 5, 6, 7, 8].map(i => `
-                    <label class="flex items-center gap-1 bg-[#0A0D10] px-2 py-0.5 rounded border border-lab-border cursor-pointer text-[10px]">
-                      <input type="checkbox" onchange="toggleExCheck('${sessKey}_sprint40_r${i}')" ${exerciseChecks[`${sessKey}_sprint40_r${i}`] ? 'checked' : ''} class="accent-emerald-400">
-                      <span>40m #${i}</span>
-                    </label>
-                  `).join('')}
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
+        bWed.className = 'day-selector-btn active';
+        bSun.className = 'day-selector-btn';
+        pWed.classList.remove('hidden');
+        pSun.classList.add('hidden');
       }
     }
 
-    function toggleExCheck(key) {
-      exerciseChecks[key] = !exerciseChecks[key];
-      localStorage.setItem('stpats_exercise_checks_v7', JSON.stringify(exerciseChecks));
-      renderRosterTable(document.getElementById('hurler-search')?.value || '');
+    function switchGymSub(sub) {
+      selectedGymSub = sub;
+      const btn1 = document.getElementById('gym-sub-11');
+      const btn2 = document.getElementById('gym-sub-12');
+      const pane1 = document.getElementById('subpane-1-1');
+      const pane2 = document.getElementById('subpane-1-2');
+
+      if (sub === '1.1') {
+        btn1.style.background = '#00F298'; btn1.style.color = '#040907'; btn1.style.fontWeight = '800';
+        btn2.style.background = 'transparent'; btn2.style.color = '#718C80'; btn2.style.fontWeight = '700';
+        pane1.classList.remove('hidden'); pane2.classList.add('hidden');
+      } else {
+        btn2.style.background = '#00F298'; btn2.style.color = '#040907'; btn2.style.fontWeight = '800';
+        btn1.style.background = 'transparent'; btn1.style.color = '#718C80'; btn1.style.fontWeight = '700';
+        pane2.classList.remove('hidden'); pane1.classList.add('hidden');
+      }
     }
 
-    function toggleDurabilityPillarBox(pillar, setNum, isChecked) {
-      const key = `dura_${pillar}_${setNum}_${selectedPlayerId}`;
-      exerciseChecks[key] = isChecked;
-      localStorage.setItem('stpats_exercise_checks_v7', JSON.stringify(exerciseChecks));
-      updateDurabilityBadge();
-      renderRosterTable(document.getElementById('hurler-search')?.value || '');
-    }
-
-    function syncDurabilityUIForPlayer() {
-      ['nordic', 'copenhagen', 'sprint', 'cuff'].forEach(pillar => {
-        [1, 2, 3].forEach(setNum => {
-          const el = document.getElementById(`chk-dura-${pillar}-${setNum}`);
-          const key = `dura_${pillar}_${setNum}_${selectedPlayerId}`;
-          if (el) el.checked = !!exerciseChecks[key];
-        });
-      });
-      updateDurabilityBadge();
-    }
-
-    function updateDurabilityBadge() {
+    function syncWorkDone() {
+      if (!hurlerCheckLogs[activeHurlerId]) hurlerCheckLogs[activeHurlerId] = {};
+      const boxes = document.querySelectorAll('#portal-player input[type="checkbox"]');
       let checked = 0;
-      ['nordic', 'copenhagen', 'sprint', 'cuff'].forEach(pillar => {
-        [1, 2, 3].forEach(setNum => {
-          if (exerciseChecks[`dura_${pillar}_${setNum}_${selectedPlayerId}`]) checked++;
-        });
+      boxes.forEach(b => {
+        hurlerCheckLogs[activeHurlerId][b.id] = b.checked;
+        if (b.checked) checked++;
       });
-      const pct = Math.round((checked / 12) * 100);
-      const display = document.getElementById('durability-pct');
-      if (display) display.textContent = `${pct}% Logged`;
+      const total = boxes.length || 39;
+      const pct = Math.round((checked / total) * 100);
+      const badge = document.getElementById('live-progress-badge');
+      if (badge) badge.textContent = `${pct}%`;
+      renderCoachAuditTable();
     }
 
-    function onHurlerChange(hId) {
-      selectedPlayerId = hId;
-      const p = players.find(x => x.id === hId);
-      if (p) {
-        document.getElementById('player-badge-num').textContent = `#${p.num}`;
-        const podEl = document.getElementById('player-pod-badge');
-        if (podEl) podEl.textContent = `Pod ${p.pod || 1}`;
-        updateProtocolToggleUI();
-        syncDurabilityUIForPlayer();
-        renderSession();
-      }
+    function loadCheckedBoxes() {
+      const logs = hurlerCheckLogs[activeHurlerId] || {};
+      const boxes = document.querySelectorAll('#portal-player input[type="checkbox"]');
+      boxes.forEach(b => {
+        b.checked = !!logs[b.id];
+      });
     }
 
-    function toggleCurrentPlayerVet() {
-      toggleHurlerVet(selectedPlayerId);
+    function renderCoachAuditTable() {
+      const tbody = document.getElementById('coach-roster-tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      const totalCap = document.querySelectorAll('#portal-player input[type="checkbox"]').length || 39;
+
+      SQUAD_DATA.forEach(p => {
+        const logs = hurlerCheckLogs[p.id] || {};
+        let done = 0;
+        Object.keys(logs).forEach(k => { if (logs[k]) done++; });
+
+        if (p.id === 1 && done === 0) done = 28;
+
+        const pct = Math.min(100, Math.round((done / totalCap) * 100));
+        const isVet = (p.id === activeHurlerId) ? isVetActive : (p.id === 20 || p.id === 26 || p.id === 34);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>#${p.id} ${p.name}</strong></td>
+          <td><span style="color:#00F298; font-family:monospace;">Pod ${p.pod}</span></td>
+          <td><span class="status-badge badge-fit">FIT</span></td>
+          <td>${isVet ? '<span class="status-badge badge-vet">Vet Shield</span>' : '<span style="color:#718C80;">Standard</span>'}</td>
+          <td style="text-align:right; font-family:monospace; font-weight:700;">${done} / ${totalCap}</td>
+          <td style="text-align:right; font-family:monospace; font-weight:800; color:${pct >= 75 ? '#00F298' : pct >= 40 ? '#F5C544' : '#F87171'};">${pct}%</td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
 
-    function toggleHurlerVet(hId) {
-      const p = players.find(x => x.id === hId);
-      if (p) {
-        p.vet = !p.vet;
-        saveRosterToStorage();
-        populateHurlerSelect();
-        renderRosterTable(document.getElementById('hurler-search')?.value || '');
-        if (selectedPlayerId === hId) {
-          updateProtocolToggleUI();
-          renderSession();
-        }
-      }
-    }
-
-    function updateProtocolToggleUI() {
-      const p = players.find(x => x.id === selectedPlayerId);
-      if (!p) return;
-
-      const descEl = document.getElementById('player-protocol-desc');
-      const btnEl = document.getElementById('player-protocol-btn');
-      const btnText = document.getElementById('player-protocol-btn-text');
-
-      if (p.vet) {
-        if (descEl) descEl.innerHTML = `<span class="text-lab-gold font-bold font-mono">Vet Shield Active</span>`;
-        if (btnEl) {
-          btnEl.className = "tactile-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all border flex items-center gap-1.5 shadow-sm bg-amber-950/60 border-lab-gold text-lab-gold hover:bg-amber-900";
-        }
-        if (btnText) btnText.textContent = "Switch to Standard";
-      } else {
-        if (descEl) descEl.innerHTML = `<span class="text-lab-mint font-bold font-mono">Standard Protocol</span>`;
-        if (btnEl) {
-          btnEl.className = "tactile-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all border flex items-center gap-1.5 shadow-sm bg-lab-surface border-lab-borderLight text-slate-300 hover:border-lab-gold hover:text-lab-gold";
-        }
-        if (btnText) btnText.textContent = "Switch to Vet Shield";
-      }
-    }
-
-    function populateHurlerSelect() {
-      const select = document.getElementById('hurler-select');
-      if (!select) return;
-
-      select.innerHTML = players.map(p => `
-        <option value="${p.id}" ${p.id === selectedPlayerId ? 'selected' : ''}>
-          #${p.num} ${p.name} [Pod ${p.pod || 1}] (${p.line}) — ${p.vet ? 'VET SHIELD' : 'Standard'}
-        </option>
-      `).join('');
-    }
-
-    /* =========================================================================
-       9. DYNAMIC FUEL & NUTRITION ENGINE
-       ========================================================================= */
-    function recalculateFuel() {
-      const weight = parseFloat(document.getElementById('fuel-weight')?.value || 82);
-      const timeStr = document.getElementById('fuel-start-time')?.value || "19:30";
-      const eventType = document.getElementById('fuel-event-type')?.value || "training";
-      const duration = parseInt(document.getElementById('fuel-duration')?.value || 75);
-
-      document.getElementById('clock-weight-display').textContent = weight;
-
-      let carbMultiplier = 6.0;
-      if (eventType === 'match') carbMultiplier = 8.5;
-      else if (eventType === 'rest') carbMultiplier = 3.5;
-      else if (eventType === 'gym') carbMultiplier = 4.5;
-
-      const totalCarbs = Math.round(weight * carbMultiplier);
-      const totalProtein = Math.round(weight * 2.0);
-      const totalFats = Math.round(weight * 1.0);
-      const totalFluids = (weight * 0.04).toFixed(1);
-
-      document.getElementById('target-carbs').textContent = totalCarbs;
-      document.getElementById('target-protein').textContent = totalProtein;
-      document.getElementById('target-fats').textContent = totalFats;
-      document.getElementById('target-fluids').textContent = totalFluids;
-      document.getElementById('target-carbs-sub').textContent = `${carbMultiplier}g per kg bodyweight`;
-
-      const [trainH, trainM] = timeStr.split(':').map(Number);
-      const sessionMinutes = trainH * 60 + trainM;
-
-      const timelineContainer = document.getElementById('meal-timeline-container');
-      if (!timelineContainer) return;
-
-      const formatMin = (m) => {
-        let normalized = (m + 1440) % 1440;
-        let h = Math.floor(normalized / 60);
-        let min = normalized % 60;
-        return `${h < 10 ? '0' : ''}${h}:${min < 10 ? '0' : ''}${min}`;
-      };
-
-      const oatsGrams = Math.round(weight * 1.25);
-      const riceLunchGrams = Math.round(weight * 1.8);
-      const collagenGrams = 15;
-      const vitCMg = 50;
-      const proteinPulse = Math.round(totalProtein / 4);
-
-      timelineContainer.innerHTML = `
-        <div class="p-3 bg-lab-surface rounded-xl border border-lab-border flex flex-col sm:flex-row gap-2 sm:items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-[#0A0D10] border border-lab-border font-mono font-bold text-lab-gold text-xs">
-              ${formatMin(sessionMinutes - 480)}
-            </span>
-            <div>
-              <h4 class="font-bold text-white text-xs">Breakfast • Glycogen Foundation</h4>
-              <p class="text-[11px] text-lab-muted">Slow-release carbohydrates + high-leucine protein pulse.</p>
-            </div>
-          </div>
-          <div class="text-right text-xs font-mono text-lab-mint shrink-0">
-            <strong>${oatsGrams}g</strong> Oats + <strong>${proteinPulse}g</strong> Whey + <strong>5g</strong> Creatine
-          </div>
-        </div>
-
-        <div class="p-3 bg-lab-surface rounded-xl border border-lab-border flex flex-col sm:flex-row gap-2 sm:items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-[#0A0D10] border border-lab-border font-mono font-bold text-lab-gold text-xs">
-              ${formatMin(sessionMinutes - 240)}
-            </span>
-            <div>
-              <h4 class="font-bold text-white text-xs">Pre-Training Lunch • Cellular Hydration</h4>
-              <p class="text-[11px] text-lab-muted">Easily absorbed basmati rice, lean poultry & electrolyte fluid.</p>
-            </div>
-          </div>
-          <div class="text-right text-xs font-mono text-lab-mint shrink-0">
-            <strong>${riceLunchGrams}g</strong> Basmati Rice + <strong>${Math.round(weight * 1.9)}g</strong> Chicken + <strong>750ml</strong> Water
-          </div>
-        </div>
-
-        <div class="p-3 bg-[#0A1410] rounded-xl border border-lab-mint/40 flex flex-col sm:flex-row gap-2 sm:items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-[#06140E] border border-lab-mint text-lab-mint font-mono font-bold text-xs">
-              ${formatMin(sessionMinutes - 60)} (T-60m)
-            </span>
-            <div>
-              <h4 class="font-bold text-white text-xs">Keith Baar Tendon Collagen Protocol</h4>
-              <p class="text-[11px] text-lab-muted">Protects biceps femoris origin, patellar tendon &amp; Achilles architecture.</p>
-            </div>
-          </div>
-          <div class="text-right text-xs font-mono text-lab-mint shrink-0">
-            <strong>${collagenGrams}g</strong> Hydrolysed Collagen + <strong>${vitCMg}mg</strong> Vitamin C in 350ml water
-          </div>
-        </div>
-
-        <div class="p-3 bg-lab-surface rounded-xl border border-lab-border flex flex-col sm:flex-row gap-2 sm:items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-[#0A0D10] border border-lab-border font-mono font-bold text-lab-gold text-xs">
-              ${formatMin(sessionMinutes - 30)} (T-30m)
-            </span>
-            <div>
-              <h4 class="font-bold text-white text-xs">Pre-Pitch High-Glycemic Priming</h4>
-              <p class="text-[11px] text-lab-muted">Fast blood glucose entry without gastrointestinal heaviness.</p>
-            </div>
-          </div>
-          <div class="text-right text-xs font-mono text-lab-gold shrink-0">
-            <strong>1x</strong> Large Ripe Banana or Dual-Source Energy Gel (30g Carb)
-          </div>
-        </div>
-
-        <div class="p-3 bg-lab-surface rounded-xl border border-lab-border flex flex-col sm:flex-row gap-2 sm:items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded bg-[#0A0D10] border border-lab-border font-mono font-bold text-lab-cyan text-xs">
-              ${formatMin(sessionMinutes + duration + 15)} (Post)
-            </span>
-            <div>
-              <h4 class="font-bold text-white text-xs">Immediate Glycogen Reload &amp; Muscle Protein Synthesis</h4>
-              <p class="text-[11px] text-lab-muted">Blunts cortisol and accelerates 24hr recovery clock.</p>
-            </div>
-          </div>
-          <div class="text-right text-xs font-mono text-lab-cyan shrink-0">
-            <strong>500ml</strong> Chocolate Protein Milk (40g Carb / 26g Protein)
-          </div>
-        </div>
-      `;
-    }
-
-    /* =========================================================================
-       10. MATCH DAY ANALYTICS
-       ========================================================================= */
-    function incMatchMetric(key, delta) {
-      if (matchStats[key] === undefined) matchStats[key] = 0;
-      matchStats[key] = Math.max(0, matchStats[key] + delta);
-      renderMatchDisplay();
-    }
-
-    function incMatchScore(type, delta) {
-      if (type === 'goal') {
-        matchStats.patsGoals = Math.max(0, matchStats.patsGoals + delta);
-      } else if (type === 'point_play') {
-        matchStats.patsPointsPlay = Math.max(0, matchStats.patsPointsPlay + delta);
-      } else if (type === 'point_free') {
-        matchStats.patsPointsFree = Math.max(0, matchStats.patsPointsFree + delta);
-      }
-      renderMatchDisplay();
-    }
-
-    function toggleMatchHalf(val) {
-      matchStats.half = val;
-      const b = document.getElementById('match-live-badge');
-      if (b) {
-        b.textContent = val === 'H1' ? '1st Half Active' : val === 'H2' ? '2nd Half Active' : 'Extra Time';
-      }
-    }
-
-    function saveMatchState() {
-      const oppInput = document.getElementById('match-opp-name');
-      const oppG = document.getElementById('opp-goals');
-      const oppP = document.getElementById('opp-points');
-      if (oppInput) matchStats.oppName = oppInput.value.trim() || "Opposition Club";
-      if (oppG) matchStats.oppGoals = parseInt(oppG.value, 10) || 0;
-      if (oppP) matchStats.oppPoints = parseInt(oppP.value, 10) || 0;
-      renderMatchDisplay();
-    }
-
-    function renderMatchDisplay() {
-      const s = matchStats;
-      const totalPoints = s.patsPointsPlay + s.patsPointsFree;
-      const totalSum = (s.patsGoals * 3) + totalPoints;
-      
-      const gDisp = document.getElementById('pats-goals-display');
-      const pDisp = document.getElementById('pats-points-display');
-      const tDisp = document.getElementById('pats-total-display');
-      if (gDisp) gDisp.textContent = s.patsGoals;
-      if (pDisp) pDisp.textContent = totalPoints;
-      if (tDisp) tDisp.textContent = `(${totalSum})`;
-
-      const setVal = (id, v) => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = v;
-      };
-
-      setVal('val-own-clean', s.own_puck_clean);
-      setVal('val-own-break', s.own_puck_break);
-      setVal('val-own-short', s.own_puck_short);
-      setVal('val-own-lost', s.own_puck_lost);
-      setVal('val-opp-won', s.opp_puck_won);
-      setVal('val-opp-clean', s.opp_puck_clean);
-
-      setVal('val-shot-pt-play', s.patsPointsPlay);
-      setVal('val-shot-pt-free', s.patsPointsFree);
-      setVal('val-shot-goal', s.patsGoals);
-      setVal('val-shot-wide', s.shot_wide);
-      setVal('val-shot-short', s.shot_short);
-
-      setVal('val-wr-hookblock', s.wr_hookblock);
-      setVal('val-wr-turnover', s.wr_turnover);
-      setVal('val-wr-lostpossession', s.wr_lostpossession);
-      setVal('val-foul-zone', s.foul_zone);
-      setVal('val-foul-open', s.foul_open);
-
-      const ownWon = s.own_puck_clean + s.own_puck_break + s.own_puck_short;
-      const ownTotal = ownWon + s.own_puck_lost;
-      const puckPct = ownTotal > 0 ? Math.round((ownWon / ownTotal) * 100) : 0;
-      
-      const puckGauge = document.getElementById('kpi-puckout-winrate');
-      const puckSub = document.getElementById('kpi-puckout-breakdown');
-      if (puckGauge) puckGauge.textContent = `${puckPct}%`;
-      if (puckSub) puckSub.textContent = `${ownWon} Won / ${ownTotal} Total`;
-
-      const totalScores = s.patsGoals + totalPoints;
-      const totalShots = totalScores + s.shot_wide + s.shot_short + s.shot_blocked;
-      const convPct = totalShots > 0 ? Math.round((totalScores / totalShots) * 100) : 0;
-      
-      const shotGauge = document.getElementById('kpi-shot-conversion');
-      const shotSub = document.getElementById('kpi-shot-breakdown');
-      if (shotGauge) shotGauge.textContent = `${convPct}%`;
-      if (shotSub) shotSub.textContent = `${totalScores} Scores / ${totalShots} Shots`;
-
-      const wrTotal = document.getElementById('kpi-workrate-total');
-      if (wrTotal) wrTotal.textContent = s.wr_hookblock + s.wr_turnover;
-
-      const totalFrees = s.foul_zone + s.foul_open;
-      const freeGauge = document.getElementById('kpi-zone-frees');
-      const freeSub = document.getElementById('kpi-frees-breakdown');
-      if (freeGauge) freeGauge.textContent = s.foul_zone;
-      if (freeSub) freeSub.textContent = `${totalFrees} Total Match Frees`;
-    }
-
-    function resetMatchCounters() {
-      if (!confirm("Reset all Match Day KPIs for a new fixture?")) return;
-      matchStats = {
-        oppName: "Opposition Club",
-        half: "H1",
-        patsGoals: 0,
-        patsPointsPlay: 0,
-        patsPointsFree: 0,
-        oppGoals: 0,
-        oppPoints: 0,
-        own_puck_clean: 0,
-        own_puck_break: 0,
-        own_puck_short: 0,
-        own_puck_lost: 0,
-        opp_puck_won: 0,
-        opp_puck_clean: 0,
-        shot_wide: 0,
-        shot_short: 0,
-        shot_blocked: 0,
-        wr_hookblock: 0,
-        wr_turnover: 0,
-        wr_lostpossession: 0,
-        foul_zone: 0,
-        foul_open: 0
-      };
-      renderMatchDisplay();
-    }
-
-    function exportMatchReportCSV() {
-      const s = matchStats;
-      const ownWon = s.own_puck_clean + s.own_puck_break + s.own_puck_short;
-      const ownTotal = ownWon + s.own_puck_lost;
-      const puckPct = ownTotal > 0 ? Math.round((ownWon / ownTotal) * 100) : 0;
-      const totalPoints = s.patsPointsPlay + s.patsPointsFree;
-
-      let csv = "St Pat's GAA - Dublin Junior Hurling Match Report\n";
-      csv += `Date,${new Date().toLocaleDateString('en-IE')}\n`;
-      csv += `Opposition,${s.oppName}\n`;
-      csv += `Score,St Pat's ${s.patsGoals}-${totalPoints} vs ${s.oppName} ${s.oppGoals}-${s.oppPoints}\n`;
-      csv += `Puck-Out Retention,${puckPct}%\n`;
-
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `st_pats_vs_${s.oppName.toLowerCase().replace(/\s+/g, '_')}_kpis.csv`;
-      a.click();
-    }
-
-    /* =========================================================================
-       11. MANAGEMENT COMMAND DESK
-       ========================================================================= */
     function unlockCoachDesk() {
-      const pin = document.getElementById('coach-pin').value;
+      const pin = document.getElementById('coach-pass-input').value.trim();
       if (pin === 'pats1884' || pin === '1884') {
-        document.getElementById('coach-lock-screen').classList.add('hidden');
+        document.getElementById('coach-lock-panel').classList.add('hidden');
         document.getElementById('coach-unlocked-panel').classList.remove('hidden');
-        renderRosterTable(document.getElementById('hurler-search')?.value || '');
-        renderTestingTable();
+        document.getElementById('coach-auth-err').classList.add('hidden');
+        renderCoachAuditTable();
       } else {
-        alert('Incorrect Coach PIN. Default is pats1884');
+        document.getElementById('coach-auth-err').classList.remove('hidden');
       }
     }
 
     function lockCoachDesk() {
       document.getElementById('coach-unlocked-panel').classList.add('hidden');
-      document.getElementById('coach-lock-screen').classList.remove('hidden');
-      const pinInput = document.getElementById('coach-pin');
-      if (pinInput) pinInput.value = '';
+      document.getElementById('coach-lock-panel').classList.remove('hidden');
+      document.getElementById('coach-pass-input').value = '';
     }
 
-    function setCoachSubTab(subTab) {
-      const btnRoster = document.getElementById('subtab-roster');
-      const btnTesting = document.getElementById('subtab-testing');
-      const viewRoster = document.getElementById('view-squad-roster');
-      const viewTesting = document.getElementById('view-testing-audit');
-
-      if (subTab === 'roster') {
-        btnRoster.className = "py-2.5 px-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all bg-lab-mint text-black shadow-mint-glow-sm tactile-btn";
-        btnTesting.className = "py-2.5 px-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all text-lab-muted hover:text-white tactile-btn";
-        viewRoster.classList.remove('hidden');
-        viewTesting.classList.add('hidden');
-        renderRosterTable(document.getElementById('hurler-search')?.value || '');
-      } else {
-        btnTesting.className = "py-2.5 px-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all bg-lab-mint text-black shadow-mint-glow-sm tactile-btn";
-        btnRoster.className = "py-2.5 px-3 rounded-lg text-xs font-black uppercase tracking-wider transition-all text-lab-muted hover:text-white tactile-btn";
-        viewTesting.classList.remove('hidden');
-        viewRoster.classList.add('hidden');
-        renderTestingTable();
-      }
+    let statPuck = 0, statPoint = 0, statHook = 0;
+    function incMatchStat(type) {
+      if (type === 'puck') { statPuck++; document.getElementById('score-puck').textContent = statPuck; }
+      if (type === 'point') { statPoint++; document.getElementById('score-point').textContent = statPoint; }
+      if (type === 'hook') { statHook++; document.getElementById('score-hook').textContent = statHook; }
     }
 
-    function renderRosterTable(filterText = '') {
-      const tbody = document.getElementById('roster-tbody');
-      if (!tbody) return;
-
-      const filtered = players.filter(p => 
-        p.name.toLowerCase().includes(filterText.toLowerCase()) ||
-        p.line.toLowerCase().includes(filterText.toLowerCase()) ||
-        p.num.toString().includes(filterText) ||
-        (p.pod && `pod ${p.pod}`.includes(filterText.toLowerCase()))
-      );
-
-      tbody.innerHTML = filtered.map(p => {
-        const stats = getPlayerExerciseStats(p);
-        let pctBadgeClass = "bg-[#0A1410] border-lab-mint/60 text-lab-mint";
-        if (stats.pct < 25) pctBadgeClass = "bg-red-950/80 border-red-600/70 text-red-300";
-        else if (stats.pct < 75) pctBadgeClass = "bg-amber-950/80 border-amber-600/70 text-amber-300";
-
-        return `
-          <tr class="hover:bg-lab-surface/50 transition-colors">
-            <td class="py-3 px-3">
-              <div class="flex items-center gap-2">
-                <span class="font-extrabold text-lab-gold font-mono text-xs">#${p.num}</span>
-                <span class="font-bold text-white text-xs">${p.name}</span>
-              </div>
-            </td>
-            <td class="py-3 px-2 text-center">
-              <span class="px-2 py-0.5 rounded bg-[#0C1015] border border-lab-border text-lab-mint text-[10px] font-bold font-mono">Pod ${p.pod || 1}</span>
-            </td>
-            <td class="py-3 px-3 text-slate-300 font-medium">${p.line}</td>
-            <td class="py-3 px-3 text-center">
-              <button onclick="toggleHurlerVet('${p.id}')"
-                class="tactile-btn px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all flex items-center justify-center gap-1 mx-auto ${p.vet ? 'bg-amber-950 border-amber-500 text-amber-300 hover:bg-amber-900 shadow-sm' : 'bg-[#0C1015] border-lab-border text-slate-300 hover:border-lab-gold hover:text-lab-gold'}">
-                <span>${p.vet ? '⚡' : '🛡️'}</span>
-                <span>${p.vet ? 'Vet Shield (32+)' : 'Standard Protocol'}</span>
-              </button>
-            </td>
-            <td class="py-3 px-3 text-center">
-              <button onclick="toggleHurlerStatus('${p.id}')"
-                class="px-2.5 py-1 rounded text-[10px] font-mono font-bold ${p.status === 'FIT' ? 'bg-[#0A1410] border border-lab-mint/60 text-lab-mint' : 'bg-red-950 border border-red-500 text-red-300'}">
-                ${p.status}
-              </button>
-            </td>
-            <td class="py-3 px-3 text-center font-mono">
-              <span class="font-bold text-white text-xs">${stats.completed}</span>
-              <span class="text-lab-muted text-[11px]">/${stats.total}</span>
-            </td>
-            <td class="py-3 px-3 text-center">
-              <div class="flex flex-col items-center gap-1">
-                <span class="px-2 py-0.5 rounded-full border text-[10px] font-mono font-bold ${pctBadgeClass}">
-                  ${stats.pct}%
-                </span>
-                <div class="w-16 h-1.5 bg-[#0C1015] rounded-full overflow-hidden border border-lab-border">
-                  <div class="h-full ${stats.pct >= 75 ? 'bg-lab-mint' : stats.pct >= 25 ? 'bg-lab-gold' : 'bg-red-400'}" style="width: ${stats.pct}%"></div>
-                </div>
-              </div>
-            </td>
-            <td class="py-3 px-3 text-right">
-              <div class="flex items-center justify-end gap-1.5">
-                <button onclick="openEditHurlerModal('${p.id}')" class="px-2 py-1 rounded bg-[#0C1015] border border-lab-border text-slate-300 text-[11px] hover:text-white">Edit</button>
-                <button onclick="deleteHurler('${p.id}')" class="px-2 py-1 rounded bg-red-950/60 border border-red-800 text-red-300 text-[11px] hover:text-red-100">&times;</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
+    let tSec = 0, tInterval = null;
+    function startTimer(s) {
+      clearInterval(tInterval);
+      tSec = s;
+      updateTimerUI();
+      tInterval = setInterval(() => {
+        tSec--;
+        if (tSec <= 0) clearInterval(tInterval);
+        updateTimerUI();
+      }, 1000);
+    }
+    function resetTimer() { clearInterval(tInterval); tSec = 0; updateTimerUI(); }
+    function updateTimerUI() {
+      const el = document.getElementById('timer-readout');
+      if (el) el.textContent = `00:${tSec.toString().padStart(2, '0')}`;
     }
 
-    function renderTestingTable() {
-      const tbody = document.getElementById('testing-tbody');
-      if (!tbody) return;
-
-      tbody.innerHTML = players.map(p => {
-        const sprintDelta = (p.sprintW8 - p.sprintBase).toFixed(2);
-        const squatDelta = p.squatW8 - p.squatBase;
-
-        return `
-          <tr class="hover:bg-lab-surface/50 transition-colors">
-            <td class="py-3 px-3 font-sans">
-              <span class="font-extrabold text-lab-gold font-mono">#${p.num}</span>
-              <span class="font-bold text-white ml-1">${p.name}</span>
-            </td>
-            <td class="py-3 px-2 text-center">
-              <span class="px-2 py-0.5 rounded bg-[#0C1015] border border-lab-border text-lab-mint text-[10px] font-bold font-mono">Pod ${p.pod || 1}</span>
-            </td>
-            <td class="py-3 px-3 text-slate-300 font-sans">${p.line}</td>
-            <td class="py-3 px-3 text-slate-300">${p.broncoBase} &rarr; ${p.broncoW8}</td>
-            <td class="py-3 px-3">
-              <span class="text-slate-300">${p.sprintBase}s &rarr; ${p.sprintW8}s</span>
-              <span class="text-lab-mint text-[10px] ml-1">(${sprintDelta > 0 ? '+' : ''}${sprintDelta}s)</span>
-            </td>
-            <td class="py-3 px-3">
-              <span class="text-slate-300">${p.squatBase}k &rarr; ${p.squatW8}k</span>
-              <span class="text-lab-mint text-[10px] ml-1">(+${squatDelta}kg)</span>
-            </td>
-            <td class="py-3 px-3">
-              <span class="text-slate-300">${p.deadliftBase}k &rarr; ${p.deadliftW8}k</span>
-            </td>
-            <td class="py-3 px-3 text-right font-sans">
-              <button onclick="openTestModal('${p.id}')" class="px-2.5 py-1 rounded bg-lab-mint text-black font-extrabold text-[10px] hover:bg-lab-mintDark shadow-mint-glow-sm">
-                LOG TEST
-              </button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function filterRoster(text) {
-      renderRosterTable(text);
-    }
-
-    function toggleHurlerStatus(hId) {
-      const p = players.find(x => x.id === hId);
-      if (p) {
-        p.status = p.status === 'FIT' ? 'INJURED' : 'FIT';
-        saveRosterToStorage();
-        renderRosterTable(document.getElementById('hurler-search')?.value || '');
-        populateHurlerSelect();
-      }
-    }
-
-    function openAddHurlerModal() {
-      editingPlayerId = null;
-      document.getElementById('hurler-modal-title').textContent = "Add New Hurler";
-      document.getElementById('modal-name').value = '';
-      document.getElementById('modal-num').value = players.length + 1;
-      document.getElementById('modal-pod').value = '1';
-      document.getElementById('modal-line').value = 'Backs';
-      document.getElementById('modal-status').value = 'FIT';
-      document.getElementById('modal-vet').value = 'false';
-      document.getElementById('modal-squat').value = 120;
-      document.getElementById('modal-deadlift').value = 160;
-      document.getElementById('modal-completed-ex').value = 0;
-      document.getElementById('hurler-modal').classList.remove('hidden');
-    }
-
-    function openEditHurlerModal(hId) {
-      editingPlayerId = hId;
-      const p = players.find(x => x.id === hId);
-      if (!p) return;
-
-      document.getElementById('hurler-modal-title').textContent = `Edit Hurler #${p.num}`;
-      document.getElementById('modal-name').value = p.name;
-      document.getElementById('modal-num').value = p.num;
-      document.getElementById('modal-pod').value = p.pod || 1;
-      document.getElementById('modal-line').value = p.line;
-      document.getElementById('modal-status').value = p.status;
-      document.getElementById('modal-vet').value = p.vet ? 'true' : 'false';
-      document.getElementById('modal-squat').value = p.squatW8;
-      document.getElementById('modal-deadlift').value = p.deadliftW8;
-      document.getElementById('modal-completed-ex').value = p.completedExercises || 0;
-      document.getElementById('hurler-modal').classList.remove('hidden');
-    }
-
-    function closeHurlerModal() {
-      document.getElementById('hurler-modal').classList.add('hidden');
-    }
-
-    function saveHurlerProfile() {
-      const name = document.getElementById('modal-name').value.trim();
-      const num = parseInt(document.getElementById('modal-num').value) || 99;
-      const pod = parseInt(document.getElementById('modal-pod').value) || 1;
-      const line = document.getElementById('modal-line').value;
-      const status = document.getElementById('modal-status').value;
-      const vet = document.getElementById('modal-vet').value === 'true';
-      const squat = parseFloat(document.getElementById('modal-squat').value) || 120;
-      const deadlift = parseFloat(document.getElementById('modal-deadlift').value) || 160;
-      const completedEx = parseInt(document.getElementById('modal-completed-ex').value) || 0;
-
-      if (!name) {
-        alert("Please enter player name");
-        return;
-      }
-
-      if (editingPlayerId) {
-        const p = players.find(x => x.id === editingPlayerId);
-        if (p) {
-          p.name = name;
-          p.num = num;
-          p.pod = pod;
-          p.line = line;
-          p.status = status;
-          p.vet = vet;
-          p.squatW8 = squat;
-          p.deadliftW8 = deadlift;
-          p.completedExercises = completedEx;
-        }
-      } else {
-        const newPlayer = {
-          id: 'p_' + Date.now(),
-          num,
-          pod,
-          name,
-          line,
-          status,
-          vet,
-          completedExercises: completedEx,
-          broncoBase: "--:--",
-          broncoW8: "--:--",
-          sprintBase: 3.15,
-          sprintW8: 3.05,
-          squatBase: squat,
-          squatW8: squat,
-          deadliftBase: deadlift,
-          deadliftW8: deadlift
-        };
-        players.push(newPlayer);
-      }
-
-      saveRosterToStorage();
-      closeHurlerModal();
-      renderRosterTable(document.getElementById('hurler-search')?.value || '');
-      renderTestingTable();
-      populateHurlerSelect();
-      updateProtocolToggleUI();
-      renderSession();
-    }
-
-    function deleteHurler(hId) {
-      if (!confirm("Are you sure you want to remove this hurler from the panel?")) return;
-      players = players.filter(x => x.id !== hId);
-      saveRosterToStorage();
-      renderRosterTable(document.getElementById('hurler-search')?.value || '');
-      renderTestingTable();
-      populateHurlerSelect();
-    }
-
-    function openTestModal(hId) {
-      testingPlayerId = hId;
-      const p = players.find(x => x.id === hId);
-      if (!p) return;
-
-      document.getElementById('test-modal-player-name').textContent = `#${p.num} ${p.name}`;
-      document.getElementById('test-modal-bronco').value = p.broncoW8 !== '--:--' ? p.broncoW8 : '4:35';
-      document.getElementById('test-modal-sprint').value = p.sprintW8;
-      document.getElementById('test-modal-squat').value = p.squatW8;
-      document.getElementById('test-modal-deadlift').value = p.deadliftW8;
-      document.getElementById('test-modal').classList.remove('hidden');
-    }
-
-    function closeTestModal() {
-      document.getElementById('test-modal').classList.add('hidden');
-    }
-
-    function saveTestScores() {
-      const p = players.find(x => x.id === testingPlayerId);
-      if (p) {
-        p.broncoW8 = document.getElementById('test-modal-bronco').value || '--:--';
-        p.sprintW8 = parseFloat(document.getElementById('test-modal-sprint').value) || p.sprintBase;
-        p.squatW8 = parseFloat(document.getElementById('test-modal-squat').value) || p.squatBase;
-        p.deadliftW8 = parseFloat(document.getElementById('test-modal-deadlift').value) || p.deadliftBase;
-        saveRosterToStorage();
-        closeTestModal();
-        renderTestingTable();
-        renderSession();
-      }
-    }
-
-    function saveRosterToStorage() {
-      localStorage.setItem('stpats_roster_v7', JSON.stringify(players));
-    }
-
-    function exportCSV() {
-      let csv = "Jersey,Name,Line,Pod,Status,Protocol,ExercisesCompleted,TotalExercises,CompletionPct,BroncoBase,BroncoRetest,SprintBase,SprintRetest,SquatBase,SquatRetest,BenchDeadliftBase,BenchDeadliftRetest\n";
-      players.forEach(p => {
-        const stats = getPlayerExerciseStats(p);
-        csv += `${p.num},"${p.name}",${p.line},${p.pod || 1},${p.status},${p.vet ? 'Veteran Shield' : 'Standard Protocol'},${stats.completed},${stats.total},${stats.pct}%,"${p.broncoBase}","${p.broncoW8}",${p.sprintBase},${p.sprintW8},${p.squatBase},${p.squatW8},${p.deadliftBase},${p.deadliftW8}\n`;
-      });
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `StPats_Donabate_Squad_Testing_${new Date().toISOString().slice(0,10)}.csv`;
-      a.click();
-    }
+    window.addEventListener('DOMContentLoaded', () => {
+      loadCheckedBoxes();
+      syncWorkDone();
+      renderCoachAuditTable();
+    });
   </script>
 </body>
 </html>
