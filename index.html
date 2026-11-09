@@ -71,14 +71,6 @@
       padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;
     }
     select:focus, input:focus { outline: none; border-color: #00F298; }
-    .toggle-shield-btn {
-      background: #07130E; border: 1px solid #163629; color: #718C80;
-      padding: 6px 12px; border-radius: 6px; font-size: 10px; font-weight: 800;
-      text-transform: uppercase;
-    }
-    .toggle-shield-btn.vet-on {
-      background: rgba(120, 53, 15, 0.4); border-color: #F5C544; color: #F5C544;
-    }
 
     /* Rest Timer */
     .timer-wrap {
@@ -134,7 +126,6 @@
       font-size: 9px; font-weight: 800; font-family: monospace;
     }
     .badge-fit { background: #064E3B; color: #34D399; border: 1px solid #059669; }
-    .badge-vet { background: #78350F; color: #FDE68A; border: 1px solid #D97706; }
 
     .btn-lock {
       background: rgba(153, 27, 27, 0.3); border: 1px solid #991B1B;
@@ -259,7 +250,6 @@
                     <option value="49">#49 Jack Edwards (Backs)</option>
                   </optgroup>
                 </select>
-                <button id="btn-vet-toggle" class="toggle-shield-btn" onclick="toggleProtocol()">Standard Protocol</button>
               </div>
             </div>
           </div>
@@ -558,7 +548,7 @@
         </section>
 
         <section class="panel-glass">
-          <div style="font-size:12px; font-weight:900; text-transform:uppercase; color:#FFF; margin-bottom:8px;">Tendon Nutrition &amp; Veteran Guidance</div>
+          <div style="font-size:12px; font-weight:900; text-transform:uppercase; color:#FFF; margin-bottom:8px;">Tendon Nutrition &amp; Recovery Protocols</div>
           <div style="background:#07130E; border:1px solid #163629; border-radius:8px; padding:10px; margin-bottom:8px;">
             <div style="display:flex; align-items:center; gap:6px;">
               <span style="font-size:9px; background:#F5C544; color:#040907; padding:1px 5px; border-radius:4px; font-weight:900;">Keith Baar Protocol</span>
@@ -569,13 +559,13 @@
             </p>
           </div>
 
-          <div style="background:#07130E; border:1px solid #78350F; border-radius:8px; padding:10px;">
+          <div style="background:#07130E; border:1px solid #163629; border-radius:8px; padding:10px;">
             <div style="display:flex; align-items:center; gap:6px;">
-              <span style="font-size:9px; background:#78350F; color:#FDE68A; padding:1px 5px; border-radius:4px; font-weight:900;">Veteran Shield (32–40)</span>
-              <strong style="font-size:11px; color:#FFF;">Anti-Inflammatory Targets</strong>
+              <span style="font-size:9px; background:#064E3B; color:#34D399; padding:1px 5px; border-radius:4px; font-weight:900;">Recovery Shield</span>
+              <strong style="font-size:11px; color:#FFF;">Targeted Anti-Inflammatory Nutrition</strong>
             </div>
             <p style="font-size:11px; color:#94A3B8; margin-top:4px; line-height:1.4;">
-              Aim for <strong>35–40g protein per feeding</strong> to overcome age-related anabolic resistance, 2–3g Omega-3s daily for joint synovitis, and 30ml tart cherry concentrate on training nights to accelerate 48-hour recovery.
+              Aim for <strong>30–35g high-leucine protein per feeding</strong> across 4 daily pulses, 2–3g Omega-3s daily for joint synovitis, and 30ml tart cherry concentrate on training nights to accelerate 48-hour recovery.
             </p>
           </div>
         </section>
@@ -868,7 +858,6 @@
                 <th>Hurler &amp; Jersey</th>
                 <th>Pod</th>
                 <th>Status</th>
-                <th>Protocol</th>
                 <th style="text-align:right;">Completed</th>
                 <th style="text-align:right;">% Work Done</th>
               </tr>
@@ -938,7 +927,6 @@
     ];
 
     let activeHurlerId = 1;
-    let isVetActive = false;
     let selectedWeek = 1;
     let selectedDay = 'sun';
     let selectedGymSub = '1.1';
@@ -961,19 +949,6 @@
       document.getElementById('jersey-display').textContent = '#' + activeHurlerId;
       loadCheckedBoxes();
       syncWorkDone();
-    }
-
-    function toggleProtocol() {
-      isVetActive = !isVetActive;
-      const btn = document.getElementById('btn-vet-toggle');
-      if (isVetActive) {
-        btn.textContent = 'Veteran Shield (32–40)';
-        btn.className = 'toggle-shield-btn vet-on';
-      } else {
-        btn.textContent = 'Standard Protocol';
-        btn.className = 'toggle-shield-btn';
-      }
-      renderCoachAuditTable();
     }
 
     function selectWeek(w) {
@@ -1059,14 +1034,12 @@
         if (p.id === 1 && done === 0) done = 28;
 
         const pct = Math.min(100, Math.round((done / totalCap) * 100));
-        const isVet = (p.id === activeHurlerId) ? isVetActive : (p.id === 20 || p.id === 26 || p.id === 34);
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>#${p.id} ${p.name}</strong></td>
           <td><span style="color:#00F298; font-family:monospace;">Pod ${p.pod}</span></td>
           <td><span class="status-badge badge-fit">FIT</span></td>
-          <td>${isVet ? '<span class="status-badge badge-vet">Vet Shield</span>' : '<span style="color:#718C80;">Standard</span>'}</td>
           <td style="text-align:right; font-family:monospace; font-weight:700;">${done} / ${totalCap}</td>
           <td style="text-align:right; font-family:monospace; font-weight:800; color:${pct >= 75 ? '#00F298' : pct >= 40 ? '#F5C544' : '#F87171'};">${pct}%</td>
         `;
