@@ -141,6 +141,21 @@
       color: #FCA5A5; font-size: 10px; font-weight: 800; padding: 5px 10px;
       border-radius: 6px; text-transform: uppercase;
     }
+
+    /* Counter buttons & Match/Fuel Grid */
+    .counter-btn-sm {
+      width: 26px; height: 26px; border-radius: 4px; border: 1px solid #163629;
+      background: #0C1E17; color: #FFF; font-weight: 800; font-size: 13px;
+      display: flex; align-items: center; justify-content: center; transition: 0.1s;
+    }
+    .counter-btn-sm:active { background: #00F298; color: #040907; }
+    .match-kpi-card {
+      background: #07130E; border: 1px solid #163629; padding: 10px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .kpi-gauge-box {
+      background: #07130E; border: 1px solid #163629; padding: 12px; border-radius: 10px;
+    }
   </style>
 </head>
 <body>
@@ -161,6 +176,7 @@
 
       <nav class="nav-tabs">
         <button id="nav-player" class="nav-btn active" onclick="switchPortal('player')">Player Floor</button>
+        <button id="nav-fuel" class="nav-btn" onclick="switchPortal('fuel')">Fuel &amp; Diet</button>
         <button id="nav-match" class="nav-btn" onclick="switchPortal('match')">Match Day</button>
         <button id="nav-coach" class="nav-btn" onclick="switchPortal('coach')">Coach Desk</button>
       </nav>
@@ -465,33 +481,364 @@
 
     </div>
 
-    <!-- PORTAL 2: MATCH DAY CONSOLE -->
-    <div id="portal-match" class="hidden">
+    <!-- PORTAL 2: FUEL & DIET ENGINE -->
+    <div id="portal-fuel" class="hidden">
+      
+      <!-- Calculator Controls -->
       <section class="panel-glass">
-        <div style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Dublin Junior Match Day KPI Console</div>
-        <div style="font-size:11px; color:#718C80; margin-top:2px;">Live Sideline Match Counters &bull; Touch Optimized</div>
+        <div class="flex-between" style="border-bottom:1px solid #163629; padding-bottom:8px;">
+          <div>
+            <div style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Dynamic Hurler Nutrition &amp; Fuel Engine</div>
+            <div style="font-size:11px; color:#718C80;">Evidence-based fueling targets scaled to bodyweight and session metabolic load.</div>
+          </div>
+          <span style="font-size:9px; background:#064E3B; border:1px solid #059669; color:#34D399; padding:2px 8px; border-radius:4px; font-family:monospace; font-weight:800;">
+            Fuel for Work Required
+          </span>
+        </div>
 
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; margin-top:12px; text-align:center;">
-          <div style="background:#07130E; border:1px solid #163629; padding:12px; border-radius:8px;">
-            <span style="font-size:10px; color:#718C80; font-weight:800; display:block;">PUCK-OUTS WON</span>
-            <span id="score-puck" style="font-size:24px; font-weight:900; color:#00F298; font-family:monospace; display:block; margin:4px 0;">0</span>
-            <button onclick="incMatchStat('puck')" style="background:#163629; border:none; color:#FFF; padding:4px 12px; border-radius:4px; font-weight:800; font-size:11px;">+ Won</button>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-top:12px;">
+          <div>
+            <label style="font-size:10px; color:#718C80; font-weight:800; text-transform:uppercase; display:block; margin-bottom:4px;">Athlete Bodyweight (kg)</label>
+            <input type="number" id="fuel-weight-input" value="82" min="50" max="130" oninput="calculateNutrition()" style="width:100%; font-family:monospace; font-weight:800; font-size:14px; color:#00F298;">
           </div>
-          <div style="background:#07130E; border:1px solid #163629; padding:12px; border-radius:8px;">
-            <span style="font-size:10px; color:#718C80; font-weight:800; display:block;">POINTS SCORED</span>
-            <span id="score-point" style="font-size:24px; font-weight:900; color:#F5C544; font-family:monospace; display:block; margin:4px 0;">0</span>
-            <button onclick="incMatchStat('point')" style="background:#163629; border:none; color:#FFF; padding:4px 12px; border-radius:4px; font-weight:800; font-size:11px;">+ Point</button>
+          <div>
+            <label style="font-size:10px; color:#718C80; font-weight:800; text-transform:uppercase; display:block; margin-bottom:4px;">Session Demand Type</label>
+            <select id="fuel-session-type" onchange="calculateNutrition()" style="width:100%;">
+              <option value="pitch">Sunday Pitch Double Running (High Glycogen)</option>
+              <option value="gym">Wednesday Gym Armor (Force &amp; Hypertrophy)</option>
+              <option value="match">Match Day Championship (Carb Load)</option>
+              <option value="rest">Recovery / Deload Day</option>
+            </select>
           </div>
-          <div style="background:#07130E; border:1px solid #163629; padding:12px; border-radius:8px;">
-            <span style="font-size:10px; color:#718C80; font-weight:800; display:block;">HOOKS &amp; BLOCKS</span>
-            <span id="score-hook" style="font-size:24px; font-weight:900; color:#FFF; font-family:monospace; display:block; margin:4px 0;">0</span>
-            <button onclick="incMatchStat('hook')" style="background:#163629; border:none; color:#FFF; padding:4px 12px; border-radius:4px; font-weight:800; font-size:11px;">+ Tackle</button>
+        </div>
+
+        <!-- Macro Display Badges -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; margin-top:14px;">
+          <div style="background:#07130E; border:1px solid #F5C544; border-radius:10px; padding:12px; text-align:center;">
+            <span style="font-size:10px; color:#F5C544; font-weight:800; display:block; text-transform:uppercase;">Carbohydrates</span>
+            <span id="out-carbs" style="font-size:22px; font-weight:900; font-family:monospace; color:#FFF; display:block; margin:2px 0;">492g</span>
+            <span id="out-carbs-sub" style="font-size:10px; color:#718C80; font-family:monospace;">6.0g / kg BW</span>
+          </div>
+          <div style="background:#07130E; border:1px solid #00F298; border-radius:10px; padding:12px; text-align:center;">
+            <span style="font-size:10px; color:#00F298; font-weight:800; display:block; text-transform:uppercase;">Protein Target</span>
+            <span id="out-prot" style="font-size:22px; font-weight:900; font-family:monospace; color:#FFF; display:block; margin:2px 0;">148g</span>
+            <span id="out-prot-sub" style="font-size:10px; color:#718C80; font-family:monospace;">1.8g / kg BW</span>
+          </div>
+          <div style="background:#07130E; border:1px solid #163629; border-radius:10px; padding:12px; text-align:center;">
+            <span style="font-size:10px; color:#718C80; font-weight:800; display:block; text-transform:uppercase;">Healthy Fats</span>
+            <span id="out-fats" style="font-size:22px; font-weight:900; font-family:monospace; color:#FFF; display:block; margin:2px 0;">82g</span>
+            <span id="out-fats-sub" style="font-size:10px; color:#718C80; font-family:monospace;">1.0g / kg BW</span>
+          </div>
+          <div style="background:#07130E; border:1px solid #163629; border-radius:10px; padding:12px; text-align:center;">
+            <span style="font-size:10px; color:#60A5FA; font-weight:800; display:block; text-transform:uppercase;">Fluid &amp; Salt</span>
+            <span id="out-fluids" style="font-size:22px; font-weight:900; font-family:monospace; color:#FFF; display:block; margin:2px 0;">3.3L</span>
+            <span id="out-fluids-sub" style="font-size:10px; color:#718C80; font-family:monospace;">+ 750mg sodium</span>
           </div>
         </div>
       </section>
+
+      <!-- Protocol Timeline & Tendon Prep -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px;">
+        <section class="panel-glass">
+          <div style="font-size:12px; font-weight:900; text-transform:uppercase; color:#FFF; margin-bottom:8px;">Hour-By-Hour Meal Strategy</div>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:11px;">
+            <div style="background:#07130E; border-left:3px solid #F5C544; padding:8px 10px; border-radius:4px;">
+              <strong style="color:#F5C544;">T-4 Hours (Main Carb Meal):</strong> Chicken breast / salmon with 200g cooked basmati rice or sweet potatoes. Low fiber to prevent stomach distress.
+            </div>
+            <div style="background:#07130E; border-left:3px solid #00F298; padding:8px 10px; border-radius:4px;">
+              <strong style="color:#00F298;">T-60 Minutes (Pre-Pitch Top-Up):</strong> Bagel with jam/honey or 1 large banana + 400ml water with electrolyte effervescent.
+            </div>
+            <div style="background:#07130E; border-left:3px solid #F87171; padding:8px 10px; border-radius:4px;">
+              <strong style="color:#F87171;">Half-Time / Session Break:</strong> 30g fast carbs (energy gel or 4 jelly babies + 200ml isotonic sips). Prevents second-half cognitive drop.
+            </div>
+            <div style="background:#07130E; border-left:3px solid #38BDF8; padding:8px 10px; border-radius:4px;">
+              <strong style="color:#38BDF8;">Post-Session 0–30m Rebuild:</strong> 500ml Chocolate Protein Milk + banana for immediate muscle protein synthesis and glycogen restoration.
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-glass">
+          <div style="font-size:12px; font-weight:900; text-transform:uppercase; color:#FFF; margin-bottom:8px;">Tendon Nutrition &amp; Veteran Guidance</div>
+          <div style="background:#07130E; border:1px solid #163629; border-radius:8px; padding:10px; margin-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-size:9px; background:#F5C544; color:#040907; padding:1px 5px; border-radius:4px; font-weight:900;">Keith Baar Protocol</span>
+              <strong style="font-size:11px; color:#FFF;">Tendon Collagen Primer</strong>
+            </div>
+            <p style="font-size:11px; color:#94A3B8; margin-top:4px; line-height:1.4;">
+              Take <strong>15g hydrolysed collagen peptides</strong> (or gelatin) with <strong>50mg Vitamin C</strong> (orange juice) roughly <strong>45–60 minutes before training</strong>. The muscle pump forces circulating amino acids into avascular tendons.
+            </p>
+          </div>
+
+          <div style="background:#07130E; border:1px solid #78350F; border-radius:8px; padding:10px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-size:9px; background:#78350F; color:#FDE68A; padding:1px 5px; border-radius:4px; font-weight:900;">Veteran Shield (32–40)</span>
+              <strong style="font-size:11px; color:#FFF;">Anti-Inflammatory Targets</strong>
+            </div>
+            <p style="font-size:11px; color:#94A3B8; margin-top:4px; line-height:1.4;">
+              Aim for <strong>35–40g protein per feeding</strong> to overcome age-related anabolic resistance, 2–3g Omega-3s daily for joint synovitis, and 30ml tart cherry concentrate on training nights to accelerate 48-hour recovery.
+            </p>
+          </div>
+        </section>
+      </div>
+
     </div>
 
-    <!-- PORTAL 3: COACH DESK -->
+    <!-- PORTAL 3: FULL MATCH DAY CONSOLE -->
+    <div id="portal-match" class="hidden">
+      
+      <!-- Scoreboard Banner -->
+      <section class="panel-glass">
+        <div class="flex-between">
+          <div>
+            <span style="font-size:9px; background:#F5C544; color:#040907; padding:1px 5px; border-radius:4px; font-weight:900; text-transform:uppercase;">Dublin Junior Hurling</span>
+            <div style="display:flex; align-items:center; gap:8px; margin-top:4px; flex-wrap:wrap;">
+              <input type="text" id="opp-name-input" value="Opposition Club" style="font-size:14px; font-weight:900; color:#FFF; width:180px;">
+              <select id="match-half-select" onchange="toggleMatchHalf(this.value)" style="font-size:11px;">
+                <option value="H1">1st Half</option>
+                <option value="H2">2nd Half</option>
+                <option value="ET">Extra Time</option>
+              </select>
+              <span id="match-half-badge" style="font-size:9px; background:#064E3B; color:#34D399; padding:2px 6px; border-radius:4px; font-family:monospace; font-weight:800;">1st Half Active</span>
+            </div>
+          </div>
+
+          <!-- Score Display -->
+          <div style="display:flex; align-items:center; gap:16px; background:#07130E; border:1px solid #163629; padding:10px 16px; border-radius:10px;">
+            <div style="text-align:center;">
+              <span style="font-size:9px; color:#F5C544; font-weight:900; text-transform:uppercase; display:block;">St Pat's</span>
+              <div style="display:flex; align-items:baseline; gap:3px;">
+                <span id="score-pats-goals" style="font-size:26px; font-weight:900; color:#F5C544; font-family:monospace;">0</span>
+                <span style="color:#718C80; font-weight:900;">-</span>
+                <span id="score-pats-points" style="font-size:26px; font-weight:900; color:#FFF; font-family:monospace;">0</span>
+                <span id="score-pats-total" style="font-size:12px; font-weight:800; color:#00F298; font-family:monospace; margin-left:2px;">(0)</span>
+              </div>
+            </div>
+
+            <span style="font-size:20px; font-weight:900; color:#718C80;">:</span>
+
+            <div style="text-align:center;">
+              <span style="font-size:9px; color:#718C80; font-weight:800; text-transform:uppercase; display:block;">Opposition</span>
+              <div style="display:flex; align-items:center; gap:3px; margin-top:2px;">
+                <input type="number" id="opp-goals-input" value="0" min="0" onchange="onOppScoreChange()" style="width:36px; text-align:center; font-family:monospace; font-weight:800;">
+                <span style="color:#718C80;">-</span>
+                <input type="number" id="opp-points-input" value="0" min="0" onchange="onOppScoreChange()" style="width:36px; text-align:center; font-family:monospace; font-weight:800;">
+                <span id="score-opp-total" style="font-size:12px; font-weight:800; color:#718C80; font-family:monospace; margin-left:2px;">(0)</span>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:4px; margin-left:6px;">
+              <button onclick="exportMatchReportCSV()" style="background:#F5C544; border:none; color:#040907; font-weight:900; font-size:10px; padding:4px 8px; border-radius:4px; text-transform:uppercase;">Export CSV</button>
+              <button onclick="resetMatchStats()" style="background:rgba(153,27,27,0.4); border:1px solid #991B1B; color:#FCA5A5; font-size:9px; font-weight:800; padding:3px 6px; border-radius:4px;">Reset</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 Live Junior KPI Gauges -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; margin-bottom:12px;">
+        <div class="kpi-gauge-box">
+          <div class="flex-between">
+            <span style="font-size:9px; color:#718C80; font-weight:800; text-transform:uppercase;">Puck-Out Win %</span>
+            <span style="font-size:8px; background:#064E3B; color:#34D399; padding:1px 4px; border-radius:2px; font-mono font-weight:800;">&gt;60% Target</span>
+          </div>
+          <span id="kpi-gauge-puck" style="font-size:24px; font-weight:900; color:#F5C544; font-family:monospace; display:block; margin:2px 0;">0%</span>
+          <span id="kpi-gauge-puck-sub" style="font-size:10px; color:#718C80; font-family:monospace;">0 won / 0 total</span>
+        </div>
+
+        <div class="kpi-gauge-box">
+          <div class="flex-between">
+            <span style="font-size:9px; color:#718C80; font-weight:800; text-transform:uppercase;">Shot Conversion</span>
+            <span style="font-size:8px; background:#064E3B; color:#34D399; padding:1px 4px; border-radius:2px; font-mono font-weight:800;">&gt;55% Target</span>
+          </div>
+          <span id="kpi-gauge-shot" style="font-size:24px; font-weight:900; color:#00F298; font-family:monospace; display:block; margin:2px 0;">0%</span>
+          <span id="kpi-gauge-shot-sub" style="font-size:10px; color:#718C80; font-family:monospace;">0 scores / 0 shots</span>
+        </div>
+
+        <div class="kpi-gauge-box">
+          <div class="flex-between">
+            <span style="font-size:9px; color:#718C80; font-weight:800; text-transform:uppercase;">Hooks &amp; Blocks</span>
+            <span style="font-size:8px; background:#07130E; border:1px solid #163629; color:#FFF; padding:1px 4px; border-radius:2px; font-mono font-weight:800;">Work Rate</span>
+          </div>
+          <span id="kpi-gauge-hook" style="font-size:24px; font-weight:900; color:#FFF; font-family:monospace; display:block; margin:2px 0;">0</span>
+          <span style="font-size:10px; color:#718C80;">Dispossessions</span>
+        </div>
+
+        <div class="kpi-gauge-box" style="border-color:#991B1B;">
+          <div class="flex-between">
+            <span style="font-size:9px; color:#F87171; font-weight:800; text-transform:uppercase;">Frees &lt;50m</span>
+            <span style="font-size:8px; background:rgba(153,27,27,0.4); color:#FCA5A5; padding:1px 4px; border-radius:2px; font-mono font-weight:800;">Danger Zone</span>
+          </div>
+          <span id="kpi-gauge-foul" style="font-size:24px; font-weight:900; color:#F87171; font-family:monospace; display:block; margin:2px 0;">0</span>
+          <span id="kpi-gauge-foul-sub" style="font-size:10px; color:#F87171; font-family:monospace;">0 total match frees</span>
+        </div>
+      </div>
+
+      <!-- 3-Column Sideline Counters -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px;">
+        
+        <!-- Column 1: Puck-Outs -->
+        <section class="panel-glass">
+          <div style="font-size:12px; font-weight:900; text-transform:uppercase; color:#FFF; border-bottom:1px solid #163629; padding-bottom:6px; margin-bottom:8px;">
+            1. Puck-Out Battle
+          </div>
+
+          <span style="font-size:10px; color:#F5C544; font-weight:800; text-transform:uppercase; display:block; margin-bottom:4px;">St Pat's Puck-Outs</span>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <div class="match-kpi-card">
+              <div><strong style="color:#FFF;">Clean Catch</strong><span id="val-own_puck_clean" style="font-size:14px; font-family:monospace; font-weight:800; color:#00F298; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchMetric('own_puck_clean', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchMetric('own_puck_clean', -1)">-</button>
+              </div>
+            </div>
+
+            <div class="match-kpi-card">
+              <div><strong style="color:#FFF;">Break Won</strong><span id="val-own_puck_break" style="font-size:14px; font-family:monospace; font-weight:800; color:#00F298; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchMetric('own_puck_break', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchMetric('own_puck_break', -1)">-</button>
+              </div>
+            </div>
+
+            <div class="match-kpi-card">
+              <div><strong style="color:#FFF;">Short &lt;45m</strong><span id="val-own_puck_short" style="font-size:14px; font-family:monospace; font-weight:800; color:#00F298; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchMetric('own_puck_short', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchMetric('own_puck_short', -1)">-</button>
+              </div>
+            </div>
+
+            <div class="match-kpi-card" style="border-color:#991B1B;">
+              <div><strong style="color:#FCA5A5;">Lost to Opponent</strong><span id="val-own_puck_lost" style="font-size:14px; font-family:monospace; font-weight:800; color:#F87171; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchMetric('own_puck_lost', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchMetric('own_puck_lost', -1)">-</button>
+              </div>
+            </div>
+          </div>
+
+          <span style="font-size:10px; color:#718C80; font-weight:800; text-transform:uppercase; display:block; margin:10px 0 4px 0;">Opposition Restarts Pressed</span>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <div class="match-kpi-card">
+              <div><strong style="color:#FFF;">Press Turnover Won</strong><span id="val-opp_puck_won" style="font-size:14px; font-family:monospace; font-weight:800; color:#F5C544; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchMetric('opp_puck_won', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchMetric('opp_puck_won', -1)">-</button>
+              </div>
+            </div>
+            <div class="match-kpi-card">
+              <div><strong style="color:#718C80;">Opponent Retained</strong><span id="val-opp_puck_clean" style="font-size:14px; font-family:monospace; font-weight:800; color:#718C80; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchMetric('opp_puck_clean', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchMetric('opp_puck_clean', -1)">-</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Column 2: Shooting & Finishing -->
+        <section class="panel-glass">
+          <div style="font-size:12px; font-weight:900; text-transform:uppercase; color:#FFF; border-bottom:1px solid #163629; padding-bottom:6px; margin-bottom:8px;">
+            2. Scoring Efficiency
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <div class="match-kpi-card" style="border-color:#F5C544;">
+              <div><strong style="color:#F5C544;">Point (Play)</strong><span id="val-point-play" style="font-size:14px; font-family:monospace; font-weight:800; color:#FFF; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchScore('point_play', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchScore('point_play', -1)">-</button>
+              </div>
+            </div>
+
+            <div class="match-kpi-card" style="border-color:#F5C544;">
+              <div><strong style="color:#F5C544;">Point (Free)</strong><span id="val-point-free" style="font-size:14px; font-family:monospace; font-weight:800; color:#FFF; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchScore('point_free', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchScore('point_free', -1)">-</button>
+              </div>
+            </div>
+
+            <div class="match-kpi-card" style="border-color:#00F298;">
+              <div><strong style="color:#00F298;">Goal (3 Points)</strong><span id="val-goal" style="font-size:14px; font-family:monospace; font-weight:800; color:#FFF; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchScore('goal', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchScore('goal', -1)">-</button>
+              </div>
+            </div>
+
+            <div class="match-kpi-card">
+              <div><strong style="color:#718C80;">Wide</strong><span id="val-shot_wide" style="font-size:14px; font-family:monospace; font-weight:800; color:#FFF; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchMetric('shot_wide', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchMetric('shot_wide', -1)">-</button>
+              </div>
+            </div>
+
+            <div class="match-kpi-card" style="border-color:#991B1B;">
+              <div><strong style="color:#FCA5A5;">Dropped Short</strong><span id="val-shot_short" style="font-size:14px; font-family:monospace; font-weight:800; color:#F87171; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchMetric('shot_short', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchMetric('shot_short', -1)">-</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Column 3: Work Rate & Discipline -->
+        <section class="panel-glass">
+          <div style="font-size:12px; font-weight:900; text-transform:uppercase; color:#FFF; border-bottom:1px solid #163629; padding-bottom:6px; margin-bottom:8px;">
+            3. Work Rate &amp; Discipline
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <div class="match-kpi-card">
+              <div><strong style="color:#FFF;">Hooks &amp; Blocks</strong><span id="val-wr_hookblock" style="font-size:14px; font-family:monospace; font-weight:800; color:#F5C544; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchMetric('wr_hookblock', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchMetric('wr_hookblock', -1)">-</button>
+              </div>
+            </div>
+
+            <div class="match-kpi-card">
+              <div><strong style="color:#FFF;">Turnover Won</strong><span id="val-wr_turnover" style="font-size:14px; font-family:monospace; font-weight:800; color:#00F298; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchMetric('wr_turnover', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchMetric('wr_turnover', -1)">-</button>
+              </div>
+            </div>
+
+            <div class="match-kpi-card" style="border-color:#991B1B;">
+              <div><strong style="color:#FCA5A5;">Foul &lt;50m (Scoring Danger)</strong><span id="val-foul_zone" style="font-size:14px; font-family:monospace; font-weight:800; color:#F87171; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchMetric('foul_zone', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchMetric('foul_zone', -1)">-</button>
+              </div>
+            </div>
+
+            <div class="match-kpi-card">
+              <div><strong style="color:#718C80;">Foul &gt;50m (Open Play)</strong><span id="val-foul_open" style="font-size:14px; font-family:monospace; font-weight:800; color:#718C80; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchMetric('foul_open', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchMetric('foul_open', -1)">-</button>
+              </div>
+            </div>
+
+            <div class="match-kpi-card" style="border-color:#991B1B;">
+              <div><strong style="color:#FCA5A5;">Unforced Turnovers Conceded</strong><span id="val-wr_lostpossession" style="font-size:14px; font-family:monospace; font-weight:800; color:#F87171; margin-left:8px;">0</span></div>
+              <div style="display:flex; gap:4px;">
+                <button class="counter-btn-sm" onclick="incMatchMetric('wr_lostpossession', 1)">+</button>
+                <button class="counter-btn-sm" onclick="incMatchMetric('wr_lostpossession', -1)">-</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+
+    <!-- PORTAL 4: COACH DESK -->
     <div id="portal-coach" class="hidden">
 
       <!-- PIN Gate -->
@@ -599,10 +946,12 @@
 
     function switchPortal(portal) {
       document.getElementById('portal-player').classList.toggle('hidden', portal !== 'player');
+      document.getElementById('portal-fuel').classList.toggle('hidden', portal !== 'fuel');
       document.getElementById('portal-match').classList.toggle('hidden', portal !== 'match');
       document.getElementById('portal-coach').classList.toggle('hidden', portal !== 'coach');
 
       document.getElementById('nav-player').className = (portal === 'player') ? 'nav-btn active' : 'nav-btn';
+      document.getElementById('nav-fuel').className = (portal === 'fuel') ? 'nav-btn active' : 'nav-btn';
       document.getElementById('nav-match').className = (portal === 'match') ? 'nav-btn active' : 'nav-btn';
       document.getElementById('nav-coach').className = (portal === 'coach') ? 'nav-btn active' : 'nav-btn';
     }
@@ -743,11 +1092,204 @@
       document.getElementById('coach-pass-input').value = '';
     }
 
-    let statPuck = 0, statPoint = 0, statHook = 0;
-    function incMatchStat(type) {
-      if (type === 'puck') { statPuck++; document.getElementById('score-puck').textContent = statPuck; }
-      if (type === 'point') { statPoint++; document.getElementById('score-point').textContent = statPoint; }
-      if (type === 'hook') { statHook++; document.getElementById('score-hook').textContent = statHook; }
+    // ==========================================
+    // FUEL & NUTRITION ENGINE LOGIC
+    // ==========================================
+    function calculateNutrition() {
+      const bw = parseFloat(document.getElementById('fuel-weight-input')?.value) || 82;
+      const type = document.getElementById('fuel-session-type')?.value || 'pitch';
+      let carbG = 6.0, protG = 1.8, fatG = 1.0, fluidMl = 40;
+      if (type === 'gym') { carbG = 4.0; protG = 2.0; fatG = 1.1; fluidMl = 35; }
+      else if (type === 'match') { carbG = 7.5; protG = 1.8; fatG = 0.8; fluidMl = 45; }
+      else if (type === 'rest') { carbG = 3.0; protG = 1.9; fatG = 1.1; fluidMl = 32; }
+
+      const totalCarbs = Math.round(bw * carbG);
+      const totalProt = Math.round(bw * protG);
+      const totalFats = Math.round(bw * fatG);
+      const totalFluids = ((bw * fluidMl) / 1000).toFixed(1);
+
+      const carbsEl = document.getElementById('out-carbs');
+      const carbsSub = document.getElementById('out-carbs-sub');
+      const protEl = document.getElementById('out-prot');
+      const protSub = document.getElementById('out-prot-sub');
+      const fatsEl = document.getElementById('out-fats');
+      const fatsSub = document.getElementById('out-fats-sub');
+      const fluidsEl = document.getElementById('out-fluids');
+
+      if (carbsEl) carbsEl.textContent = `${totalCarbs}g`;
+      if (carbsSub) carbsSub.textContent = `${carbG}g / kg BW`;
+      if (protEl) protEl.textContent = `${totalProt}g`;
+      if (protSub) protSub.textContent = `${protG}g / kg BW (4x pulses)`;
+      if (fatsEl) fatsEl.textContent = `${totalFats}g`;
+      if (fatsSub) fatsSub.textContent = `${fatG}g / kg BW`;
+      if (fluidsEl) fluidsEl.textContent = `${totalFluids}L`;
+    }
+
+    // ==========================================
+    // FULL MATCH DAY CONSOLE LOGIC
+    // ==========================================
+    let matchData = {
+      oppName: "Opposition Club",
+      half: "H1",
+      patsGoals: 0,
+      patsPointsPlay: 0,
+      patsPointsFree: 0,
+      oppGoals: 0,
+      oppPoints: 0,
+      own_puck_clean: 0,
+      own_puck_break: 0,
+      own_puck_short: 0,
+      own_puck_lost: 0,
+      opp_puck_won: 0,
+      opp_puck_clean: 0,
+      shot_wide: 0,
+      shot_short: 0,
+      wr_hookblock: 0,
+      wr_turnover: 0,
+      wr_lostpossession: 0,
+      foul_zone: 0,
+      foul_open: 0
+    };
+
+    function incMatchScore(type, d) {
+      if (type === 'goal') matchData.patsGoals = Math.max(0, matchData.patsGoals + d);
+      if (type === 'point_play') matchData.patsPointsPlay = Math.max(0, matchData.patsPointsPlay + d);
+      if (type === 'point_free') matchData.patsPointsFree = Math.max(0, matchData.patsPointsFree + d);
+      renderMatchDisplay();
+    }
+
+    function incMatchMetric(key, d) {
+      if (matchData[key] === undefined) matchData[key] = 0;
+      matchData[key] = Math.max(0, matchData[key] + d);
+      renderMatchDisplay();
+    }
+
+    function toggleMatchHalf(val) {
+      matchData.half = val;
+      const b = document.getElementById('match-half-badge');
+      if (b) {
+        b.textContent = val === 'H1' ? '1st Half Active' : val === 'H2' ? '2nd Half Active' : 'Extra Time';
+      }
+    }
+
+    function onOppScoreChange() {
+      const g = parseInt(document.getElementById('opp-goals-input')?.value, 10) || 0;
+      const p = parseInt(document.getElementById('opp-points-input')?.value, 10) || 0;
+      matchData.oppGoals = Math.max(0, g);
+      matchData.oppPoints = Math.max(0, p);
+      renderMatchDisplay();
+    }
+
+    function renderMatchDisplay() {
+      const totalPoints = matchData.patsPointsPlay + matchData.patsPointsFree;
+      const totalSum = (matchData.patsGoals * 3) + totalPoints;
+      const oppTotalSum = (matchData.oppGoals * 3) + matchData.oppPoints;
+
+      const gEl = document.getElementById('score-pats-goals');
+      const pEl = document.getElementById('score-pats-points');
+      const totEl = document.getElementById('score-pats-total');
+      const oppTotEl = document.getElementById('score-opp-total');
+
+      if (gEl) gEl.textContent = matchData.patsGoals;
+      if (pEl) pEl.textContent = totalPoints;
+      if (totEl) totEl.textContent = `(${totalSum})`;
+      if (oppTotEl) oppTotEl.textContent = `(${oppTotalSum})`;
+
+      const keys = [
+        'own_puck_clean', 'own_puck_break', 'own_puck_short', 'own_puck_lost',
+        'opp_puck_won', 'opp_puck_clean', 'shot_wide', 'shot_short',
+        'wr_hookblock', 'wr_turnover', 'wr_lostpossession', 'foul_zone', 'foul_open'
+      ];
+      keys.forEach(k => {
+        const el = document.getElementById(`val-${k}`);
+        if (el) el.textContent = matchData[k] || 0;
+      });
+
+      const ptPlayEl = document.getElementById('val-point-play');
+      if (ptPlayEl) ptPlayEl.textContent = matchData.patsPointsPlay;
+      const ptFreeEl = document.getElementById('val-point-free');
+      if (ptFreeEl) ptFreeEl.textContent = matchData.patsPointsFree;
+      const goalEl = document.getElementById('val-goal');
+      if (goalEl) goalEl.textContent = matchData.patsGoals;
+
+      const ownWon = matchData.own_puck_clean + matchData.own_puck_break + matchData.own_puck_short;
+      const ownTotal = ownWon + matchData.own_puck_lost;
+      const puckPct = ownTotal > 0 ? Math.round((ownWon / ownTotal) * 100) : 0;
+      const puckGauge = document.getElementById('kpi-gauge-puck');
+      if (puckGauge) puckGauge.textContent = `${puckPct}%`;
+      const puckSub = document.getElementById('kpi-gauge-puck-sub');
+      if (puckSub) puckSub.textContent = `${ownWon} won / ${ownTotal} total`;
+
+      const totalScores = matchData.patsGoals + totalPoints;
+      const totalShots = totalScores + matchData.shot_wide + matchData.shot_short;
+      const shotPct = totalShots > 0 ? Math.round((totalScores / totalShots) * 100) : 0;
+      const shotGauge = document.getElementById('kpi-gauge-shot');
+      if (shotGauge) shotGauge.textContent = `${shotPct}%`;
+      const shotSub = document.getElementById('kpi-gauge-shot-sub');
+      if (shotSub) shotSub.textContent = `${totalScores} scores / ${totalShots} shots`;
+
+      const hookGauge = document.getElementById('kpi-gauge-hook');
+      if (hookGauge) hookGauge.textContent = matchData.wr_hookblock + matchData.wr_turnover;
+
+      const foulGauge = document.getElementById('kpi-gauge-foul');
+      if (foulGauge) foulGauge.textContent = matchData.foul_zone;
+      const foulSub = document.getElementById('kpi-gauge-foul-sub');
+      if (foulSub) foulSub.textContent = `${matchData.foul_zone + matchData.foul_open} total match frees`;
+    }
+
+    function resetMatchStats() {
+      matchData = {
+        oppName: "Opposition Club",
+        half: "H1",
+        patsGoals: 0,
+        patsPointsPlay: 0,
+        patsPointsFree: 0,
+        oppGoals: 0,
+        oppPoints: 0,
+        own_puck_clean: 0,
+        own_puck_break: 0,
+        own_puck_short: 0,
+        own_puck_lost: 0,
+        opp_puck_won: 0,
+        opp_puck_clean: 0,
+        shot_wide: 0,
+        shot_short: 0,
+        wr_hookblock: 0,
+        wr_turnover: 0,
+        wr_lostpossession: 0,
+        foul_zone: 0,
+        foul_open: 0
+      };
+      const oppG = document.getElementById('opp-goals-input');
+      const oppP = document.getElementById('opp-points-input');
+      if (oppG) oppG.value = 0;
+      if (oppP) oppP.value = 0;
+      renderMatchDisplay();
+    }
+
+    function exportMatchReportCSV() {
+      const ownWon = matchData.own_puck_clean + matchData.own_puck_break + matchData.own_puck_short;
+      const ownTotal = ownWon + matchData.own_puck_lost;
+      const puckPct = ownTotal > 0 ? Math.round((ownWon / ownTotal) * 100) : 0;
+      const totalPoints = matchData.patsPointsPlay + matchData.patsPointsFree;
+      const totalScores = matchData.patsGoals + totalPoints;
+      const totalShots = totalScores + matchData.shot_wide + matchData.shot_short;
+      const shotPct = totalShots > 0 ? Math.round((totalScores / totalShots) * 100) : 0;
+
+      let csv = "St Pat's GAA - Dublin Junior Hurling Match Report\n";
+      csv += `Date,${new Date().toLocaleDateString('en-IE')}\n`;
+      csv += `Opposition,${document.getElementById('opp-name-input')?.value || "Opposition Club"}\n`;
+      csv += `Score,St Pat's ${matchData.patsGoals}-${totalPoints} vs ${matchData.oppGoals}-${matchData.oppPoints}\n\n`;
+      csv += `Puck-Out Retention,${puckPct}%,(Benchmark: >60%)\n`;
+      csv += `Shot Conversion,${shotPct}%,(Benchmark: >55%)\n`;
+      csv += `Hooks & Blocks,${matchData.wr_hookblock}\n`;
+      csv += `Scoring Zone Frees (<50m),${matchData.foul_zone}\n`;
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `st_pats_match_kpis.csv`;
+      a.click();
     }
 
     let tSec = 0, tInterval = null;
@@ -771,6 +1313,8 @@
       loadCheckedBoxes();
       syncWorkDone();
       renderCoachAuditTable();
+      calculateNutrition();
+      renderMatchDisplay();
     });
   </script>
 </body>
