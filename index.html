@@ -66,7 +66,7 @@
       color: #00F298; font-weight: 900; font-size: 14px;
       font-family: monospace; display: flex; align-items: center; justify-content: center;
     }
-    select, input[type="text"], input[type="password"] {
+    select, input[type="text"], input[type="password"], input[type="number"] {
       background: #07130E; border: 1px solid #163629; color: #FFF;
       padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;
     }
@@ -189,65 +189,65 @@
               <div style="display:flex; align-items:center; gap:6px; margin-top:2px; flex-wrap:wrap;">
                 <select id="player-dropdown" onchange="onSelectPlayer(this.value)">
                   <optgroup label="Pod 1">
-                    <option value="1">#1 Alan Quinn (Backs)</option>
-                    <option value="2">#2 Brian Powell (Backs)</option>
-                    <option value="3">#3 Dan Burke (Backs)</option>
-                    <option value="4">#4 Paul McCarthy (Backs)</option>
-                    <option value="5">#5 Stephen Lohan (Backs)</option>
-                    <option value="6">#6 Cian Darcy (Backs)</option>
-                    <option value="7">#7 Paddy Gleeson (Midfield)</option>
-                    <option value="8">#8 Conor Tighe (Forwards)</option>
-                    <option value="9">#9 James Stanbridge (Forwards)</option>
+                    <option value="1">#1 Alan Quinn</option>
+                    <option value="2">#2 Brian Powell</option>
+                    <option value="3">#3 Dan Burke</option>
+                    <option value="4">#4 Paul McCarthy</option>
+                    <option value="5">#5 Stephen Lohan</option>
+                    <option value="6">#6 Cian Darcy</option>
+                    <option value="7">#7 Paddy Gleeson</option>
+                    <option value="8">#8 Conor Tighe</option>
+                    <option value="9">#9 James Stanbridge</option>
                   </optgroup>
                   <optgroup label="Pod 2">
-                    <option value="10">#10 Conor Henry (Forwards)</option>
-                    <option value="11">#11 Kieron Keary (Backs)</option>
-                    <option value="12">#12 Dan Taylor (Midfield)</option>
-                    <option value="13">#13 Tiernan O Rourke (Forwards)</option>
-                    <option value="14">#14 Donnacha Liston (Backs)</option>
-                    <option value="15">#15 Jack Fitzgerald (Backs)</option>
-                    <option value="16">#16 Jacob Turner (Forwards)</option>
-                    <option value="17">#17 Conor Donovan (Forwards)</option>
+                    <option value="10">#10 Conor Henry</option>
+                    <option value="11">#11 Kieron Keary</option>
+                    <option value="12">#12 Dan Taylor</option>
+                    <option value="13">#13 Tiernan O Rourke</option>
+                    <option value="14">#14 Donnacha Liston</option>
+                    <option value="15">#15 Jack Fitzgerald</option>
+                    <option value="16">#16 Jacob Turner</option>
+                    <option value="17">#17 Conor Donovan</option>
                   </optgroup>
                   <optgroup label="Pod 3">
-                    <option value="18">#18 Cormac Kelly (Backs)</option>
-                    <option value="19">#19 Ciaran Darcy (Midfield)</option>
-                    <option value="20">#20 Martin Fanning (Forwards)</option>
-                    <option value="21">#21 Tim Kelly (Backs)</option>
-                    <option value="22">#22 Donagh Crean (Backs)</option>
-                    <option value="23">#23 Aidan Walsh (Forwards)</option>
-                    <option value="24">#24 Mathew O Connor (Forwards)</option>
-                    <option value="25">#25 Eoghen Delaney (Midfield)</option>
+                    <option value="18">#18 Cormac Kelly</option>
+                    <option value="19">#19 Ciaran Darcy</option>
+                    <option value="20">#20 Martin Fanning</option>
+                    <option value="21">#21 Tim Kelly</option>
+                    <option value="22">#22 Donagh Crean</option>
+                    <option value="23">#23 Aidan Walsh</option>
+                    <option value="24">#24 Mathew O Connor</option>
+                    <option value="25">#25 Eoghen Delaney</option>
                   </optgroup>
                   <optgroup label="Pod 4">
-                    <option value="26">#26 Mick O Donoghue (Forwards)</option>
-                    <option value="27">#27 Jack Burridge (Backs)</option>
-                    <option value="28">#28 Paul Roche (Forwards)</option>
-                    <option value="29">#29 Kev Barry (Backs)</option>
-                    <option value="30">#30 Cillian Brett (Backs)</option>
-                    <option value="31">#31 Dylan Duke (Midfield)</option>
-                    <option value="32">#32 Finn Masterson (Backs)</option>
-                    <option value="33">#33 Daniel McNamara (Forwards)</option>
+                    <option value="26">#26 Mick O Donoghue</option>
+                    <option value="27">#27 Jack Burridge</option>
+                    <option value="28">#28 Paul Roche</option>
+                    <option value="29">#29 Kev Barry</option>
+                    <option value="30">#30 Cillian Brett</option>
+                    <option value="31">#31 Dylan Duke</option>
+                    <option value="32">#32 Finn Masterson</option>
+                    <option value="33">#33 Daniel McNamara</option>
                   </optgroup>
                   <optgroup label="Pod 5">
-                    <option value="34">#34 John Hanley (Backs)</option>
-                    <option value="35">#35 Ciaran Sinnott (Midfield)</option>
-                    <option value="36">#36 Hansi Fischer-Kerrane (Backs)</option>
-                    <option value="37">#37 Ethan Ryan (Forwards)</option>
-                    <option value="38">#38 Colum McQuaile (Midfield)</option>
-                    <option value="39">#39 Senan Mythen (Forwards)</option>
-                    <option value="40">#40 Conor Heffernan (Backs)</option>
-                    <option value="41">#41 Jakob Connolly (Forwards)</option>
+                    <option value="34">#34 John Hanley</option>
+                    <option value="35">#35 Ciaran Sinnott</option>
+                    <option value="36">#36 Hansi Fischer-Kerrane</option>
+                    <option value="37">#37 Ethan Ryan</option>
+                    <option value="38">#38 Colum McQuaile</option>
+                    <option value="39">#39 Senan Mythen</option>
+                    <option value="40">#40 Conor Heffernan</option>
+                    <option value="41">#41 Jakob Connolly</option>
                   </optgroup>
                   <optgroup label="Pod 6">
-                    <option value="42">#42 Brian Kennedy (Forwards)</option>
-                    <option value="43">#43 Donal O' Riordan (Backs)</option>
-                    <option value="44">#44 Hugh Feeney (Backs)</option>
-                    <option value="45">#45 Cathal Carty (Midfield)</option>
-                    <option value="46">#46 Sean Kennedy (Forwards)</option>
-                    <option value="47">#47 Moses Harley (Backs)</option>
-                    <option value="48">#48 Senan Ryan (Forwards)</option>
-                    <option value="49">#49 Jack Edwards (Backs)</option>
+                    <option value="42">#42 Brian Kennedy</option>
+                    <option value="43">#43 Donal O' Riordan</option>
+                    <option value="44">#44 Hugh Feeney</option>
+                    <option value="45">#45 Cathal Carty</option>
+                    <option value="46">#46 Sean Kennedy</option>
+                    <option value="47">#47 Moses Harley</option>
+                    <option value="48">#48 Senan Ryan</option>
+                    <option value="49">#49 Jack Edwards</option>
                   </optgroup>
                 </select>
               </div>
@@ -300,11 +300,11 @@
       <!-- Session Progress Card -->
       <section class="panel-glass flex-between">
         <div>
-          <span style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Session Exercise Checklist</span>
-          <span style="font-size:11px; color:#718C80; display:block;">Check off sets and reps below to log training volume directly to the Coach Desk.</span>
+          <span id="session-progress-title" style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Week 1 Session Checklist</span>
+          <span style="font-size:11px; color:#718C80; display:block;">Check off sets below to log training volume live to the Coach Desk for this specific week.</span>
         </div>
-        <div style="display:flex; align-items:center; gap:6px;">
-          <span style="font-size:10px; color:#718C80; font-weight:700;">Progress:</span>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span id="live-fraction-badge" style="font-size:11px; color:#718C80; font-family:monospace; font-weight:700;">0 / 39</span>
           <span id="live-progress-badge" style="background:#07130E; border:1px solid #163629; color:#00F298; font-weight:900; font-family:monospace; padding:3px 10px; border-radius:6px; font-size:12px;">0%</span>
         </div>
       </section>
@@ -314,9 +314,9 @@
         <div class="flex-between" style="border-bottom:1px solid #163629; padding-bottom:6px;">
           <div>
             <span style="font-size:9px; background:#F5C544; color:#040907; padding:1px 5px; border-radius:4px; font-weight:900; text-transform:uppercase;">Sunday Pitch Session</span>
-            <h3 style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF; margin-top:4px;">Week 1 Double Running Prescriptions</h3>
+            <h3 id="sun-pitch-title" style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF; margin-top:4px;">Week 1 Double Running Prescriptions</h3>
           </div>
-          <span style="font-size:10px; color:#00F298; font-family:monospace; font-weight:800;">Aerobic + Anaerobic Engine</span>
+          <span style="font-size:10px; color:#00F298; font-family:monospace; font-weight:800;">28 Target Reps</span>
         </div>
 
         <!-- Part 1: Tempos -->
@@ -329,22 +329,22 @@
           
           <div style="font-size:10px; color:#718C80; font-weight:800; margin-top:6px;">Set 1:</div>
           <div class="checkbox-chip-row">
-            <label><input type="checkbox" id="chk_t1_1" onchange="syncWorkDone()"> R1</label>
-            <label><input type="checkbox" id="chk_t1_2" onchange="syncWorkDone()"> R2</label>
-            <label><input type="checkbox" id="chk_t1_3" onchange="syncWorkDone()"> R3</label>
-            <label><input type="checkbox" id="chk_t1_4" onchange="syncWorkDone()"> R4</label>
-            <label><input type="checkbox" id="chk_t1_5" onchange="syncWorkDone()"> R5</label>
-            <label><input type="checkbox" id="chk_t1_6" onchange="syncWorkDone()"> R6</label>
+            <label><input type="checkbox" id="chk_t1_1" onchange="onCheckboxChange(this)"> R1</label>
+            <label><input type="checkbox" id="chk_t1_2" onchange="onCheckboxChange(this)"> R2</label>
+            <label><input type="checkbox" id="chk_t1_3" onchange="onCheckboxChange(this)"> R3</label>
+            <label><input type="checkbox" id="chk_t1_4" onchange="onCheckboxChange(this)"> R4</label>
+            <label><input type="checkbox" id="chk_t1_5" onchange="onCheckboxChange(this)"> R5</label>
+            <label><input type="checkbox" id="chk_t1_6" onchange="onCheckboxChange(this)"> R6</label>
           </div>
 
           <div style="font-size:10px; color:#718C80; font-weight:800; margin-top:6px;">Set 2:</div>
           <div class="checkbox-chip-row">
-            <label><input type="checkbox" id="chk_t2_1" onchange="syncWorkDone()"> R1</label>
-            <label><input type="checkbox" id="chk_t2_2" onchange="syncWorkDone()"> R2</label>
-            <label><input type="checkbox" id="chk_t2_3" onchange="syncWorkDone()"> R3</label>
-            <label><input type="checkbox" id="chk_t2_4" onchange="syncWorkDone()"> R4</label>
-            <label><input type="checkbox" id="chk_t2_5" onchange="syncWorkDone()"> R5</label>
-            <label><input type="checkbox" id="chk_t2_6" onchange="syncWorkDone()"> R6</label>
+            <label><input type="checkbox" id="chk_t2_1" onchange="onCheckboxChange(this)"> R1</label>
+            <label><input type="checkbox" id="chk_t2_2" onchange="onCheckboxChange(this)"> R2</label>
+            <label><input type="checkbox" id="chk_t2_3" onchange="onCheckboxChange(this)"> R3</label>
+            <label><input type="checkbox" id="chk_t2_4" onchange="onCheckboxChange(this)"> R4</label>
+            <label><input type="checkbox" id="chk_t2_5" onchange="onCheckboxChange(this)"> R5</label>
+            <label><input type="checkbox" id="chk_t2_6" onchange="onCheckboxChange(this)"> R6</label>
           </div>
         </div>
 
@@ -356,12 +356,12 @@
           </div>
           <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Sustained aerobic capacity pacing held across the full 2-minute effort.</p>
           <div class="checkbox-chip-row">
-            <label><input type="checkbox" id="chk_cap_1" onchange="syncWorkDone()"> Rep 1</label>
-            <label><input type="checkbox" id="chk_cap_2" onchange="syncWorkDone()"> Rep 2</label>
-            <label><input type="checkbox" id="chk_cap_3" onchange="syncWorkDone()"> Rep 3</label>
-            <label><input type="checkbox" id="chk_cap_4" onchange="syncWorkDone()"> Rep 4</label>
-            <label><input type="checkbox" id="chk_cap_5" onchange="syncWorkDone()"> Rep 5</label>
-            <label><input type="checkbox" id="chk_cap_6" onchange="syncWorkDone()"> Rep 6</label>
+            <label><input type="checkbox" id="chk_cap_1" onchange="onCheckboxChange(this)"> Rep 1</label>
+            <label><input type="checkbox" id="chk_cap_2" onchange="onCheckboxChange(this)"> Rep 2</label>
+            <label><input type="checkbox" id="chk_cap_3" onchange="onCheckboxChange(this)"> Rep 3</label>
+            <label><input type="checkbox" id="chk_cap_4" onchange="onCheckboxChange(this)"> Rep 4</label>
+            <label><input type="checkbox" id="chk_cap_5" onchange="onCheckboxChange(this)"> Rep 5</label>
+            <label><input type="checkbox" id="chk_cap_6" onchange="onCheckboxChange(this)"> Rep 6</label>
           </div>
         </div>
 
@@ -373,16 +373,16 @@
           </div>
           <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Repeated sprint tolerance and sharp 180° cuts simulating end-of-half fatigue.</p>
           <div class="checkbox-chip-row">
-            <label><input type="checkbox" id="chk_hi_1" onchange="syncWorkDone()"> R1</label>
-            <label><input type="checkbox" id="chk_hi_2" onchange="syncWorkDone()"> R2</label>
-            <label><input type="checkbox" id="chk_hi_3" onchange="syncWorkDone()"> R3</label>
-            <label><input type="checkbox" id="chk_hi_4" onchange="syncWorkDone()"> R4</label>
-            <label><input type="checkbox" id="chk_hi_5" onchange="syncWorkDone()"> R5</label>
-            <label><input type="checkbox" id="chk_hi_6" onchange="syncWorkDone()"> R6</label>
-            <label><input type="checkbox" id="chk_hi_7" onchange="syncWorkDone()"> R7</label>
-            <label><input type="checkbox" id="chk_hi_8" onchange="syncWorkDone()"> R8</label>
-            <label><input type="checkbox" id="chk_hi_9" onchange="syncWorkDone()"> R9</label>
-            <label><input type="checkbox" id="chk_hi_10" onchange="syncWorkDone()"> R10</label>
+            <label><input type="checkbox" id="chk_hi_1" onchange="onCheckboxChange(this)"> R1</label>
+            <label><input type="checkbox" id="chk_hi_2" onchange="onCheckboxChange(this)"> R2</label>
+            <label><input type="checkbox" id="chk_hi_3" onchange="onCheckboxChange(this)"> R3</label>
+            <label><input type="checkbox" id="chk_hi_4" onchange="onCheckboxChange(this)"> R4</label>
+            <label><input type="checkbox" id="chk_hi_5" onchange="onCheckboxChange(this)"> R5</label>
+            <label><input type="checkbox" id="chk_hi_6" onchange="onCheckboxChange(this)"> R6</label>
+            <label><input type="checkbox" id="chk_hi_7" onchange="onCheckboxChange(this)"> R7</label>
+            <label><input type="checkbox" id="chk_hi_8" onchange="onCheckboxChange(this)"> R8</label>
+            <label><input type="checkbox" id="chk_hi_9" onchange="onCheckboxChange(this)"> R9</label>
+            <label><input type="checkbox" id="chk_hi_10" onchange="onCheckboxChange(this)"> R10</label>
           </div>
         </div>
       </section>
@@ -409,12 +409,12 @@
             </div>
             <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Superset with Single Arm DB Row (3 sets x 8 reps e/s @ 2111 tempo).</p>
             <div class="checkbox-chip-row">
-              <label><input type="checkbox" id="chk_g1_sq_1" onchange="syncWorkDone()"> Squat S1</label>
-              <label><input type="checkbox" id="chk_g1_sq_2" onchange="syncWorkDone()"> Squat S2</label>
-              <label><input type="checkbox" id="chk_g1_sq_3" onchange="syncWorkDone()"> Squat S3</label>
-              <label><input type="checkbox" id="chk_g1_row_1" onchange="syncWorkDone()"> DB Row S1</label>
-              <label><input type="checkbox" id="chk_g1_row_2" onchange="syncWorkDone()"> DB Row S2</label>
-              <label><input type="checkbox" id="chk_g1_row_3" onchange="syncWorkDone()"> DB Row S3</label>
+              <label><input type="checkbox" id="chk_g1_sq_1" onchange="onCheckboxChange(this)"> Squat S1</label>
+              <label><input type="checkbox" id="chk_g1_sq_2" onchange="onCheckboxChange(this)"> Squat S2</label>
+              <label><input type="checkbox" id="chk_g1_sq_3" onchange="onCheckboxChange(this)"> Squat S3</label>
+              <label><input type="checkbox" id="chk_g1_row_1" onchange="onCheckboxChange(this)"> DB Row S1</label>
+              <label><input type="checkbox" id="chk_g1_row_2" onchange="onCheckboxChange(this)"> DB Row S2</label>
+              <label><input type="checkbox" id="chk_g1_row_3" onchange="onCheckboxChange(this)"> DB Row S3</label>
             </div>
           </div>
 
@@ -425,11 +425,11 @@
             </div>
             <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Superset with Single Leg Glute Bridge ISO (3x 5x5s e/s) and Lateral Lunges (3x10 e/s).</p>
             <div class="checkbox-chip-row">
-              <label><input type="checkbox" id="chk_g1_bp_1" onchange="syncWorkDone()"> Bench S1</label>
-              <label><input type="checkbox" id="chk_g1_bp_2" onchange="syncWorkDone()"> Bench S2</label>
-              <label><input type="checkbox" id="chk_g1_bp_3" onchange="syncWorkDone()"> Bench S3</label>
-              <label><input type="checkbox" id="chk_g1_gb" onchange="syncWorkDone()"> Glute Bridge ISO</label>
-              <label><input type="checkbox" id="chk_g1_ll" onchange="syncWorkDone()"> Lateral Lunges</label>
+              <label><input type="checkbox" id="chk_g1_bp_1" onchange="onCheckboxChange(this)"> Bench S1</label>
+              <label><input type="checkbox" id="chk_g1_bp_2" onchange="onCheckboxChange(this)"> Bench S2</label>
+              <label><input type="checkbox" id="chk_g1_bp_3" onchange="onCheckboxChange(this)"> Bench S3</label>
+              <label><input type="checkbox" id="chk_g1_gb" onchange="onCheckboxChange(this)"> Glute Bridge ISO</label>
+              <label><input type="checkbox" id="chk_g1_ll" onchange="onCheckboxChange(this)"> Lateral Lunges</label>
             </div>
           </div>
         </div>
@@ -443,12 +443,12 @@
             </div>
             <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Superset with DB Overhead Press (3 sets x 10 reps @ 2111 tempo).</p>
             <div class="checkbox-chip-row">
-              <label><input type="checkbox" id="chk_g2_rdl_1" onchange="syncWorkDone()"> BB RDL S1</label>
-              <label><input type="checkbox" id="chk_g2_rdl_2" onchange="syncWorkDone()"> BB RDL S2</label>
-              <label><input type="checkbox" id="chk_g2_rdl_3" onchange="syncWorkDone()"> BB RDL S3</label>
-              <label><input type="checkbox" id="chk_g2_ohp_1" onchange="syncWorkDone()"> DB OHP S1</label>
-              <label><input type="checkbox" id="chk_g2_ohp_2" onchange="syncWorkDone()"> DB OHP S2</label>
-              <label><input type="checkbox" id="chk_g2_ohp_3" onchange="syncWorkDone()"> DB OHP S3</label>
+              <label><input type="checkbox" id="chk_g2_rdl_1" onchange="onCheckboxChange(this)"> BB RDL S1</label>
+              <label><input type="checkbox" id="chk_g2_rdl_2" onchange="onCheckboxChange(this)"> BB RDL S2</label>
+              <label><input type="checkbox" id="chk_g2_rdl_3" onchange="onCheckboxChange(this)"> BB RDL S3</label>
+              <label><input type="checkbox" id="chk_g2_ohp_1" onchange="onCheckboxChange(this)"> DB OHP S1</label>
+              <label><input type="checkbox" id="chk_g2_ohp_2" onchange="onCheckboxChange(this)"> DB OHP S2</label>
+              <label><input type="checkbox" id="chk_g2_ohp_3" onchange="onCheckboxChange(this)"> DB OHP S3</label>
             </div>
           </div>
 
@@ -459,11 +459,11 @@
             </div>
             <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Chin Up ISO (5x5s) paired with DB Hack Squat (8 reps @ 2020) and Banded Prone Ham Curls (10 reps @ 2111).</p>
             <div class="checkbox-chip-row">
-              <label><input type="checkbox" id="chk_g2_chin" onchange="syncWorkDone()"> Chin Up ISO</label>
-              <label><input type="checkbox" id="chk_g2_hack_1" onchange="syncWorkDone()"> Hack Squat S1</label>
-              <label><input type="checkbox" id="chk_g2_hack_2" onchange="syncWorkDone()"> Hack Squat S2</label>
-              <label><input type="checkbox" id="chk_g2_curl_1" onchange="syncWorkDone()"> Ham Curl S1</label>
-              <label><input type="checkbox" id="chk_g2_curl_2" onchange="syncWorkDone()"> Ham Curl S2</label>
+              <label><input type="checkbox" id="chk_g2_chin" onchange="onCheckboxChange(this)"> Chin Up ISO</label>
+              <label><input type="checkbox" id="chk_g2_hack_1" onchange="onCheckboxChange(this)"> Hack Squat S1</label>
+              <label><input type="checkbox" id="chk_g2_hack_2" onchange="onCheckboxChange(this)"> Hack Squat S2</label>
+              <label><input type="checkbox" id="chk_g2_curl_1" onchange="onCheckboxChange(this)"> Ham Curl S1</label>
+              <label><input type="checkbox" id="chk_g2_curl_2" onchange="onCheckboxChange(this)"> Ham Curl S2</label>
             </div>
           </div>
         </div>
@@ -843,14 +843,35 @@
 
       <!-- Unlocked Console -->
       <section id="coach-unlocked-panel" class="hidden">
+        
+        <!-- Header & Lock -->
         <div class="panel-glass flex-between">
           <div>
-            <div style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Squad Roster &amp; Live Work Completion Audit</div>
-            <div style="font-size:11px; color:#718C80;">All 49 players &bull; Live updates from Player Floor checks</div>
+            <div style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Squad Work Completion Audit &bull; Weekly Tracking</div>
+            <div style="font-size:11px; color:#718C80;">Accurate, live data per week across all 49 hurlers.</div>
           </div>
           <button class="btn-lock" onclick="lockCoachDesk()">Lock Desk</button>
         </div>
 
+        <!-- Coach Week Selector Strip -->
+        <div class="panel-glass flex-between" style="padding:10px 14px; margin-bottom:10px;">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span style="font-size:10px; font-weight:900; color:#F5C544; text-transform:uppercase;">Audit Week:</span>
+            <div style="display:flex; gap:4px;" id="coach-week-strip">
+              <button id="cwbtn-1" class="week-btn active" onclick="setCoachAuditWeek(1)">Week 1</button>
+              <button id="cwbtn-2" class="week-btn" onclick="setCoachAuditWeek(2)">Week 2</button>
+              <button id="cwbtn-3" class="week-btn" onclick="setCoachAuditWeek(3)">Week 3 (Test)</button>
+              <button id="cwbtn-4" class="week-btn" onclick="setCoachAuditWeek(4)">Week 4</button>
+              <button id="cwbtn-5" class="week-btn" onclick="setCoachAuditWeek(5)">Week 5</button>
+              <button id="cwbtn-6" class="week-btn" onclick="setCoachAuditWeek(6)">Week 6</button>
+            </div>
+          </div>
+          <div style="font-size:11px; font-family:monospace; color:#00F298; font-weight:800;" id="coach-audit-week-summary">
+            Auditing Week 1 &bull; Target: 39 Sets
+          </div>
+        </div>
+
+        <!-- Audit Table -->
         <div class="panel-glass" style="overflow-x:auto;">
           <table>
             <thead>
@@ -858,12 +879,14 @@
                 <th>Hurler &amp; Jersey</th>
                 <th>Pod</th>
                 <th>Status</th>
-                <th style="text-align:right;">Completed</th>
-                <th style="text-align:right;">% Work Done</th>
+                <th style="text-align:right;">Pitch Running (28)</th>
+                <th style="text-align:right;">Gym (11)</th>
+                <th style="text-align:right;">Total Sets</th>
+                <th style="text-align:right;">Week % Done</th>
               </tr>
             </thead>
             <tbody id="coach-roster-tbody">
-              <!-- Dynamically populated -->
+              <!-- Dynamically populated per selected audit week -->
             </tbody>
           </table>
         </div>
@@ -874,63 +897,110 @@
   </main>
 
   <script>
+    // Clean Roster with no position tags in brackets
     const SQUAD_DATA = [
-      { id: 1, name: "Alan Quinn", pod: 1, line: "Backs" },
-      { id: 2, name: "Brian Powell", pod: 1, line: "Backs" },
-      { id: 3, name: "Dan Burke", pod: 1, line: "Backs" },
-      { id: 4, name: "Paul McCarthy", pod: 1, line: "Backs" },
-      { id: 5, name: "Stephen Lohan", pod: 1, line: "Backs" },
-      { id: 6, name: "Cian Darcy", pod: 1, line: "Backs" },
-      { id: 7, name: "Paddy Gleeson", pod: 1, line: "Midfield" },
-      { id: 8, name: "Conor Tighe", pod: 1, line: "Forwards" },
-      { id: 9, name: "James Stanbridge", pod: 1, line: "Forwards" },
-      { id: 10, name: "Conor Henry", pod: 2, line: "Forwards" },
-      { id: 11, name: "Kieron Keary", pod: 2, line: "Backs" },
-      { id: 12, name: "Dan Taylor", pod: 2, line: "Midfield" },
-      { id: 13, name: "Tiernan O Rourke", pod: 2, line: "Forwards" },
-      { id: 14, name: "Donnacha Liston", pod: 2, line: "Backs" },
-      { id: 15, name: "Jack Fitzgerald", pod: 2, line: "Backs" },
-      { id: 16, name: "Jacob Turner", pod: 2, line: "Forwards" },
-      { id: 17, name: "Conor Donovan", pod: 2, line: "Forwards" },
-      { id: 18, name: "Cormac Kelly", pod: 3, line: "Backs" },
-      { id: 19, name: "Ciaran Darcy", pod: 3, line: "Midfield" },
-      { id: 20, name: "Martin Fanning", pod: 3, line: "Forwards" },
-      { id: 21, name: "Tim Kelly", pod: 3, line: "Backs" },
-      { id: 22, name: "Donagh Crean", pod: 3, line: "Backs" },
-      { id: 23, name: "Aidan Walsh", pod: 3, line: "Forwards" },
-      { id: 24, name: "Mathew O Connor", pod: 3, line: "Forwards" },
-      { id: 25, name: "Eoghen Delaney", pod: 3, line: "Midfield" },
-      { id: 26, name: "Mick O Donoghue", pod: 4, line: "Forwards" },
-      { id: 27, name: "Jack Burridge", pod: 4, line: "Backs" },
-      { id: 28, name: "Paul Roche", pod: 4, line: "Forwards" },
-      { id: 29, name: "Kev Barry", pod: 4, line: "Backs" },
-      { id: 30, name: "Cillian Brett", pod: 4, line: "Backs" },
-      { id: 31, name: "Dylan Duke", pod: 4, line: "Midfield" },
-      { id: 32, name: "Finn Masterson", pod: 4, line: "Backs" },
-      { id: 33, name: "Daniel McNamara", pod: 4, line: "Forwards" },
-      { id: 34, name: "John Hanley", pod: 5, line: "Backs" },
-      { id: 35, name: "Ciaran Sinnott", pod: 5, line: "Midfield" },
-      { id: 36, name: "Hansi Fischer-Kerrane", pod: 5, line: "Backs" },
-      { id: 37, name: "Ethan Ryan", pod: 5, line: "Forwards" },
-      { id: 38, name: "Colum McQuaile", pod: 5, line: "Midfield" },
-      { id: 39, name: "Senan Mythen", pod: 5, line: "Forwards" },
-      { id: 40, name: "Conor Heffernan", pod: 5, line: "Backs" },
-      { id: 41, name: "Jakob Connolly", pod: 5, line: "Forwards" },
-      { id: 42, name: "Brian Kennedy", pod: 6, line: "Forwards" },
-      { id: 43, name: "Donal O' Riordan", pod: 6, line: "Backs" },
-      { id: 44, name: "Hugh Feeney", pod: 6, line: "Backs" },
-      { id: 45, name: "Cathal Carty", pod: 6, line: "Midfield" },
-      { id: 46, name: "Sean Kennedy", pod: 6, line: "Forwards" },
-      { id: 47, name: "Moses Harley", pod: 6, line: "Backs" },
-      { id: 48, name: "Senan Ryan", pod: 6, line: "Forwards" },
-      { id: 49, name: "Jack Edwards", pod: 6, line: "Backs" }
+      { id: 1, name: "Alan Quinn", pod: 1 },
+      { id: 2, name: "Brian Powell", pod: 1 },
+      { id: 3, name: "Dan Burke", pod: 1 },
+      { id: 4, name: "Paul McCarthy", pod: 1 },
+      { id: 5, name: "Stephen Lohan", pod: 1 },
+      { id: 6, name: "Cian Darcy", pod: 1 },
+      { id: 7, name: "Paddy Gleeson", pod: 1 },
+      { id: 8, name: "Conor Tighe", pod: 1 },
+      { id: 9, name: "James Stanbridge", pod: 1 },
+      { id: 10, name: "Conor Henry", pod: 2 },
+      { id: 11, name: "Kieron Keary", pod: 2 },
+      { id: 12, name: "Dan Taylor", pod: 2 },
+      { id: 13, name: "Tiernan O Rourke", pod: 2 },
+      { id: 14, name: "Donnacha Liston", pod: 2 },
+      { id: 15, name: "Jack Fitzgerald", pod: 2 },
+      { id: 16, name: "Jacob Turner", pod: 2 },
+      { id: 17, name: "Conor Donovan", pod: 2 },
+      { id: 18, name: "Cormac Kelly", pod: 3 },
+      { id: 19, name: "Ciaran Darcy", pod: 3 },
+      { id: 20, name: "Martin Fanning", pod: 3 },
+      { id: 21, name: "Tim Kelly", pod: 3 },
+      { id: 22, name: "Donagh Crean", pod: 3 },
+      { id: 23, name: "Aidan Walsh", pod: 3 },
+      { id: 24, name: "Mathew O Connor", pod: 3 },
+      { id: 25, name: "Eoghen Delaney", pod: 3 },
+      { id: 26, name: "Mick O Donoghue", pod: 4 },
+      { id: 27, name: "Jack Burridge", pod: 4 },
+      { id: 28, name: "Paul Roche", pod: 4 },
+      { id: 29, name: "Kev Barry", pod: 4 },
+      { id: 30, name: "Cillian Brett", pod: 4 },
+      { id: 31, name: "Dylan Duke", pod: 4 },
+      { id: 32, name: "Finn Masterson", pod: 4 },
+      { id: 33, name: "Daniel McNamara", pod: 4 },
+      { id: 34, name: "John Hanley", pod: 5 },
+      { id: 35, name: "Ciaran Sinnott", pod: 5 },
+      { id: 36, name: "Hansi Fischer-Kerrane", pod: 5 },
+      { id: 37, name: "Ethan Ryan", pod: 5 },
+      { id: 38, name: "Colum McQuaile", pod: 5 },
+      { id: 39, name: "Senan Mythen", pod: 5 },
+      { id: 40, name: "Conor Heffernan", pod: 5 },
+      { id: 41, name: "Jakob Connolly", pod: 5 },
+      { id: 42, name: "Brian Kennedy", pod: 6 },
+      { id: 43, name: "Donal O' Riordan", pod: 6 },
+      { id: 44, name: "Hugh Feeney", pod: 6 },
+      { id: 45, name: "Cathal Carty", pod: 6 },
+      { id: 46, name: "Sean Kennedy", pod: 6 },
+      { id: 47, name: "Moses Harley", pod: 6 },
+      { id: 48, name: "Senan Ryan", pod: 6 },
+      { id: 49, name: "Jack Edwards", pod: 6 }
     ];
+
+    // Checkbox mapping for accurate weekly completion calculation
+    const SUNDAY_CHECKBOX_IDS = [
+      'chk_t1_1', 'chk_t1_2', 'chk_t1_3', 'chk_t1_4', 'chk_t1_5', 'chk_t1_6',
+      'chk_t2_1', 'chk_t2_2', 'chk_t2_3', 'chk_t2_4', 'chk_t2_5', 'chk_t2_6',
+      'chk_cap_1', 'chk_cap_2', 'chk_cap_3', 'chk_cap_4', 'chk_cap_5', 'chk_cap_6',
+      'chk_hi_1', 'chk_hi_2', 'chk_hi_3', 'chk_hi_4', 'chk_hi_5', 'chk_hi_6',
+      'chk_hi_7', 'chk_hi_8', 'chk_hi_9', 'chk_hi_10'
+    ]; // 28 items
+
+    const GYM_1_1_IDS = [
+      'chk_g1_sq_1', 'chk_g1_sq_2', 'chk_g1_sq_3',
+      'chk_g1_row_1', 'chk_g1_row_2', 'chk_g1_row_3',
+      'chk_g1_bp_1', 'chk_g1_bp_2', 'chk_g1_bp_3',
+      'chk_g1_gb', 'chk_g1_ll'
+    ]; // 11 items
+
+    const GYM_1_2_IDS = [
+      'chk_g2_rdl_1', 'chk_g2_rdl_2', 'chk_g2_rdl_3',
+      'chk_g2_ohp_1', 'chk_g2_ohp_2', 'chk_g2_ohp_3',
+      'chk_g2_chin',
+      'chk_g2_hack_1', 'chk_g2_hack_2',
+      'chk_g2_curl_1', 'chk_g2_curl_2'
+    ]; // 11 items
+
+    const TARGET_ITEMS_PER_WEEK = 39; // 28 Sunday + 11 Gym sets
 
     let activeHurlerId = 1;
     let selectedWeek = 1;
+    let coachAuditWeek = 1;
     let selectedDay = 'sun';
     let selectedGymSub = '1.1';
+
+    // Structure: hurlerCheckLogs[hurlerId][weekNumber][checkboxId] = boolean
     let hurlerCheckLogs = {};
+
+    function loadPersistedCheckLogs() {
+      try {
+        const saved = localStorage.getItem('stpats_weekly_checks_v3');
+        if (saved) hurlerCheckLogs = JSON.parse(saved);
+      } catch (e) {
+        console.warn("Storage load error", e);
+      }
+    }
+
+    function saveCheckLogs() {
+      try {
+        localStorage.setItem('stpats_weekly_checks_v3', JSON.stringify(hurlerCheckLogs));
+      } catch (e) {
+        console.warn("Storage save error", e);
+      }
+    }
 
     function switchPortal(portal) {
       document.getElementById('portal-player').classList.toggle('hidden', portal !== 'player');
@@ -942,13 +1012,18 @@
       document.getElementById('nav-fuel').className = (portal === 'fuel') ? 'nav-btn active' : 'nav-btn';
       document.getElementById('nav-match').className = (portal === 'match') ? 'nav-btn active' : 'nav-btn';
       document.getElementById('nav-coach').className = (portal === 'coach') ? 'nav-btn active' : 'nav-btn';
+
+      if (portal === 'coach') {
+        renderCoachAuditTable();
+      }
     }
 
     function onSelectPlayer(val) {
       activeHurlerId = parseInt(val, 10);
       document.getElementById('jersey-display').textContent = '#' + activeHurlerId;
-      loadCheckedBoxes();
-      syncWorkDone();
+      loadCheckedBoxesForCurrentWeek();
+      updateSessionProgressUI();
+      renderCoachAuditTable();
     }
 
     function selectWeek(w) {
@@ -957,6 +1032,15 @@
         const b = document.getElementById(`wbtn-${i}`);
         if (b) b.className = (i === w) ? 'week-btn active' : 'week-btn';
       }
+      
+      const title = document.getElementById('session-progress-title');
+      if (title) title.textContent = `Week ${w} Session Checklist`;
+
+      const sunTitle = document.getElementById('sun-pitch-title');
+      if (sunTitle) sunTitle.textContent = `Week ${w} Double Running Prescriptions`;
+
+      loadCheckedBoxesForCurrentWeek();
+      updateSessionProgressUI();
     }
 
     function selectDay(d) {
@@ -997,51 +1081,104 @@
       }
     }
 
-    function syncWorkDone() {
+    function onCheckboxChange(el) {
       if (!hurlerCheckLogs[activeHurlerId]) hurlerCheckLogs[activeHurlerId] = {};
-      const boxes = document.querySelectorAll('#portal-player input[type="checkbox"]');
-      let checked = 0;
-      boxes.forEach(b => {
-        hurlerCheckLogs[activeHurlerId][b.id] = b.checked;
-        if (b.checked) checked++;
-      });
-      const total = boxes.length || 39;
-      const pct = Math.round((checked / total) * 100);
-      const badge = document.getElementById('live-progress-badge');
-      if (badge) badge.textContent = `${pct}%`;
+      if (!hurlerCheckLogs[activeHurlerId][selectedWeek]) hurlerCheckLogs[activeHurlerId][selectedWeek] = {};
+
+      hurlerCheckLogs[activeHurlerId][selectedWeek][el.id] = el.checked;
+      saveCheckLogs();
+      updateSessionProgressUI();
       renderCoachAuditTable();
     }
 
-    function loadCheckedBoxes() {
-      const logs = hurlerCheckLogs[activeHurlerId] || {};
+    function loadCheckedBoxesForCurrentWeek() {
+      const weekLogs = (hurlerCheckLogs[activeHurlerId] && hurlerCheckLogs[activeHurlerId][selectedWeek]) || {};
       const boxes = document.querySelectorAll('#portal-player input[type="checkbox"]');
       boxes.forEach(b => {
-        b.checked = !!logs[b.id];
+        b.checked = !!weekLogs[b.id];
       });
+    }
+
+    // Accurate calculation per week
+    function calculateHurlerWeekStats(hurlerId, weekNum) {
+      const weekLogs = (hurlerCheckLogs[hurlerId] && hurlerCheckLogs[hurlerId][weekNum]) || {};
+
+      let pitchDone = 0;
+      SUNDAY_CHECKBOX_IDS.forEach(id => {
+        if (weekLogs[id]) pitchDone++;
+      });
+
+      let g1Done = 0;
+      GYM_1_1_IDS.forEach(id => {
+        if (weekLogs[id]) g1Done++;
+      });
+
+      let g2Done = 0;
+      GYM_1_2_IDS.forEach(id => {
+        if (weekLogs[id]) g2Done++;
+      });
+
+      // Athlete completes Donabate 1.1 or 1.2 for the Wednesday gym session
+      const gymDone = Math.min(11, Math.max(g1Done, g2Done));
+      const totalDone = pitchDone + gymDone;
+      const pct = Math.min(100, Math.round((totalDone / TARGET_ITEMS_PER_WEEK) * 100));
+
+      return {
+        pitchDone,
+        gymDone,
+        totalDone,
+        targetTotal: TARGET_ITEMS_PER_WEEK,
+        pct
+      };
+    }
+
+    function updateSessionProgressUI() {
+      const stats = calculateHurlerWeekStats(activeHurlerId, selectedWeek);
+      
+      const badge = document.getElementById('live-progress-badge');
+      if (badge) {
+        badge.textContent = `${stats.pct}%`;
+        badge.style.color = stats.pct >= 75 ? '#00F298' : (stats.pct >= 35 ? '#F5C544' : '#F87171');
+      }
+
+      const frac = document.getElementById('live-fraction-badge');
+      if (frac) {
+        frac.textContent = `${stats.totalDone} / ${stats.targetTotal} sets`;
+      }
+    }
+
+    // Coach Desk: Set audit week
+    function setCoachAuditWeek(w) {
+      coachAuditWeek = w;
+      for (let i = 1; i <= 6; i++) {
+        const b = document.getElementById(`cwbtn-${i}`);
+        if (b) b.className = (i === w) ? 'week-btn active' : 'week-btn';
+      }
+
+      const sumEl = document.getElementById('coach-audit-week-summary');
+      if (sumEl) sumEl.textContent = `Auditing Week ${w} \u2022 Target: 39 Sets`;
+
+      renderCoachAuditTable();
     }
 
     function renderCoachAuditTable() {
       const tbody = document.getElementById('coach-roster-tbody');
       if (!tbody) return;
       tbody.innerHTML = '';
-      const totalCap = document.querySelectorAll('#portal-player input[type="checkbox"]').length || 39;
 
       SQUAD_DATA.forEach(p => {
-        const logs = hurlerCheckLogs[p.id] || {};
-        let done = 0;
-        Object.keys(logs).forEach(k => { if (logs[k]) done++; });
-
-        if (p.id === 1 && done === 0) done = 28;
-
-        const pct = Math.min(100, Math.round((done / totalCap) * 100));
-
+        const stats = calculateHurlerWeekStats(p.id, coachAuditWeek);
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>#${p.id} ${p.name}</strong></td>
           <td><span style="color:#00F298; font-family:monospace;">Pod ${p.pod}</span></td>
           <td><span class="status-badge badge-fit">FIT</span></td>
-          <td style="text-align:right; font-family:monospace; font-weight:700;">${done} / ${totalCap}</td>
-          <td style="text-align:right; font-family:monospace; font-weight:800; color:${pct >= 75 ? '#00F298' : pct >= 40 ? '#F5C544' : '#F87171'};">${pct}%</td>
+          <td style="text-align:right; font-family:monospace; color:${stats.pitchDone >= 20 ? '#00F298' : '#F1F5F9'};">${stats.pitchDone} / 28</td>
+          <td style="text-align:right; font-family:monospace; color:${stats.gymDone >= 8 ? '#00F298' : '#F1F5F9'};">${stats.gymDone} / 11</td>
+          <td style="text-align:right; font-family:monospace; font-weight:700;">${stats.totalDone} / ${stats.targetTotal}</td>
+          <td style="text-align:right; font-family:monospace; font-weight:800; color:${stats.pct >= 75 ? '#00F298' : (stats.pct >= 35 ? '#F5C544' : '#F87171')}; font-size:12px;">
+            ${stats.pct}%
+          </td>
         `;
         tbody.appendChild(tr);
       });
@@ -1283,8 +1420,9 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      loadCheckedBoxes();
-      syncWorkDone();
+      loadPersistedCheckLogs();
+      loadCheckedBoxesForCurrentWeek();
+      updateSessionProgressUI();
       renderCoachAuditTable();
       calculateNutrition();
       renderMatchDisplay();
