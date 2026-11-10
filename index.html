@@ -103,11 +103,12 @@
     /* Cards & Checkbox Rows */
     .checkbox-chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
     .checkbox-chip-row label {
-      background: #07130E; border: 1px solid #163629; padding: 4px 8px;
-      border-radius: 4px; font-size: 11px; font-family: monospace;
-      color: #CBD5E1; display: flex; align-items: center; gap: 4px; cursor: pointer;
+      background: #07130E; border: 1px solid #163629; padding: 5px 9px;
+      border-radius: 5px; font-size: 11px; font-family: monospace;
+      color: #CBD5E1; display: flex; align-items: center; gap: 5px; cursor: pointer;
     }
     .checkbox-chip-row label:hover { border-color: #00F298; }
+    .checkbox-chip-row input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; accent-color: #00F298; }
 
     /* Drill Block */
     .drill-block {
@@ -116,6 +117,26 @@
     }
     .drill-title { font-weight: 800; font-size: 12px; color: #FFF; }
     .drill-badge { font-family: monospace; font-size: 11px; font-weight: 700; color: #F5C544; }
+
+    /* SAVE BUTTON STYLES */
+    .btn-save-main {
+      background: linear-gradient(135deg, #00F298 0%, #059669 100%);
+      color: #040907;
+      font-weight: 900;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 15px rgba(0, 242, 152, 0.25);
+      transition: all 0.15s ease;
+    }
+    .btn-save-main:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn-save-main:active { transform: translateY(0); filter: brightness(0.95); }
 
     /* Table Styles */
     table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 8px; }
@@ -147,9 +168,20 @@
     .kpi-gauge-box {
       background: #07130E; border: 1px solid #163629; padding: 12px; border-radius: 10px;
     }
+
+    /* Toast Notification */
+    #toast-msg {
+      position: fixed; bottom: 20px; right: 20px; z-index: 99;
+      background: #064E3B; border: 1px solid #00F298; color: #FFF;
+      padding: 10px 16px; border-radius: 8px; font-weight: 800; font-size: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6); display: none;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Toast Message Element -->
+  <div id="toast-msg"></div>
 
   <!-- Top Navigation -->
   <header>
@@ -297,15 +329,23 @@
         </div>
       </section>
 
-      <!-- Session Progress Card -->
-      <section class="panel-glass flex-between">
+      <!-- Session Progress & LIVE SAVE ACTION BAR -->
+      <section class="panel-glass flex-between" style="border: 1px solid #00F298;">
         <div>
-          <span id="session-progress-title" style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Week 1 Session Checklist</span>
-          <span style="font-size:11px; color:#718C80; display:block;">Check off sets below to log training volume live to the Coach Desk for this specific week.</span>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span id="session-progress-title" style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Week 1 Session Progress</span>
+            <span id="live-progress-badge" style="background:#07130E; border:1px solid #163629; color:#00F298; font-weight:900; font-family:monospace; padding:2px 8px; border-radius:6px; font-size:12px;">0%</span>
+          </div>
+          <div style="font-size:11px; color:#718C80; margin-top:2px;">
+            <span id="live-fraction-badge" style="font-family:monospace; font-weight:700; color:#FFF;">0 / 39 sets</span> &bull; 
+            <span id="save-status-msg" style="color:#00F298; font-weight:700;">Progress auto-stored locally</span>
+          </div>
         </div>
+        
         <div style="display:flex; align-items:center; gap:8px;">
-          <span id="live-fraction-badge" style="font-size:11px; color:#718C80; font-family:monospace; font-weight:700;">0 / 39</span>
-          <span id="live-progress-badge" style="background:#07130E; border:1px solid #163629; color:#00F298; font-weight:900; font-family:monospace; padding:3px 10px; border-radius:6px; font-size:12px;">0%</span>
+          <button id="btn-save-progress" class="btn-save-main" onclick="savePlayerSessionProgress()">
+            <span>💾</span> Save Progress to Coach Desk
+          </button>
         </div>
       </section>
 
@@ -467,6 +507,17 @@
             </div>
           </div>
         </div>
+      </section>
+
+      <!-- Bottom Floating / Sticky Save Bar -->
+      <section class="panel-glass flex-between" style="background:#07130E; border-color:#00F298;">
+        <div>
+          <strong style="color:#FFF;">Done with your workout?</strong>
+          <span style="font-size:11px; color:#718C80; display:block;">Hit Save to lock in your reps permanently to the Coaches Desk.</span>
+        </div>
+        <button class="btn-save-main" onclick="savePlayerSessionProgress()">
+          <span>💾</span> Save Week <span class="active-week-label">1</span> Progress
+        </button>
       </section>
 
     </div>
@@ -879,10 +930,11 @@
                 <th>Hurler &amp; Jersey</th>
                 <th>Pod</th>
                 <th>Status</th>
-                <th style="text-align:right;">Pitch Running (28)</th>
+                <th style="text-align:right;">Pitch (28)</th>
                 <th style="text-align:right;">Gym (11)</th>
                 <th style="text-align:right;">Total Sets</th>
                 <th style="text-align:right;">Week % Done</th>
+                <th style="text-align:right;">Last Saved</th>
               </tr>
             </thead>
             <tbody id="coach-roster-tbody">
@@ -982,24 +1034,99 @@
     let selectedDay = 'sun';
     let selectedGymSub = '1.1';
 
+    // Permanent Multi-Tiered Storage Keys
+    const STORAGE_KEY = 'stpats_weekly_checks_v4';
+    const TIMESTAMP_KEY = 'stpats_weekly_timestamps_v4';
+
     // Structure: hurlerCheckLogs[hurlerId][weekNumber][checkboxId] = boolean
     let hurlerCheckLogs = {};
+    // Structure: hurlerTimestamps[hurlerId][weekNumber] = "18:45, 10 Nov"
+    let hurlerTimestamps = {};
 
     function loadPersistedCheckLogs() {
       try {
-        const saved = localStorage.getItem('stpats_weekly_checks_v3');
+        const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) hurlerCheckLogs = JSON.parse(saved);
+        const savedTimes = localStorage.getItem(TIMESTAMP_KEY);
+        if (savedTimes) hurlerTimestamps = JSON.parse(savedTimes);
       } catch (e) {
         console.warn("Storage load error", e);
       }
     }
 
-    function saveCheckLogs() {
+    function saveAllPersistentData() {
       try {
-        localStorage.setItem('stpats_weekly_checks_v3', JSON.stringify(hurlerCheckLogs));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(hurlerCheckLogs));
+        localStorage.setItem(TIMESTAMP_KEY, JSON.stringify(hurlerTimestamps));
       } catch (e) {
         console.warn("Storage save error", e);
       }
+    }
+
+    function getActiveHurlerName() {
+      const p = SQUAD_DATA.find(x => x.id === activeHurlerId);
+      return p ? `#${p.id} ${p.name}` : `#${activeHurlerId}`;
+    }
+
+    // ==========================================
+    // EXPLICIT SAVE BUTTON LOGIC (COMMITS TO COACH DESK)
+    // ==========================================
+    function savePlayerSessionProgress() {
+      if (!hurlerCheckLogs[activeHurlerId]) hurlerCheckLogs[activeHurlerId] = {};
+      if (!hurlerCheckLogs[activeHurlerId][selectedWeek]) hurlerCheckLogs[activeHurlerId][selectedWeek] = {};
+
+      const boxes = document.querySelectorAll('#portal-player input[type="checkbox"]');
+      boxes.forEach(b => {
+        hurlerCheckLogs[activeHurlerId][selectedWeek][b.id] = b.checked;
+      });
+
+      // Format current timestamp
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('en-IE', { hour: '2-digit', minute: '2-digit' });
+      const dateStr = now.toLocaleDateString('en-IE', { day: 'numeric', month: 'short' });
+      const fullTimestamp = `${timeStr}, ${dateStr}`;
+
+      if (!hurlerTimestamps[activeHurlerId]) hurlerTimestamps[activeHurlerId] = {};
+      hurlerTimestamps[activeHurlerId][selectedWeek] = fullTimestamp;
+
+      // Commit permanently to localStorage
+      saveAllPersistentData();
+      updateSessionProgressUI();
+      renderCoachAuditTable();
+
+      // UI Feedback on Save Buttons
+      const saveBtns = document.querySelectorAll('.btn-save-main');
+      saveBtns.forEach(btn => {
+        btn.innerHTML = '<span>✓</span> Saved to Coach Desk!';
+        btn.style.background = '#F5C544';
+        btn.style.color = '#040907';
+      });
+
+      const statusMsg = document.getElementById('save-status-msg');
+      if (statusMsg) {
+        statusMsg.textContent = `Last saved: ${fullTimestamp}`;
+        statusMsg.style.color = '#00F298';
+      }
+
+      setTimeout(() => {
+        saveBtns.forEach(btn => {
+          btn.innerHTML = `<span>💾</span> Save Week ${selectedWeek} Progress`;
+          btn.style.background = '';
+          btn.style.color = '';
+        });
+      }, 2500);
+
+      showToast(`Saved Week ${selectedWeek} progress for ${getActiveHurlerName()}! Live on Coach Desk.`);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast-msg');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3500);
     }
 
     function switchPortal(portal) {
@@ -1034,10 +1161,16 @@
       }
       
       const title = document.getElementById('session-progress-title');
-      if (title) title.textContent = `Week ${w} Session Checklist`;
+      if (title) title.textContent = `Week ${w} Session Progress`;
 
       const sunTitle = document.getElementById('sun-pitch-title');
       if (sunTitle) sunTitle.textContent = `Week ${w} Double Running Prescriptions`;
+
+      // Update week labels on save buttons
+      document.querySelectorAll('.active-week-label').forEach(el => el.textContent = w);
+      document.querySelectorAll('.btn-save-main').forEach(btn => {
+        btn.innerHTML = `<span>💾</span> Save Week ${w} Progress`;
+      });
 
       loadCheckedBoxesForCurrentWeek();
       updateSessionProgressUI();
@@ -1086,7 +1219,7 @@
       if (!hurlerCheckLogs[activeHurlerId][selectedWeek]) hurlerCheckLogs[activeHurlerId][selectedWeek] = {};
 
       hurlerCheckLogs[activeHurlerId][selectedWeek][el.id] = el.checked;
-      saveCheckLogs();
+      saveAllPersistentData();
       updateSessionProgressUI();
       renderCoachAuditTable();
     }
@@ -1097,6 +1230,18 @@
       boxes.forEach(b => {
         b.checked = !!weekLogs[b.id];
       });
+
+      const lastSavedTime = (hurlerTimestamps[activeHurlerId] && hurlerTimestamps[activeHurlerId][selectedWeek]) || null;
+      const statusMsg = document.getElementById('save-status-msg');
+      if (statusMsg) {
+        if (lastSavedTime) {
+          statusMsg.textContent = `Last saved: ${lastSavedTime}`;
+          statusMsg.style.color = '#00F298';
+        } else {
+          statusMsg.textContent = 'Not yet saved for this week';
+          statusMsg.style.color = '#F5C544';
+        }
+      }
     }
 
     // Accurate calculation per week
@@ -1123,12 +1268,15 @@
       const totalDone = pitchDone + gymDone;
       const pct = Math.min(100, Math.round((totalDone / TARGET_ITEMS_PER_WEEK) * 100));
 
+      const lastSaved = (hurlerTimestamps[hurlerId] && hurlerTimestamps[hurlerId][weekNum]) || '—';
+
       return {
         pitchDone,
         gymDone,
         totalDone,
         targetTotal: TARGET_ITEMS_PER_WEEK,
-        pct
+        pct,
+        lastSaved
       };
     }
 
@@ -1178,6 +1326,9 @@
           <td style="text-align:right; font-family:monospace; font-weight:700;">${stats.totalDone} / ${stats.targetTotal}</td>
           <td style="text-align:right; font-family:monospace; font-weight:800; color:${stats.pct >= 75 ? '#00F298' : (stats.pct >= 35 ? '#F5C544' : '#F87171')}; font-size:12px;">
             ${stats.pct}%
+          </td>
+          <td style="text-align:right; font-family:monospace; font-size:10px; color:${stats.lastSaved !== '—' ? '#00F298' : '#718C80'};">
+            ${stats.lastSaved}
           </td>
         `;
         tbody.appendChild(tr);
