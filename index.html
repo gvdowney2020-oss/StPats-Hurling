@@ -118,7 +118,7 @@
     .drill-title { font-weight: 800; font-size: 12px; color: #FFF; }
     .drill-badge { font-family: monospace; font-size: 11px; font-weight: 700; color: #F5C544; }
 
-    /* SAVE BUTTON STYLES */
+    /* Save Button Styles */
     .btn-save-main {
       background: linear-gradient(135deg, #00F298 0%, #059669 100%);
       color: #040907;
@@ -180,10 +180,10 @@
 </head>
 <body>
 
-  <!-- Toast Message Element -->
+  <!-- Toast Notification -->
   <div id="toast-msg"></div>
 
-  <!-- Top Navigation -->
+  <!-- Top Navigation Header -->
   <header>
     <div class="container flex-between" style="padding:0;">
       <div class="brand-wrap">
@@ -211,7 +211,7 @@
     <!-- PORTAL 1: PLAYER FLOOR -->
     <div id="portal-player">
 
-      <!-- Hurler Selection & Timer -->
+      <!-- Hurler Selection & Rest Timer -->
       <section class="panel-glass">
         <div class="flex-between">
           <div style="display:flex; align-items:center; gap:8px;">
@@ -220,66 +220,49 @@
               <span style="font-size:9px; color:#718C80; font-weight:800; text-transform:uppercase; display:block;">Active Hurler</span>
               <div style="display:flex; align-items:center; gap:6px; margin-top:2px; flex-wrap:wrap;">
                 <select id="player-dropdown" onchange="onSelectPlayer(this.value)">
-                  <optgroup label="Pod 1">
-                    <option value="1">#1 Alan Quinn</option>
-                    <option value="2">#2 Brian Powell</option>
-                    <option value="3">#3 Dan Burke</option>
-                    <option value="4">#4 Paul McCarthy</option>
-                    <option value="5">#5 Stephen Lohan</option>
-                    <option value="6">#6 Cian Darcy</option>
-                    <option value="7">#7 Paddy Gleeson</option>
-                    <option value="8">#8 Conor Tighe</option>
-                    <option value="9">#9 James Stanbridge</option>
+                  <optgroup label="Pod 1 (Poweller Pod)">
+                    <option value="1">#1 Brian Powell</option>
+                    <option value="2">#2 Brian Kennedy</option>
+                    <option value="3">#3 Cian Darcy</option>
+                    <option value="4">#4 Colm Gleeson</option>
+                    <option value="5">#5 Ethan Ryan</option>
+                    <option value="6">#6 Jack Burridge</option>
+                    <option value="7">#7 Niall O Connor</option>
                   </optgroup>
-                  <optgroup label="Pod 2">
-                    <option value="10">#10 Conor Henry</option>
-                    <option value="11">#11 Kieron Keary</option>
-                    <option value="12">#12 Dan Taylor</option>
-                    <option value="13">#13 Tiernan O Rourke</option>
-                    <option value="14">#14 Donnacha Liston</option>
-                    <option value="15">#15 Jack Fitzgerald</option>
-                    <option value="16">#16 Jacob Turner</option>
-                    <option value="17">#17 Conor Donovan</option>
+                  <optgroup label="Pod 2 (Conor Henry's Pod)">
+                    <option value="8">#8 Conor Henry</option>
+                    <option value="9">#9 Brian Hanley</option>
+                    <option value="10">#10 Donagh Crean</option>
+                    <option value="11">#11 Hansi Fischer-Kerrane</option>
+                    <option value="12">#12 Hugh Feeney</option>
+                    <option value="13">#13 Tim Kelly</option>
                   </optgroup>
-                  <optgroup label="Pod 3">
-                    <option value="18">#18 Cormac Kelly</option>
-                    <option value="19">#19 Ciaran Darcy</option>
-                    <option value="20">#20 Martin Fanning</option>
-                    <option value="21">#21 Tim Kelly</option>
-                    <option value="22">#22 Donagh Crean</option>
-                    <option value="23">#23 Aidan Walsh</option>
-                    <option value="24">#24 Mathew O Connor</option>
-                    <option value="25">#25 Eoghen Delaney</option>
+                  <optgroup label="Pod 3 (Cormie Pod)">
+                    <option value="14">#14 Cormac Kelly</option>
+                    <option value="15">#15 Ciaran Sinnott</option>
+                    <option value="16">#16 Cillian Brett</option>
+                    <option value="17">#17 Dan Burke</option>
+                    <option value="18">#18 Dan Taylor</option>
+                    <option value="19">#19 Jack Fitzgerald</option>
                   </optgroup>
-                  <optgroup label="Pod 4">
-                    <option value="26">#26 Mick O Donoghue</option>
-                    <option value="27">#27 Jack Burridge</option>
-                    <option value="28">#28 Paul Roche</option>
-                    <option value="29">#29 Kev Barry</option>
-                    <option value="30">#30 Cillian Brett</option>
-                    <option value="31">#31 Dylan Duke</option>
-                    <option value="32">#32 Finn Masterson</option>
-                    <option value="33">#33 Daniel McNamara</option>
+                  <optgroup label="Pod 4 (Donall's Pod)">
+                    <option value="20">#20 Donal O'Riordan</option>
+                    <option value="21">#21 Cian Latham</option>
+                    <option value="22">#22 Colly Noonan</option>
+                    <option value="23">#23 Colum McQuaile</option>
+                    <option value="24">#24 Daire Foley</option>
+                    <option value="25">#25 John Hanley</option>
+                    <option value="26">#26 Paddy Gleeson</option>
                   </optgroup>
-                  <optgroup label="Pod 5">
-                    <option value="34">#34 John Hanley</option>
-                    <option value="35">#35 Ciaran Sinnott</option>
-                    <option value="36">#36 Hansi Fischer-Kerrane</option>
-                    <option value="37">#37 Ethan Ryan</option>
-                    <option value="38">#38 Colum McQuaile</option>
-                    <option value="39">#39 Senan Mythen</option>
-                    <option value="40">#40 Conor Heffernan</option>
-                    <option value="41">#41 Jakob Connolly</option>
-                  </optgroup>
-                  <optgroup label="Pod 6">
-                    <option value="42">#42 Brian Kennedy</option>
-                    <option value="43">#43 Donal O' Riordan</option>
-                    <option value="44">#44 Hugh Feeney</option>
-                    <option value="45">#45 Cathal Carty</option>
-                    <option value="46">#46 Sean Kennedy</option>
-                    <option value="47">#47 Moses Harley</option>
-                    <option value="48">#48 Senan Ryan</option>
-                    <option value="49">#49 Jack Edwards</option>
+                  <optgroup label="Pod 5 (Micks Pod + Alan)">
+                    <option value="27">#27 Mick O Donoghue</option>
+                    <option value="28">#28 Alan Quinn</option>
+                    <option value="29">#29 Ciaran Darcy</option>
+                    <option value="30">#30 Donnacha Liston</option>
+                    <option value="31">#31 Martin Fanning</option>
+                    <option value="32">#32 Paul McCarthy</option>
+                    <option value="33">#33 Paul Roche</option>
+                    <option value="34">#34 Sean Kennedy</option>
                   </optgroup>
                 </select>
               </div>
@@ -509,7 +492,7 @@
         </div>
       </section>
 
-      <!-- Bottom Floating / Sticky Save Bar -->
+      <!-- Bottom Save Action Bar -->
       <section class="panel-glass flex-between" style="background:#07130E; border-color:#00F298;">
         <div>
           <strong style="color:#FFF;">Done with your workout?</strong>
@@ -553,7 +536,7 @@
           </div>
         </div>
 
-        <!-- Macro Display Badges -->
+        <!-- Macro Badges -->
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; margin-top:14px;">
           <div style="background:#07130E; border:1px solid #F5C544; border-radius:10px; padding:12px; text-align:center;">
             <span style="font-size:10px; color:#F5C544; font-weight:800; display:block; text-transform:uppercase;">Carbohydrates</span>
@@ -899,7 +882,7 @@
         <div class="panel-glass flex-between">
           <div>
             <div style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Squad Work Completion Audit &bull; Weekly Tracking</div>
-            <div style="font-size:11px; color:#718C80;">Accurate, live data per week across all 49 hurlers.</div>
+            <div style="font-size:11px; color:#718C80;">Accurate, live data per week across all 34 hurlers.</div>
           </div>
           <button class="btn-lock" onclick="lockCoachDesk()">Lock Desk</button>
         </div>
@@ -949,57 +932,51 @@
   </main>
 
   <script>
-    // Clean Roster with no position tags in brackets
+    // Exact Squad Structure Transcribed from WhatsApp Groups (34 Players Across 5 Pods)
     const SQUAD_DATA = [
-      { id: 1, name: "Alan Quinn", pod: 1 },
-      { id: 2, name: "Brian Powell", pod: 1 },
-      { id: 3, name: "Dan Burke", pod: 1 },
-      { id: 4, name: "Paul McCarthy", pod: 1 },
-      { id: 5, name: "Stephen Lohan", pod: 1 },
-      { id: 6, name: "Cian Darcy", pod: 1 },
-      { id: 7, name: "Paddy Gleeson", pod: 1 },
-      { id: 8, name: "Conor Tighe", pod: 1 },
-      { id: 9, name: "James Stanbridge", pod: 1 },
-      { id: 10, name: "Conor Henry", pod: 2 },
-      { id: 11, name: "Kieron Keary", pod: 2 },
-      { id: 12, name: "Dan Taylor", pod: 2 },
-      { id: 13, name: "Tiernan O Rourke", pod: 2 },
-      { id: 14, name: "Donnacha Liston", pod: 2 },
-      { id: 15, name: "Jack Fitzgerald", pod: 2 },
-      { id: 16, name: "Jacob Turner", pod: 2 },
-      { id: 17, name: "Conor Donovan", pod: 2 },
-      { id: 18, name: "Cormac Kelly", pod: 3 },
-      { id: 19, name: "Ciaran Darcy", pod: 3 },
-      { id: 20, name: "Martin Fanning", pod: 3 },
-      { id: 21, name: "Tim Kelly", pod: 3 },
-      { id: 22, name: "Donagh Crean", pod: 3 },
-      { id: 23, name: "Aidan Walsh", pod: 3 },
-      { id: 24, name: "Mathew O Connor", pod: 3 },
-      { id: 25, name: "Eoghen Delaney", pod: 3 },
-      { id: 26, name: "Mick O Donoghue", pod: 4 },
-      { id: 27, name: "Jack Burridge", pod: 4 },
-      { id: 28, name: "Paul Roche", pod: 4 },
-      { id: 29, name: "Kev Barry", pod: 4 },
-      { id: 30, name: "Cillian Brett", pod: 4 },
-      { id: 31, name: "Dylan Duke", pod: 4 },
-      { id: 32, name: "Finn Masterson", pod: 4 },
-      { id: 33, name: "Daniel McNamara", pod: 4 },
-      { id: 34, name: "John Hanley", pod: 5 },
-      { id: 35, name: "Ciaran Sinnott", pod: 5 },
-      { id: 36, name: "Hansi Fischer-Kerrane", pod: 5 },
-      { id: 37, name: "Ethan Ryan", pod: 5 },
-      { id: 38, name: "Colum McQuaile", pod: 5 },
-      { id: 39, name: "Senan Mythen", pod: 5 },
-      { id: 40, name: "Conor Heffernan", pod: 5 },
-      { id: 41, name: "Jakob Connolly", pod: 5 },
-      { id: 42, name: "Brian Kennedy", pod: 6 },
-      { id: 43, name: "Donal O' Riordan", pod: 6 },
-      { id: 44, name: "Hugh Feeney", pod: 6 },
-      { id: 45, name: "Cathal Carty", pod: 6 },
-      { id: 46, name: "Sean Kennedy", pod: 6 },
-      { id: 47, name: "Moses Harley", pod: 6 },
-      { id: 48, name: "Senan Ryan", pod: 6 },
-      { id: 49, name: "Jack Edwards", pod: 6 }
+      // Pod 1 ("Poweller pod" - 7)
+      { id: 1, name: "Brian Powell", pod: 1 },
+      { id: 2, name: "Brian Kennedy", pod: 1 },
+      { id: 3, name: "Cian Darcy", pod: 1 },
+      { id: 4, name: "Colm Gleeson", pod: 1 },
+      { id: 5, name: "Ethan Ryan", pod: 1 },
+      { id: 6, name: "Jack Burridge", pod: 1 },
+      { id: 7, name: "Niall O Connor", pod: 1 },
+
+      // Pod 2 ("Conor Henry's pod" - 6)
+      { id: 8, name: "Conor Henry", pod: 2 },
+      { id: 9, name: "Brian Hanley", pod: 2 },
+      { id: 10, name: "Donagh Crean", pod: 2 },
+      { id: 11, name: "Hansi Fischer-Kerrane", pod: 2 },
+      { id: 12, name: "Hugh Feeney", pod: 2 },
+      { id: 13, name: "Tim Kelly", pod: 2 },
+
+      // Pod 3 ("Cormie Pod" - 6)
+      { id: 14, name: "Cormac Kelly", pod: 3 },
+      { id: 15, name: "Ciaran Sinnott", pod: 3 },
+      { id: 16, name: "Cillian Brett", pod: 3 },
+      { id: 17, name: "Dan Burke", pod: 3 },
+      { id: 18, name: "Dan Taylor", pod: 3 },
+      { id: 19, name: "Jack Fitzgerald", pod: 3 },
+
+      // Pod 4 ("Donall's pod" - 7)
+      { id: 20, name: "Donal O'Riordan", pod: 4 },
+      { id: 21, name: "Cian Latham", pod: 4 },
+      { id: 22, name: "Colly Noonan", pod: 4 },
+      { id: 23, name: "Colum McQuaile", pod: 4 },
+      { id: 24, name: "Daire Foley", pod: 4 },
+      { id: 25, name: "John Hanley", pod: 4 },
+      { id: 26, name: "Paddy Gleeson", pod: 4 },
+
+      // Pod 5 ("Micks Pod + Alan" - 8)
+      { id: 27, name: "Mick O Donoghue", pod: 5 },
+      { id: 28, name: "Alan Quinn", pod: 5 },
+      { id: 29, name: "Ciaran Darcy", pod: 5 },
+      { id: 30, name: "Donnacha Liston", pod: 5 },
+      { id: 31, name: "Martin Fanning", pod: 5 },
+      { id: 32, name: "Paul McCarthy", pod: 5 },
+      { id: 33, name: "Paul Roche", pod: 5 },
+      { id: 34, name: "Sean Kennedy", pod: 5 }
     ];
 
     // Checkbox mapping for accurate weekly completion calculation
@@ -1035,12 +1012,10 @@
     let selectedGymSub = '1.1';
 
     // Permanent Multi-Tiered Storage Keys
-    const STORAGE_KEY = 'stpats_weekly_checks_v4';
-    const TIMESTAMP_KEY = 'stpats_weekly_timestamps_v4';
+    const STORAGE_KEY = 'stpats_weekly_checks_v6';
+    const TIMESTAMP_KEY = 'stpats_weekly_timestamps_v6';
 
-    // Structure: hurlerCheckLogs[hurlerId][weekNumber][checkboxId] = boolean
     let hurlerCheckLogs = {};
-    // Structure: hurlerTimestamps[hurlerId][weekNumber] = "18:45, 10 Nov"
     let hurlerTimestamps = {};
 
     function loadPersistedCheckLogs() {
@@ -1068,9 +1043,7 @@
       return p ? `#${p.id} ${p.name}` : `#${activeHurlerId}`;
     }
 
-    // ==========================================
-    // EXPLICIT SAVE BUTTON LOGIC (COMMITS TO COACH DESK)
-    // ==========================================
+    // Save Button Logic
     function savePlayerSessionProgress() {
       if (!hurlerCheckLogs[activeHurlerId]) hurlerCheckLogs[activeHurlerId] = {};
       if (!hurlerCheckLogs[activeHurlerId][selectedWeek]) hurlerCheckLogs[activeHurlerId][selectedWeek] = {};
@@ -1080,7 +1053,6 @@
         hurlerCheckLogs[activeHurlerId][selectedWeek][b.id] = b.checked;
       });
 
-      // Format current timestamp
       const now = new Date();
       const timeStr = now.toLocaleTimeString('en-IE', { hour: '2-digit', minute: '2-digit' });
       const dateStr = now.toLocaleDateString('en-IE', { day: 'numeric', month: 'short' });
@@ -1089,12 +1061,10 @@
       if (!hurlerTimestamps[activeHurlerId]) hurlerTimestamps[activeHurlerId] = {};
       hurlerTimestamps[activeHurlerId][selectedWeek] = fullTimestamp;
 
-      // Commit permanently to localStorage
       saveAllPersistentData();
       updateSessionProgressUI();
       renderCoachAuditTable();
 
-      // UI Feedback on Save Buttons
       const saveBtns = document.querySelectorAll('.btn-save-main');
       saveBtns.forEach(btn => {
         btn.innerHTML = '<span>✓</span> Saved to Coach Desk!';
@@ -1166,7 +1136,6 @@
       const sunTitle = document.getElementById('sun-pitch-title');
       if (sunTitle) sunTitle.textContent = `Week ${w} Double Running Prescriptions`;
 
-      // Update week labels on save buttons
       document.querySelectorAll('.active-week-label').forEach(el => el.textContent = w);
       document.querySelectorAll('.btn-save-main').forEach(btn => {
         btn.innerHTML = `<span>💾</span> Save Week ${w} Progress`;
@@ -1244,7 +1213,6 @@
       }
     }
 
-    // Accurate calculation per week
     function calculateHurlerWeekStats(hurlerId, weekNum) {
       const weekLogs = (hurlerCheckLogs[hurlerId] && hurlerCheckLogs[hurlerId][weekNum]) || {};
 
@@ -1263,7 +1231,6 @@
         if (weekLogs[id]) g2Done++;
       });
 
-      // Athlete completes Donabate 1.1 or 1.2 for the Wednesday gym session
       const gymDone = Math.min(11, Math.max(g1Done, g2Done));
       const totalDone = pitchDone + gymDone;
       const pct = Math.min(100, Math.round((totalDone / TARGET_ITEMS_PER_WEEK) * 100));
@@ -1295,7 +1262,6 @@
       }
     }
 
-    // Coach Desk: Set audit week
     function setCoachAuditWeek(w) {
       coachAuditWeek = w;
       for (let i = 1; i <= 6; i++) {
@@ -1353,9 +1319,7 @@
       document.getElementById('coach-pass-input').value = '';
     }
 
-    // ==========================================
-    // FUEL & NUTRITION ENGINE LOGIC
-    // ==========================================
+    // Fuel & Nutrition Logic
     function calculateNutrition() {
       const bw = parseFloat(document.getElementById('fuel-weight-input')?.value) || 82;
       const type = document.getElementById('fuel-session-type')?.value || 'pitch';
@@ -1386,9 +1350,7 @@
       if (fluidsEl) fluidsEl.textContent = `${totalFluids}L`;
     }
 
-    // ==========================================
-    // FULL MATCH DAY CONSOLE LOGIC
-    // ==========================================
+    // Match Day Console Logic
     let matchData = {
       oppName: "Opposition Club",
       half: "H1",
