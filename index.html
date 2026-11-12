@@ -1504,6 +1504,37 @@ WITH CHECK (true);</div>
     let hurlerTimestamps = {};
     let cloudPushDebounceTimer = null;
 
+    function getSupabaseHeaders(extra = {}) {
+      const headers = {
+        'apikey': sbKey,
+        ...extra
+      };
+      if (sbKey && sbKey.startsWith('eyJ')) {
+        headers['Authorization'] = `Bearer ${sbKey}`;
+      }
+      return headers;
+    }
+
+    function updateSupabaseCredentials() {
+      const urlEl = document.getElementById('cfg-sb-url');
+      const keyEl = document.getElementById('cfg-sb-key');
+      const newUrl = (urlEl ? urlEl.value : '').trim().replace(/\/+$/, '');
+      const newKey = (keyEl ? keyEl.value : '').trim();
+
+      if (!newUrl || !newUrl.startsWith('http') || !newKey) {
+        showToast('Please enter both a valid Supabase Project URL and API Key.');
+        return;
+      }
+
+      sbUrl = newUrl;
+      sbKey = newKey;
+      try {
+        localStorage.setItem(SB_CFG_KEY, JSON.stringify({ url: sbUrl, key: sbKey }));
+      } catch (e) {}
+
+      pullFromCloud(true);
+    }
+
     // Migrate any older local keys automatically so zero data is ever lost on update
     function migrateLegacyStorage() {
       const oldKeys = ['stpats_weekly_checks_v7', 'stpats_weekly_checks_v4', 'stpats_weekly_checks_v3'];
@@ -1518,6 +1549,54 @@ WITH CHECK (true);</div>
               Object.assign(hurlerCheckLogs[pid], parsed[pid]);
             });
           }
+        } catch (e) {}
+      });
+      oldTimeKeys.forEach(k => {
+        try {
+          const raw = localStorage.getItem(k);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            Object.keys(parsed).forEach(pid => {
+              if (!hurlerTimestamps[pid]) hurlerTimestamps[pid] = {};
+              Object.assign(hurlerTimestamps[pid], parsed[pid]);
+            });
+          }
+        } catch (e) {}
+      });
+    }
+
+    function loadPersistedCheckLogs() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) hurlerCheckLogs = JSON.parse(raw) || {};
+      } catch (e) {
+        hurlerCheckLogs = {};
+      }
+      try {
+        const rawT = localStorage.getItem(TIMESTAMP_KEY);
+        if (rawT) hurlerTimestamps = JSON.parse(rawT) || {};
+      } catch (e) {
+        hurlerTimestamps = {};
+      }
+      migrateLegacyStorage();
+    }
+
+    function setCloudIndicator(status, detailMsg = '') {
+      const pill = document.getElementById('cloud-sync-indicator');
+      const diag = document.getElementById('cloud-diag-text');
+      const banner = document.getElementById('cloud-setup-banner');
+
+      if (status === 'live') {
+        isCloudReady = true;
+        lastCloudError = '';
+        if (pill) {
+          pill.className = 'sync-pill';
+          pill.textContent = '☁️ Cloud Live';
+        }
+        if (diag) {
+          diag.innerHTML = `<span style="color:#00F298; font-weight:800;">Connected &amp; Syncing Live:</span> All player progress across phones &amp; laptops is synced to Supabase.`;
+        }
+        if (banner) banner.style.borderColor = '#059669';
       } else if (status === 'syncing') {
         if (pill) {
           pill.className = 'sync-pill syncing';
@@ -1551,50 +1630,91 @@ WITH CHECK (true);</div>
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(hurlerCheckLogs));
         localStorage.setItem(TIMESTAMP_KEY, JSON.stringify(hurlerTimestamps));
-      } catch (e) {
-        console.warn("Local storage save error", e);
-      }
+      } catch (e) {}
     }
 
-    // Fetch all saved records from Supabase across all players & devices
-    async function pullFromCloud(showFeedback = false) {
+    function formatTimestamp() {
+      const now = new Date();
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const d = now.getDate();
+      const m = months[now.getMonth()];
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      return `${d} ${m}, ${hh}:${mm}`;
+    }
+
+    async function pushWeekToCloud(hurlerId, weekNum, showFeedback = false) {
       if (!hasSupabaseConfig()) {
         setCloudIndicator('unconfigured');
-        if (showFeedback) showToast('Paste your new Supabase Project URL and API Key first.');
-        return false;
+        return;
       }
+
+      setCloudIndicator('syncing');
+      const rowId = `h${hurlerId}_w${weekNum}`;
+      const checksObj = (hurlerCheckLogs[hurlerId] && hurlerCheckLogs[hurlerId][weekNum]) || {};
+      const savedAtStr = (hurlerTimestamps[hurlerId] && hurlerTimestamps[hurlerId][weekNum]) || formatTimestamp();
+
       try {
-        setCloudIndicator('syncing');
-        const res = await fetch(`${sbUrl}/rest/v1/hurler_weekly_progress?select=*`, {
-          method: 'GET',
-          headers: getSupabaseHeaders({ 'Content-Type': 'application/json' })
+        const res = await fetch(`${sbUrl}/rest/v1/hurler_weekly_progress?on_conflict=id`, {
+          method: 'POST',
+          headers: getSupabaseHeaders({
+            'Content-Type': 'application/json',
+            'Prefer': 'resolution=merge-duplicates,return=minimal'
+          }),
+          body: JSON.stringify({
+            id: rowId,
+            hurler_id: hurlerId,
+            week_num: weekNum,
+            checks: checksObj,
+            saved_at: savedAtStr,
+            updated_at: new Date().toISOString()
+          })
         });
 
         if (!res.ok) {
-          let errText = `HTTP ${res.status}`;
-          try {
-            const errJson = await res.json();
-            if (errJson && errJson.message) errText = errJson.message;
-          } catch (e) {}
-          setCloudIndicator('offline', errText);
-          if (showFeedback) showToast(`Cloud status: ${errText}`);
-          return false;
+          const errText = await res.text();
+          setCloudIndicator('offline', `HTTP ${res.status}: ${errText.slice(0, 120)}`);
+          return;
+        }
+
+        setCloudIndicator('live');
+        if (showFeedback) {
+          showToast('Saved & synced live to Coach Desk!');
+        }
+      } catch (err) {
+        setCloudIndicator('offline', err.message || 'Network error');
+      }
+    }
+
+    async function pullFromCloud(showFeedback = false) {
+      if (!hasSupabaseConfig()) {
+        setCloudIndicator('unconfigured');
+        return;
+      }
+
+      setCloudIndicator('syncing');
+      try {
+        const res = await fetch(`${sbUrl}/rest/v1/hurler_weekly_progress?select=*`, {
+          method: 'GET',
+          headers: getSupabaseHeaders()
+        });
+
+        if (!res.ok) {
+          const errText = await res.text();
+          setCloudIndicator('offline', `HTTP ${res.status}: ${errText.slice(0, 120)}`);
+          return;
         }
 
         const rows = await res.json();
         if (Array.isArray(rows)) {
-          rows.forEach(row => {
-            const pid = row.hurler_id;
-            const wk = row.week_num;
-            if (pid && wk) {
-              if (!hurlerCheckLogs[pid]) hurlerCheckLogs[pid] = {};
-              hurlerCheckLogs[pid][wk] = row.checks || {};
-
-              if (row.saved_at) {
-                if (!hurlerTimestamps[pid]) hurlerTimestamps[pid] = {};
-                hurlerTimestamps[pid][wk] = row.saved_at;
-              }
-            }
+          rows.forEach(r => {
+            const hid = r.hurler_id;
+            const wk = r.week_num;
+            if (!hid || !wk) return;
+            if (!hurlerCheckLogs[hid]) hurlerCheckLogs[hid] = {};
+            if (!hurlerTimestamps[hid]) hurlerTimestamps[hid] = {};
+            hurlerCheckLogs[hid][wk] = r.checks || {};
+            if (r.saved_at) hurlerTimestamps[hid][wk] = r.saved_at;
           });
           saveAllLocalData();
           loadCheckedBoxesForCurrentWeek();
@@ -1603,249 +1723,58 @@ WITH CHECK (true);</div>
         }
 
         setCloudIndicator('live');
-        if (showFeedback) showToast('✓ Synced latest squad data from Supabase!');
-        return true;
+        if (showFeedback) {
+          showToast('Cloud data synced across all devices!');
+        }
       } catch (err) {
-        setCloudIndicator('offline', err.message || 'Network unavailable');
-        if (showFeedback) showToast('Could not reach Supabase — saved locally on device.');
-        return false;
-      }
-    }
-
-    // Upsert a single player's week record to Supabase
-    async function pushPlayerWeekToCloud(hurlerId, weekNum, showToastOnSuccess = false) {
-      if (!hasSupabaseConfig()) {
-        setCloudIndicator('unconfigured');
-        if (showToastOnSuccess) {
-          showToast(`💾 Saved locally for ${getActiveHurlerName()} (connect Supabase in Coach Desk for multi-device sync).`);
-        }
-        return false;
-      }
-      const recordId = `p${hurlerId}_w${weekNum}`;
-      const checksPayload = (hurlerCheckLogs[hurlerId] && hurlerCheckLogs[hurlerId][weekNum]) || {};
-      const savedAtStr = (hurlerTimestamps[hurlerId] && hurlerTimestamps[hurlerId][weekNum]) || '';
-
-      try {
-        setCloudIndicator('syncing');
-        const res = await fetch(`${sbUrl}/rest/v1/hurler_weekly_progress?on_conflict=id`, {
-          method: 'POST',
-          headers: getSupabaseHeaders({
-            'Content-Type': 'application/json',
-            'Prefer': 'resolution=merge-duplicates,return=minimal'
-          }),
-          body: JSON.stringify({
-            id: recordId,
-            hurler_id: hurlerId,
-            week_num: weekNum,
-            checks: checksPayload,
-            saved_at: savedAtStr,
-            updated_at: new Date().toISOString()
-          })
-        });
-
-        if (!res.ok) {
-          let errText = `HTTP ${res.status}`;
-          try {
-            const errJson = await res.json();
-            if (errJson && errJson.message) errText = errJson.message;
-          } catch (e) {}
-          setCloudIndicator('offline', errText);
-          if (showToastOnSuccess) {
-            showToast(`Saved locally on device (Supabase table not ready yet).`);
-          }
-          return false;
-        }
-
-        setCloudIndicator('live');
-        if (showToastOnSuccess) {
-          showToast(`☁️ Saved & synced Week ${weekNum} for ${getActiveHurlerName()}!`);
-        }
-        return true;
-      } catch (err) {
-        setCloudIndicator('offline', err.message || 'Offline');
-        if (showToastOnSuccess) {
-          showToast(`Saved locally on device (offline).`);
-        }
-        return false;
-      }
-    }
-
-    function queueCloudSync(hurlerId, weekNum) {
-      clearTimeout(cloudPushDebounceTimer);
-      cloudPushDebounceTimer = setTimeout(() => {
-        pushPlayerWeekToCloud(hurlerId, weekNum, false);
-      }, 450);
-    }
-
-    function copySetupSql() {
-      const sqlEl = document.getElementById('supabase-sql-code');
-      if (!sqlEl) return;
-      const text = sqlEl.textContent;
-      try {
-        const temp = document.createElement('textarea');
-        temp.value = text;
-        document.body.appendChild(temp);
-        temp.select();
-        document.execCommand('copy');
-        document.body.removeChild(temp);
-        showToast('✓ SQL Setup copied! Paste into Supabase SQL Editor & click Run.');
-      } catch (e) {
-        showToast('Select and copy the SQL text box manually.');
-      }
-    }
-
-    function toggleCloudConfigPanel() {
-      const details = document.getElementById('cloud-sql-details');
-      if (details) details.classList.toggle('hidden');
-    }
-
-    function getActiveHurlerName() {
-      const p = SQUAD_DATA.find(x => x.id === activeHurlerId);
-      return p ? `#${p.id} ${p.name}` : `#${activeHurlerId}`;
-    }
-
-    // =========================================================================
-    // 2. "CHECK ALL" BUTTON LOGIC
-    // =========================================================================
-    function checkAllActiveSession() {
-      checkAllSession(selectedDay);
-    }
-
-    function checkAllSession(dayKey) {
-      let targetIds = [];
-      let label = '';
-
-      if (dayKey === 'sun') {
-        targetIds = SUNDAY_CHECKBOX_IDS;
-        label = 'Sunday Pitch Running (28 reps)';
-      } else {
-        targetIds = (selectedGymSub === '1.2') ? GYM_1_2_IDS : GYM_1_1_IDS;
-        label = `Wednesday Gym Donabate ${selectedGymSub} (20 sets)`;
-      }
-
-      const allAlreadyChecked = targetIds.every(id => {
-        const el = document.getElementById(id);
-        return el && el.checked;
-      });
-
-      const newState = !allAlreadyChecked;
-      targetIds.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.checked = newState;
-      });
-
-      savePlayerSessionProgress(false);
-
-      if (newState) {
-        showToast(`✓ Checked all ${label} & synced for ${getActiveHurlerName()}!`);
-      } else {
-        showToast(`Cleared ${label} checks for ${getActiveHurlerName()}.`);
+        setCloudIndicator('offline', err.message || 'Network error');
       }
     }
 
     // =========================================================================
-    // 3. SAVE PROGRESS & LIVE SYNC ENGINE
+    // 2. NAVIGATION & PLAYER FLOOR INTERACTIONS
     // =========================================================================
-    function savePlayerSessionProgress(showConfirmationToast = true) {
-      if (!hurlerCheckLogs[activeHurlerId]) hurlerCheckLogs[activeHurlerId] = {};
-      if (!hurlerCheckLogs[activeHurlerId][selectedWeek]) hurlerCheckLogs[activeHurlerId][selectedWeek] = {};
-
-      const boxes = document.querySelectorAll('#portal-player input[type="checkbox"]');
-      boxes.forEach(b => {
-        hurlerCheckLogs[activeHurlerId][selectedWeek][b.id] = b.checked;
-      });
-
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString('en-IE', { hour: '2-digit', minute: '2-digit' });
-      const dateStr = now.toLocaleDateString('en-IE', { day: 'numeric', month: 'short' });
-      const fullTimestamp = `${timeStr}, ${dateStr}`;
-
-      if (!hurlerTimestamps[activeHurlerId]) hurlerTimestamps[activeHurlerId] = {};
-      hurlerTimestamps[activeHurlerId][selectedWeek] = fullTimestamp;
-
-      saveAllLocalData();
-      updateSessionProgressUI();
-      renderCoachAuditTable();
-
-      // Push live to Supabase
-      pushPlayerWeekToCloud(activeHurlerId, selectedWeek, showConfirmationToast);
-
-      const saveBtns = document.querySelectorAll('.btn-save-main');
-      saveBtns.forEach(btn => {
-        btn.innerHTML = '<span>✓</span> Saved!';
-        btn.style.background = '#F5C544';
-        btn.style.color = '#040907';
-      });
-
-      const statusMsg = document.getElementById('save-status-msg');
-      if (statusMsg) {
-        statusMsg.textContent = `Last saved: ${fullTimestamp}`;
-        statusMsg.style.color = '#00F298';
-      }
-
-      setTimeout(() => {
-        saveBtns.forEach(btn => {
-          btn.innerHTML = `<span>💾</span> Save Week ${selectedWeek} Progress`;
-          btn.style.background = '';
-          btn.style.color = '';
-        });
-      }, 2200);
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById('toast-msg');
-      if (!toast) return;
-      toast.textContent = msg;
-      toast.style.display = 'block';
-      clearTimeout(toast._hideTimer);
-      toast._hideTimer = setTimeout(() => {
-        toast.style.display = 'none';
-      }, 3500);
-    }
-
     function switchPortal(portal) {
-      document.getElementById('portal-player').classList.toggle('hidden', portal !== 'player');
-      document.getElementById('portal-roadmap').classList.toggle('hidden', portal !== 'roadmap');
-      document.getElementById('portal-fuel').classList.toggle('hidden', portal !== 'fuel');
-      document.getElementById('portal-match').classList.toggle('hidden', portal !== 'match');
-      document.getElementById('portal-coach').classList.toggle('hidden', portal !== 'coach');
-
-      document.getElementById('nav-player').className = (portal === 'player') ? 'nav-btn active' : 'nav-btn';
-      document.getElementById('nav-roadmap').className = (portal === 'roadmap') ? 'nav-btn active' : 'nav-btn';
-      document.getElementById('nav-fuel').className = (portal === 'fuel') ? 'nav-btn active' : 'nav-btn';
-      document.getElementById('nav-match').className = (portal === 'match') ? 'nav-btn active' : 'nav-btn';
-      document.getElementById('nav-coach').className = (portal === 'coach') ? 'nav-btn active' : 'nav-btn';
+      const portals = ['player', 'roadmap', 'fuel', 'match', 'coach'];
+      portals.forEach(p => {
+        const pane = document.getElementById(`portal-${p}`);
+        const btn = document.getElementById(`nav-${p}`);
+        if (pane) pane.classList.toggle('hidden', p !== portal);
+        if (btn) btn.className = (p === portal) ? 'nav-btn active' : 'nav-btn';
+      });
 
       if (portal === 'coach') {
-        pullFromCloud(false);
         renderCoachAuditTable();
+      } else if (portal === 'fuel') {
+        calculateNutrition();
+      } else if (portal === 'match') {
+        renderMatchDisplay();
       }
     }
 
     function onSelectPlayer(val) {
-      activeHurlerId = parseInt(val, 10);
-      document.getElementById('jersey-display').textContent = '#' + activeHurlerId;
+      activeHurlerId = parseInt(val, 10) || 1;
+      const badge = document.getElementById('jersey-display');
+      if (badge) badge.textContent = `#${activeHurlerId}`;
       loadCheckedBoxesForCurrentWeek();
       updateSessionProgressUI();
-      renderCoachAuditTable();
     }
 
     function selectWeek(w) {
-      selectedWeek = w;
+      selectedWeek = parseInt(w, 10) || 1;
       for (let i = 1; i <= 6; i++) {
         const b = document.getElementById(`wbtn-${i}`);
-        if (b) b.className = (i === w) ? 'week-btn active' : 'week-btn';
+        if (b) b.className = (i === selectedWeek) ? 'week-btn active' : 'week-btn';
       }
-      
-      const title = document.getElementById('session-progress-title');
-      if (title) title.textContent = `Week ${w} Session Progress`;
+
+      const progTitle = document.getElementById('session-progress-title');
+      if (progTitle) progTitle.textContent = `Week ${selectedWeek} Session Progress`;
 
       const sunTitle = document.getElementById('sun-pitch-title');
-      if (sunTitle) sunTitle.textContent = `Week ${w} Double Running Prescriptions`;
+      if (sunTitle) sunTitle.textContent = `Week ${selectedWeek} Double Running Prescriptions`;
 
-      document.querySelectorAll('.active-week-label').forEach(el => el.textContent = w);
-      document.querySelectorAll('.btn-save-main').forEach(btn => {
-        btn.innerHTML = `<span>💾</span> Save Week ${w} Progress`;
+      document.querySelectorAll('.active-week-label').forEach(el => {
+        el.textContent = String(selectedWeek);
       });
 
       loadCheckedBoxesForCurrentWeek();
@@ -1860,15 +1789,15 @@ WITH CHECK (true);</div>
       const pWed = document.getElementById('pane-wed');
 
       if (d === 'sun') {
-        bSun.className = 'day-selector-btn active';
-        bWed.className = 'day-selector-btn';
-        pSun.classList.remove('hidden');
-        pWed.classList.add('hidden');
+        if (bSun) bSun.className = 'day-selector-btn active';
+        if (bWed) bWed.className = 'day-selector-btn';
+        if (pSun) pSun.classList.remove('hidden');
+        if (pWed) pWed.classList.add('hidden');
       } else {
-        bWed.className = 'day-selector-btn active';
-        bSun.className = 'day-selector-btn';
-        pWed.classList.remove('hidden');
-        pSun.classList.add('hidden');
+        if (bWed) bWed.className = 'day-selector-btn active';
+        if (bSun) bSun.className = 'day-selector-btn';
+        if (pWed) pWed.classList.remove('hidden');
+        if (pSun) pSun.classList.add('hidden');
       }
     }
 
@@ -1880,121 +1809,194 @@ WITH CHECK (true);</div>
       const pane2 = document.getElementById('subpane-1-2');
 
       if (sub === '1.1') {
-        btn1.style.background = '#00F298'; btn1.style.color = '#040907'; btn1.style.fontWeight = '800';
-        btn2.style.background = 'transparent'; btn2.style.color = '#718C80'; btn2.style.fontWeight = '700';
-        pane1.classList.remove('hidden'); pane2.classList.add('hidden');
+        if (btn1) { btn1.style.background = '#00F298'; btn1.style.color = '#040907'; btn1.style.fontWeight = '800'; }
+        if (btn2) { btn2.style.background = 'transparent'; btn2.style.color = '#718C80'; btn2.style.fontWeight = '700'; }
+        if (pane1) pane1.classList.remove('hidden');
+        if (pane2) pane2.classList.add('hidden');
       } else {
-        btn2.style.background = '#00F298'; btn2.style.color = '#040907'; btn2.style.fontWeight = '800';
-        btn1.style.background = 'transparent'; btn1.style.color = '#718C80'; btn1.style.fontWeight = '700';
-        pane2.classList.remove('hidden'); pane1.classList.add('hidden');
+        if (btn2) { btn2.style.background = '#00F298'; btn2.style.color = '#040907'; btn2.style.fontWeight = '800'; }
+        if (btn1) { btn1.style.background = 'transparent'; btn1.style.color = '#718C80'; btn1.style.fontWeight = '700'; }
+        if (pane2) pane2.classList.remove('hidden');
+        if (pane1) pane1.classList.add('hidden');
       }
     }
 
-    function onCheckboxChange(el) {
-      if (!hurlerCheckLogs[activeHurlerId]) hurlerCheckLogs[activeHurlerId] = {};
-      if (!hurlerCheckLogs[activeHurlerId][selectedWeek]) hurlerCheckLogs[activeHurlerId][selectedWeek] = {};
+    // =========================================================================
+    // 3. CHECKBOX TRACKING, CHECK ALL & SAVE ENGINE
+    // =========================================================================
+    function getWeekChecks(hurlerId, weekNum) {
+      if (!hurlerCheckLogs[hurlerId]) hurlerCheckLogs[hurlerId] = {};
+      if (!hurlerCheckLogs[hurlerId][weekNum]) hurlerCheckLogs[hurlerId][weekNum] = {};
+      return hurlerCheckLogs[hurlerId][weekNum];
+    }
 
-      hurlerCheckLogs[activeHurlerId][selectedWeek][el.id] = el.checked;
-
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString('en-IE', { hour: '2-digit', minute: '2-digit' });
-      const dateStr = now.toLocaleDateString('en-IE', { day: 'numeric', month: 'short' });
-      const fullTimestamp = `${timeStr}, ${dateStr}`;
+    function onCheckboxChange(checkboxEl) {
+      const checks = getWeekChecks(activeHurlerId, selectedWeek);
+      checks[checkboxEl.id] = checkboxEl.checked;
 
       if (!hurlerTimestamps[activeHurlerId]) hurlerTimestamps[activeHurlerId] = {};
-      hurlerTimestamps[activeHurlerId][selectedWeek] = fullTimestamp;
+      hurlerTimestamps[activeHurlerId][selectedWeek] = formatTimestamp();
 
       saveAllLocalData();
       updateSessionProgressUI();
       renderCoachAuditTable();
-      queueCloudSync(activeHurlerId, selectedWeek);
 
       const statusMsg = document.getElementById('save-status-msg');
-      if (statusMsg) {
-        statusMsg.textContent = `Saved: ${fullTimestamp}`;
-        statusMsg.style.color = '#00F298';
+      if (statusMsg) statusMsg.textContent = `Saved: ${hurlerTimestamps[activeHurlerId][selectedWeek]}`;
+
+      clearTimeout(cloudPushDebounceTimer);
+      cloudPushDebounceTimer = setTimeout(() => {
+        pushWeekToCloud(activeHurlerId, selectedWeek, false);
+      }, 450);
+    }
+
+    function checkAllSession(sessionType) {
+      const ids = sessionType === 'sun'
+        ? SUNDAY_CHECKBOX_IDS
+        : (selectedGymSub === '1.2' ? GYM_1_2_IDS : GYM_1_1_IDS);
+
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.checked = true;
+      });
+
+      savePlayerSessionProgress(true);
+    }
+
+    function checkAllActiveSession() {
+      checkAllSession(selectedDay);
+    }
+
+    function savePlayerSessionProgress(manualClick = false) {
+      const checks = getWeekChecks(activeHurlerId, selectedWeek);
+      const boxes = document.querySelectorAll('#portal-player input[type="checkbox"]');
+      boxes.forEach(b => {
+        checks[b.id] = b.checked;
+      });
+
+      const ts = formatTimestamp();
+      if (!hurlerTimestamps[activeHurlerId]) hurlerTimestamps[activeHurlerId] = {};
+      hurlerTimestamps[activeHurlerId][selectedWeek] = ts;
+
+      saveAllLocalData();
+      updateSessionProgressUI();
+      renderCoachAuditTable();
+
+      const statusMsg = document.getElementById('save-status-msg');
+      if (statusMsg) statusMsg.textContent = `Last saved: ${ts}`;
+
+      if (manualClick) {
+        const btn = document.getElementById('btn-save-progress');
+        if (btn) {
+          const origHTML = btn.innerHTML;
+          btn.innerHTML = '<span>✓</span> Saved to Coach Desk!';
+          setTimeout(() => { btn.innerHTML = origHTML; }, 2200);
+        }
+        const playerObj = SQUAD_DATA.find(p => p.id === activeHurlerId);
+        showToast(`Week ${selectedWeek} progress saved for ${playerObj ? playerObj.name : 'Hurler'}!`);
       }
+
+      pushWeekToCloud(activeHurlerId, selectedWeek, false);
     }
 
     function loadCheckedBoxesForCurrentWeek() {
-      const weekLogs = (hurlerCheckLogs[activeHurlerId] && hurlerCheckLogs[activeHurlerId][selectedWeek]) || {};
+      const checks = getWeekChecks(activeHurlerId, selectedWeek);
       const boxes = document.querySelectorAll('#portal-player input[type="checkbox"]');
       boxes.forEach(b => {
-        b.checked = !!weekLogs[b.id];
+        b.checked = !!checks[b.id];
       });
 
-      const lastSavedTime = (hurlerTimestamps[activeHurlerId] && hurlerTimestamps[activeHurlerId][selectedWeek]) || null;
+      const ts = (hurlerTimestamps[activeHurlerId] && hurlerTimestamps[activeHurlerId][selectedWeek]) || '';
       const statusMsg = document.getElementById('save-status-msg');
       if (statusMsg) {
-        if (lastSavedTime) {
-          statusMsg.textContent = `Last saved: ${lastSavedTime}`;
-          statusMsg.style.color = '#00F298';
-        } else {
-          statusMsg.textContent = 'Not yet saved for this week';
-          statusMsg.style.color = '#F5C544';
-        }
+        statusMsg.textContent = ts ? `Last saved: ${ts}` : 'Auto-syncs live across all devices';
       }
     }
 
     function calculateHurlerWeekStats(hurlerId, weekNum) {
-      const weekLogs = (hurlerCheckLogs[hurlerId] && hurlerCheckLogs[hurlerId][weekNum]) || {};
-
+      const checks = (hurlerCheckLogs[hurlerId] && hurlerCheckLogs[hurlerId][weekNum]) || {};
       let pitchDone = 0;
       SUNDAY_CHECKBOX_IDS.forEach(id => {
-        if (weekLogs[id]) pitchDone++;
+        if (checks[id]) pitchDone++;
       });
 
-      let g1Done = 0;
+      let gym11Done = 0;
       GYM_1_1_IDS.forEach(id => {
-        if (weekLogs[id]) g1Done++;
+        if (checks[id]) gym11Done++;
       });
 
-      let g2Done = 0;
+      let gym12Done = 0;
       GYM_1_2_IDS.forEach(id => {
-        if (weekLogs[id]) g2Done++;
+        if (checks[id]) gym12Done++;
       });
 
-      const gymDone = Math.min(20, Math.max(g1Done, g2Done));
+      const gymDone = Math.max(gym11Done, gym12Done);
       const totalDone = pitchDone + gymDone;
       const pct = Math.min(100, Math.round((totalDone / TARGET_ITEMS_PER_WEEK) * 100));
 
-      const lastSaved = (hurlerTimestamps[hurlerId] && hurlerTimestamps[hurlerId][weekNum]) || '—';
-
-      return {
-        pitchDone,
-        gymDone,
-        totalDone,
-        targetTotal: TARGET_ITEMS_PER_WEEK,
-        pct,
-        lastSaved
-      };
+      return { pitchDone, gymDone, totalDone, pct };
     }
 
     function updateSessionProgressUI() {
       const stats = calculateHurlerWeekStats(activeHurlerId, selectedWeek);
-      
-      const badge = document.getElementById('live-progress-badge');
-      if (badge) {
-        badge.textContent = `${stats.pct}%`;
-        badge.style.color = stats.pct >= 75 ? '#00F298' : (stats.pct >= 35 ? '#F5C544' : '#F87171');
-      }
+      const pctBadge = document.getElementById('live-progress-badge');
+      const fracBadge = document.getElementById('live-fraction-badge');
 
-      const frac = document.getElementById('live-fraction-badge');
-      if (frac) {
-        frac.textContent = `${stats.totalDone} / ${stats.targetTotal} target sets`;
+      if (pctBadge) pctBadge.textContent = `${stats.pct}%`;
+      if (fracBadge) fracBadge.textContent = `${stats.totalDone} / ${TARGET_ITEMS_PER_WEEK} target sets`;
+    }
+
+    // =========================================================================
+    // 4. COACH DESK & AUDIT TABLE
+    // =========================================================================
+    function unlockCoachDesk() {
+      const input = document.getElementById('coach-pass-input');
+      const pin = (input ? input.value : '').trim().toLowerCase();
+      if (pin === 'pats1884' || pin === '1884') {
+        document.getElementById('coach-lock-panel').classList.add('hidden');
+        document.getElementById('coach-unlocked-panel').classList.remove('hidden');
+        document.getElementById('coach-auth-err').classList.add('hidden');
+        renderCoachAuditTable();
+        pullFromCloud(false);
+      } else {
+        document.getElementById('coach-auth-err').classList.remove('hidden');
       }
     }
 
+    function lockCoachDesk() {
+      document.getElementById('coach-unlocked-panel').classList.add('hidden');
+      document.getElementById('coach-lock-panel').classList.remove('hidden');
+      const input = document.getElementById('coach-pass-input');
+      if (input) input.value = '';
+    }
+
+    function toggleCloudConfigPanel() {
+      const box = document.getElementById('cloud-sql-details');
+      if (box) box.classList.toggle('hidden');
+    }
+
+    function copySetupSql() {
+      const sqlEl = document.getElementById('supabase-sql-code');
+      if (!sqlEl) return;
+      const temp = document.createElement('textarea');
+      temp.value = sqlEl.textContent;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
+      showToast('SQL script copied! Paste it into Supabase SQL Editor.');
+    }
+
     function setCoachAuditWeek(w) {
-      coachAuditWeek = w;
+      coachAuditWeek = parseInt(w, 10) || 1;
       for (let i = 1; i <= 6; i++) {
         const b = document.getElementById(`cwbtn-${i}`);
-        if (b) b.className = (i === w) ? 'week-btn active' : 'week-btn';
+        if (b) b.className = (i === coachAuditWeek) ? 'week-btn active' : 'week-btn';
       }
-
-      const sumEl = document.getElementById('coach-audit-week-summary');
-      if (sumEl) sumEl.textContent = `Auditing Week ${w} \u2022 Target: 48 Sets (Pitch + Gym Warm-ups & Lifts)`;
-
+      const summary = document.getElementById('coach-audit-week-summary');
+      if (summary) {
+        summary.innerHTML = `Auditing Week ${coachAuditWeek} &bull; Target: ${TARGET_ITEMS_PER_WEEK} Sets (Pitch + Gym Warm-ups &amp; Lifts)`;
+      }
       renderCoachAuditTable();
     }
 
@@ -2005,84 +2007,85 @@ WITH CHECK (true);</div>
 
       SQUAD_DATA.forEach(p => {
         const stats = calculateHurlerWeekStats(p.id, coachAuditWeek);
+        const savedAt = (hurlerTimestamps[p.id] && hurlerTimestamps[p.id][coachAuditWeek]) || '—';
+        const pctColor = stats.pct >= 75 ? '#00F298' : stats.pct >= 35 ? '#F5C544' : '#F87171';
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><strong>#${p.id} ${p.name}</strong></td>
           <td><span style="color:#00F298; font-family:monospace;">Pod ${p.pod}</span></td>
           <td><span class="status-badge badge-fit">FIT</span></td>
-          <td style="text-align:right; font-family:monospace; color:${stats.pitchDone >= 20 ? '#00F298' : '#F1F5F9'};">${stats.pitchDone} / 28</td>
-          <td style="text-align:right; font-family:monospace; color:${stats.gymDone >= 14 ? '#00F298' : '#F1F5F9'};">${stats.gymDone} / 20</td>
-          <td style="text-align:right; font-family:monospace; font-weight:700;">${stats.totalDone} / ${stats.targetTotal}</td>
-          <td style="text-align:right; font-family:monospace; font-weight:800; color:${stats.pct >= 75 ? '#00F298' : (stats.pct >= 35 ? '#F5C544' : '#F87171')}; font-size:12px;">
-            ${stats.pct}%
-          </td>
-          <td style="text-align:right; font-family:monospace; font-size:10px; color:${stats.lastSaved !== '—' ? '#00F298' : '#718C80'};">
-            ${stats.lastSaved}
-          </td>
+          <td style="text-align:right; font-family:monospace;">${stats.pitchDone} / 28</td>
+          <td style="text-align:right; font-family:monospace;">${stats.gymDone} / 20</td>
+          <td style="text-align:right; font-family:monospace; font-weight:700;">${stats.totalDone} / ${TARGET_ITEMS_PER_WEEK}</td>
+          <td style="text-align:right; font-family:monospace; font-weight:900; color:${pctColor};">${stats.pct}%</td>
+          <td style="text-align:right; font-family:monospace; font-size:10px; color:#94A3B8;">${savedAt}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    function unlockCoachDesk() {
-      const pin = document.getElementById('coach-pass-input').value.trim();
-      if (pin === 'pats1884' || pin === '1884') {
-        document.getElementById('coach-lock-panel').classList.add('hidden');
-        document.getElementById('coach-unlocked-panel').classList.remove('hidden');
-        document.getElementById('coach-auth-err').classList.add('hidden');
-        pullFromCloud(false);
-        renderCoachAuditTable();
-      } else {
-        document.getElementById('coach-auth-err').classList.remove('hidden');
-      }
-    }
-
-    function lockCoachDesk() {
-      document.getElementById('coach-unlocked-panel').classList.add('hidden');
-      document.getElementById('coach-lock-panel').classList.remove('hidden');
-      document.getElementById('coach-pass-input').value = '';
-    }
-
-    // Fuel & Nutrition Logic
+    // =========================================================================
+    // 5. FUEL & NUTRITION ENGINE
+    // =========================================================================
     function calculateNutrition() {
-      const bw = parseFloat(document.getElementById('fuel-weight-input')?.value) || 82;
-      const type = document.getElementById('fuel-session-type')?.value || 'pitch';
-      let carbG = 6.0, protG = 1.8, fatG = 1.0, fluidMl = 40;
-      if (type === 'gym') { carbG = 4.0; protG = 2.0; fatG = 1.1; fluidMl = 35; }
-      else if (type === 'match') { carbG = 7.5; protG = 1.8; fatG = 0.8; fluidMl = 45; }
-      else if (type === 'rest') { carbG = 3.0; protG = 1.9; fatG = 1.1; fluidMl = 32; }
+      const wtInput = document.getElementById('fuel-weight-input');
+      const typeSelect = document.getElementById('fuel-session-type');
+      const bw = Math.max(40, Math.min(160, parseFloat(wtInput ? wtInput.value : 82) || 82));
+      const mode = typeSelect ? typeSelect.value : 'pitch';
 
-      const totalCarbs = Math.round(bw * carbG);
-      const totalProt = Math.round(bw * protG);
-      const totalFats = Math.round(bw * fatG);
-      const totalFluids = ((bw * fluidMl) / 1000).toFixed(1);
+      let carbFactor = 6.0;
+      let protFactor = 1.8;
+      let fatFactor = 1.0;
+      let fluidFactor = 40;
 
-      const carbsEl = document.getElementById('out-carbs');
-      const carbsSub = document.getElementById('out-carbs-sub');
-      const protEl = document.getElementById('out-prot');
-      const protSub = document.getElementById('out-prot-sub');
-      const fatsEl = document.getElementById('out-fats');
-      const fatsSub = document.getElementById('out-fats-sub');
-      const fluidsEl = document.getElementById('out-fluids');
+      if (mode === 'gym') {
+        carbFactor = 4.0;
+        protFactor = 2.0;
+        fatFactor = 1.0;
+        fluidFactor = 35;
+      } else if (mode === 'match') {
+        carbFactor = 7.5;
+        protFactor = 1.8;
+        fatFactor = 0.8;
+        fluidFactor = 45;
+      } else if (mode === 'rest') {
+        carbFactor = 3.0;
+        protFactor = 1.8;
+        fatFactor = 1.1;
+        fluidFactor = 35;
+      }
 
-      if (carbsEl) carbsEl.textContent = `${totalCarbs}g`;
-      if (carbsSub) carbsSub.textContent = `${carbG}g / kg BW`;
-      if (protEl) protEl.textContent = `${totalProt}g`;
-      if (protSub) protSub.textContent = `${protG}g / kg BW (4x pulses)`;
-      if (fatsEl) fatsEl.textContent = `${totalFats}g`;
-      if (fatsSub) fatsSub.textContent = `${fatG}g / kg BW`;
-      if (fluidsEl) fluidsEl.textContent = `${totalFluids}L`;
+      const carbs = Math.round(bw * carbFactor);
+      const prot = Math.round(bw * protFactor);
+      const fats = Math.round(bw * fatFactor);
+      const fluids = ((bw * fluidFactor) / 1000).toFixed(1);
+
+      const elCarbs = document.getElementById('out-carbs');
+      const elCarbsSub = document.getElementById('out-carbs-sub');
+      const elProt = document.getElementById('out-prot');
+      const elProtSub = document.getElementById('out-prot-sub');
+      const elFats = document.getElementById('out-fats');
+      const elFatsSub = document.getElementById('out-fats-sub');
+      const elFluids = document.getElementById('out-fluids');
+
+      if (elCarbs) elCarbs.textContent = `${carbs}g`;
+      if (elCarbsSub) elCarbsSub.textContent = `${carbFactor.toFixed(1)}g / kg BW`;
+      if (elProt) elProt.textContent = `${prot}g`;
+      if (elProtSub) elProtSub.textContent = `${protFactor.toFixed(1)}g / kg BW`;
+      if (elFats) elFats.textContent = `${fats}g`;
+      if (elFatsSub) elFatsSub.textContent = `${fatFactor.toFixed(1)}g / kg BW`;
+      if (elFluids) elFluids.textContent = `${fluids}L`;
     }
 
-    // Match Day Console Logic
-    let matchData = {
-      oppName: "Opposition Club",
-      half: "H1",
+    // =========================================================================
+    // 6. MATCH DAY KPI CONSOLE
+    // =========================================================================
+    const matchState = {
+      half: 'H1',
       patsGoals: 0,
-      patsPointsPlay: 0,
-      patsPointsFree: 0,
-      oppGoals: 0,
-      oppPoints: 0,
+      patsPointPlay: 0,
+      patsPointFree: 0,
       own_puck_clean: 0,
       own_puck_break: 0,
       own_puck_short: 0,
@@ -2093,167 +2096,187 @@ WITH CHECK (true);</div>
       shot_short: 0,
       wr_hookblock: 0,
       wr_turnover: 0,
-      wr_lostpossession: 0,
       foul_zone: 0,
-      foul_open: 0
+      foul_open: 0,
+      wr_lostpossession: 0
     };
 
-    function incMatchScore(type, d) {
-      if (type === 'goal') matchData.patsGoals = Math.max(0, matchData.patsGoals + d);
-      if (type === 'point_play') matchData.patsPointsPlay = Math.max(0, matchData.patsPointsPlay + d);
-      if (type === 'point_free') matchData.patsPointsFree = Math.max(0, matchData.patsPointsFree + d);
+    function incMatchMetric(key, delta) {
+      matchState[key] = Math.max(0, (matchState[key] || 0) + delta);
       renderMatchDisplay();
     }
 
-    function incMatchMetric(key, d) {
-      if (matchData[key] === undefined) matchData[key] = 0;
-      matchData[key] = Math.max(0, matchData[key] + d);
+    function incMatchScore(type, delta) {
+      if (type === 'goal') {
+        matchState.patsGoals = Math.max(0, matchState.patsGoals + delta);
+      } else if (type === 'point_play') {
+        matchState.patsPointPlay = Math.max(0, matchState.patsPointPlay + delta);
+      } else if (type === 'point_free') {
+        matchState.patsPointFree = Math.max(0, matchState.patsPointFree + delta);
+      }
       renderMatchDisplay();
     }
 
     function toggleMatchHalf(val) {
-      matchData.half = val;
-      const b = document.getElementById('match-half-badge');
-      if (b) {
-        b.textContent = val === 'H1' ? '1st Half Active' : val === 'H2' ? '2nd Half Active' : 'Extra Time';
+      matchState.half = val;
+      const badge = document.getElementById('match-half-badge');
+      if (badge) {
+        badge.textContent = val === 'H1' ? '1st Half Active' : val === 'H2' ? '2nd Half Active' : 'Extra Time Active';
       }
     }
 
     function onOppScoreChange() {
-      const g = parseInt(document.getElementById('opp-goals-input')?.value, 10) || 0;
-      const p = parseInt(document.getElementById('opp-points-input')?.value, 10) || 0;
-      matchData.oppGoals = Math.max(0, g);
-      matchData.oppPoints = Math.max(0, p);
       renderMatchDisplay();
     }
 
-    function renderMatchDisplay() {
-      const totalPoints = matchData.patsPointsPlay + matchData.patsPointsFree;
-      const totalSum = (matchData.patsGoals * 3) + totalPoints;
-      const oppTotalSum = (matchData.oppGoals * 3) + matchData.oppPoints;
-
-      const gEl = document.getElementById('score-pats-goals');
-      const pEl = document.getElementById('score-pats-points');
-      const totEl = document.getElementById('score-pats-total');
-      const oppTotEl = document.getElementById('score-opp-total');
-
-      if (gEl) gEl.textContent = matchData.patsGoals;
-      if (pEl) pEl.textContent = totalPoints;
-      if (totEl) totEl.textContent = `(${totalSum})`;
-      if (oppTotEl) oppTotEl.textContent = `(${oppTotalSum})`;
-
-      const keys = [
-        'own_puck_clean', 'own_puck_break', 'own_puck_short', 'own_puck_lost',
-        'opp_puck_won', 'opp_puck_clean', 'shot_wide', 'shot_short',
-        'wr_hookblock', 'wr_turnover', 'wr_lostpossession', 'foul_zone', 'foul_open'
-      ];
-      keys.forEach(k => {
-        const el = document.getElementById(`val-${k}`);
-        if (el) el.textContent = matchData[k] || 0;
-      });
-
-      const ptPlayEl = document.getElementById('val-point-play');
-      if (ptPlayEl) ptPlayEl.textContent = matchData.patsPointsPlay;
-      const ptFreeEl = document.getElementById('val-point-free');
-      if (ptFreeEl) ptFreeEl.textContent = matchData.patsPointsFree;
-      const goalEl = document.getElementById('val-goal');
-      if (goalEl) goalEl.textContent = matchData.patsGoals;
-
-      const ownWon = matchData.own_puck_clean + matchData.own_puck_break + matchData.own_puck_short;
-      const ownTotal = ownWon + matchData.own_puck_lost;
-      const puckPct = ownTotal > 0 ? Math.round((ownWon / ownTotal) * 100) : 0;
-      const puckGauge = document.getElementById('kpi-gauge-puck');
-      if (puckGauge) puckGauge.textContent = `${puckPct}%`;
-      const puckSub = document.getElementById('kpi-gauge-puck-sub');
-      if (puckSub) puckSub.textContent = `${ownWon} won / ${ownTotal} total`;
-
-      const totalScores = matchData.patsGoals + totalPoints;
-      const totalShots = totalScores + matchData.shot_wide + matchData.shot_short;
-      const shotPct = totalShots > 0 ? Math.round((totalScores / totalShots) * 100) : 0;
-      const shotGauge = document.getElementById('kpi-gauge-shot');
-      if (shotGauge) shotGauge.textContent = `${shotPct}%`;
-      const shotSub = document.getElementById('kpi-gauge-shot-sub');
-      if (shotSub) shotSub.textContent = `${totalScores} scores / ${totalShots} shots`;
-
-      const hookGauge = document.getElementById('kpi-gauge-hook');
-      if (hookGauge) hookGauge.textContent = matchData.wr_hookblock + matchData.wr_turnover;
-
-      const foulGauge = document.getElementById('kpi-gauge-foul');
-      if (foulGauge) foulGauge.textContent = matchData.foul_zone;
-      const foulSub = document.getElementById('kpi-gauge-foul-sub');
-      if (foulSub) foulSub.textContent = `${matchData.foul_zone + matchData.foul_open} total match frees`;
-    }
-
     function resetMatchStats() {
-      matchData = {
-        oppName: "Opposition Club",
-        half: "H1",
-        patsGoals: 0,
-        patsPointsPlay: 0,
-        patsPointsFree: 0,
-        oppGoals: 0,
-        oppPoints: 0,
-        own_puck_clean: 0,
-        own_puck_break: 0,
-        own_puck_short: 0,
-        own_puck_lost: 0,
-        opp_puck_won: 0,
-        opp_puck_clean: 0,
-        shot_wide: 0,
-        shot_short: 0,
-        wr_hookblock: 0,
-        wr_turnover: 0,
-        wr_lostpossession: 0,
-        foul_zone: 0,
-        foul_open: 0
-      };
+      Object.keys(matchState).forEach(k => {
+        if (k !== 'half') matchState[k] = 0;
+      });
       const oppG = document.getElementById('opp-goals-input');
       const oppP = document.getElementById('opp-points-input');
       if (oppG) oppG.value = 0;
       if (oppP) oppP.value = 0;
       renderMatchDisplay();
+      showToast('Match Day scoreboard & KPIs reset.');
+    }
+
+    function renderMatchDisplay() {
+      const patsPoints = matchState.patsPointPlay + matchState.patsPointFree;
+      const patsTotal = (matchState.patsGoals * 3) + patsPoints;
+
+      const oppGoals = parseInt(document.getElementById('opp-goals-input')?.value || '0', 10) || 0;
+      const oppPoints = parseInt(document.getElementById('opp-points-input')?.value || '0', 10) || 0;
+      const oppTotal = (oppGoals * 3) + oppPoints;
+
+      const setTxt = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+      };
+
+      setTxt('score-pats-goals', matchState.patsGoals);
+      setTxt('score-pats-points', patsPoints);
+      setTxt('score-pats-total', `(${patsTotal})`);
+      setTxt('score-opp-total', `(${oppTotal})`);
+
+      setTxt('val-point-play', matchState.patsPointPlay);
+      setTxt('val-point-free', matchState.patsPointFree);
+      setTxt('val-goal', matchState.patsGoals);
+
+      const metricKeys = [
+        'own_puck_clean', 'own_puck_break', 'own_puck_short', 'own_puck_lost',
+        'opp_puck_won', 'opp_puck_clean', 'shot_wide', 'shot_short',
+        'wr_hookblock', 'wr_turnover', 'foul_zone', 'foul_open', 'wr_lostpossession'
+      ];
+      metricKeys.forEach(k => setTxt(`val-${k}`, matchState[k]));
+
+      // Gauges
+      const ownPuckWon = matchState.own_puck_clean + matchState.own_puck_break + matchState.own_puck_short;
+      const ownPuckTotal = ownPuckWon + matchState.own_puck_lost;
+      const puckPct = ownPuckTotal > 0 ? Math.round((ownPuckWon / ownPuckTotal) * 100) : 0;
+      setTxt('kpi-gauge-puck', `${puckPct}%`);
+      setTxt('kpi-gauge-puck-sub', `${ownPuckWon} won / ${ownPuckTotal} total`);
+
+      const totalScores = matchState.patsGoals + patsPoints;
+      const totalShots = totalScores + matchState.shot_wide + matchState.shot_short;
+      const shotPct = totalShots > 0 ? Math.round((totalScores / totalShots) * 100) : 0;
+      setTxt('kpi-gauge-shot', `${shotPct}%`);
+      setTxt('kpi-gauge-shot-sub', `${totalScores} scores / ${totalShots} shots`);
+
+      setTxt('kpi-gauge-hook', matchState.wr_hookblock);
+
+      const totalFrees = matchState.foul_zone + matchState.foul_open;
+      setTxt('kpi-gauge-foul', matchState.foul_zone);
+      setTxt('kpi-gauge-foul-sub', `${totalFrees} total match frees`);
     }
 
     function exportMatchReportCSV() {
-      const ownWon = matchData.own_puck_clean + matchData.own_puck_break + matchData.own_puck_short;
-      const ownTotal = ownWon + matchData.own_puck_lost;
-      const puckPct = ownTotal > 0 ? Math.round((ownWon / ownTotal) * 100) : 0;
-      const totalPoints = matchData.patsPointsPlay + matchData.patsPointsFree;
-      const totalScores = matchData.patsGoals + totalPoints;
-      const totalShots = totalScores + matchData.shot_wide + matchData.shot_short;
-      const shotPct = totalShots > 0 ? Math.round((totalScores / totalShots) * 100) : 0;
+      const oppName = (document.getElementById('opp-name-input')?.value || 'Opposition').replace(/,/g, ' ');
+      const patsPoints = matchState.patsPointPlay + matchState.patsPointFree;
+      const oppGoals = parseInt(document.getElementById('opp-goals-input')?.value || '0', 10) || 0;
+      const oppPoints = parseInt(document.getElementById('opp-points-input')?.value || '0', 10) || 0;
 
-      let csv = "St Pat's GAA - Dublin Junior Hurling Match Report\n";
-      csv += `Date,${new Date().toLocaleDateString('en-IE')}\n`;
-      csv += `Opposition,${document.getElementById('opp-name-input')?.value || "Opposition Club"}\n`;
-      csv += `Score,St Pat's ${matchData.patsGoals}-${totalPoints} vs ${matchData.oppGoals}-${matchData.oppPoints}\n\n`;
-      csv += `Puck-Out Retention,${puckPct}%,(Benchmark: >60%)\n`;
-      csv += `Shot Conversion,${shotPct}%,(Benchmark: >55%)\n`;
-      csv += `Hooks & Blocks,${matchData.wr_hookblock}\n`;
-      csv += `Scoring Zone Frees (<50m),${matchData.foul_zone}\n`;
+      const lines = [
+        'Metric,Value',
+        `Opposition,${oppName}`,
+        `St Pat's Score,${matchState.patsGoals}-${patsPoints}`,
+        `Opposition Score,${oppGoals}-${oppPoints}`,
+        `Own Puck-Outs Clean,${matchState.own_puck_clean}`,
+        `Own Puck-Outs Break Won,${matchState.own_puck_break}`,
+        `Own Puck-Outs Short <45m,${matchState.own_puck_short}`,
+        `Own Puck-Outs Lost,${matchState.own_puck_lost}`,
+        `Opp Puck-Out Press Won,${matchState.opp_puck_won}`,
+        `Points From Play,${matchState.patsPointPlay}`,
+        `Points From Frees,${matchState.patsPointFree}`,
+        `Goals,${matchState.patsGoals}`,
+        `Wides,${matchState.shot_wide}`,
+        `Dropped Short,${matchState.shot_short}`,
+        `Hooks & Blocks,${matchState.wr_hookblock}`,
+        `Turnovers Won,${matchState.wr_turnover}`,
+        `Fouls <50m,${matchState.foul_zone}`,
+        `Fouls >50m,${matchState.foul_open}`,
+        `Unforced Turnovers Conceded,${matchState.wr_lostpossession}`
+      ];
 
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `st_pats_match_kpis.csv`;
+      a.href = url;
+      a.download = `stpats_match_report_${oppName.toLowerCase().replace(/\s+/g, '_')}.csv`;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Match KPI CSV report exported!');
     }
 
-    let tSec = 0, tInterval = null;
-    function startTimer(s) {
-      clearInterval(tInterval);
-      tSec = s;
+    // =========================================================================
+    // 7. REST TIMER & TOAST NOTIFICATIONS
+    // =========================================================================
+    let timerSeconds = 0;
+    let timerInterval = null;
+
+    function startTimer(sec) {
+      clearInterval(timerInterval);
+      timerSeconds = sec;
       updateTimerUI();
-      tInterval = setInterval(() => {
-        tSec--;
-        if (tSec <= 0) clearInterval(tInterval);
-        updateTimerUI();
+      timerInterval = setInterval(() => {
+        timerSeconds--;
+        if (timerSeconds <= 0) {
+          clearInterval(timerInterval);
+          timerSeconds = 0;
+          updateTimerUI();
+          showToast('Rest window complete — go again!');
+        } else {
+          updateTimerUI();
+        }
       }, 1000);
     }
-    function resetTimer() { clearInterval(tInterval); tSec = 0; updateTimerUI(); }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerSeconds = 0;
+      updateTimerUI();
+    }
+
     function updateTimerUI() {
       const el = document.getElementById('timer-readout');
-      if (el) el.textContent = `00:${tSec.toString().padStart(2, '0')}`;
+      if (!el) return;
+      const mm = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+      const ss = String(timerSeconds % 60).padStart(2, '0');
+      el.textContent = `${mm}:${ss}`;
+    }
+
+    let toastTimeout = null;
+    function showToast(msg) {
+      const el = document.getElementById('toast-msg');
+      if (!el) return;
+      el.textContent = msg;
+      el.style.display = 'block';
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        el.style.display = 'none';
+      }, 2800);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
