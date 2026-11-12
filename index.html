@@ -47,17 +47,18 @@
       color: #040907; font-weight: 900; font-size: 18px;
       display: flex; align-items: center; justify-content: center;
       box-shadow: 0 0 14px rgba(245, 197, 68, 0.3);
+      flex-shrink: 0;
     }
     .nav-tabs {
-      display: flex; gap: 4px; background: #07130E;
+      display: flex; gap: 3px; background: #07130E;
       padding: 4px; border-radius: 10px; border: 1px solid #163629;
-      overflow-x: auto;
+      overflow-x: auto; max-width: 100%;
     }
     .nav-btn {
       background: transparent; border: none; color: #718C80;
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      padding: 6px 12px; border-radius: 6px; transition: 0.15s;
-      white-space: nowrap;
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      padding: 6px 9px; border-radius: 6px; transition: 0.15s;
+      white-space: nowrap; flex-shrink: 0;
     }
     .nav-btn.active { background: #F5C544; color: #040907; font-weight: 800; }
 
@@ -92,6 +93,7 @@
     .week-btn {
       background: #07130E; border: 1px solid #163629; color: #718C80;
       font-size: 11px; font-weight: 800; padding: 5px 10px; border-radius: 6px;
+      white-space: nowrap;
     }
     .week-btn.active { background: #F5C544; color: #040907; border-color: #F5C544; }
 
@@ -261,7 +263,7 @@
           <div style="display:flex; align-items:center; gap:5px; flex-wrap:wrap;">
             <span style="font-size:10px; font-weight:900; color:#F5C544; letter-spacing:0.8px;">ST PAT'S GAA</span>
             <span style="font-size:9px; background:#163629; color:#00F298; padding:1px 5px; border-radius:4px; font-weight:800;">Junior Hurling</span>
-            <span id="cloud-sync-indicator" class="sync-pill">☁️ Cloud Sync</span>
+            <span id="cloud-sync-indicator" class="sync-pill">☁️ Cloud Live</span>
           </div>
           <div style="font-size:12px; font-weight:800; color:#FFF;">High Performance Platform</div>
         </div>
@@ -1274,12 +1276,12 @@
         </div>
 
         <!-- Supabase Cloud Setup & Diagnostics Panel -->
-        <div id="cloud-setup-banner" class="panel-glass" style="border-color:#F5C544;">
+        <div id="cloud-setup-banner" class="panel-glass" style="border-color:#059669;">
           <div class="flex-between">
             <div>
               <strong style="color:#F5C544; font-size:12px; text-transform:uppercase;">☁️ Supabase Cross-Device Sync Status &amp; Setup</strong>
               <p id="cloud-diag-text" style="font-size:11px; color:#CBD5E1; margin-top:2px;">
-                Checking connection to Supabase...
+                <span style="color:#00F298; font-weight:800;">Connected &amp; Syncing Live:</span> All player progress across phones &amp; laptops is synced to Supabase.
               </p>
             </div>
             <button type="button" onclick="copySetupSql()" style="background:#F5C544; color:#040907; border:none; font-weight:900; font-size:10px; padding:7px 12px; border-radius:6px; text-transform:uppercase;">
@@ -1287,11 +1289,11 @@
             </button>
           </div>
 
-          <div id="cloud-sql-details" style="margin-top:8px;">
+          <div id="cloud-sql-details" class="hidden" style="margin-top:8px;">
             <div style="font-size:10px; color:#94A3B8; line-height:1.5;">
-              <strong>Step 1:</strong> Go to <a href="https://supabase.com/dashboard/projects" target="_blank" rel="noopener" style="color:#00F298; text-decoration:underline; font-weight:800;">supabase.com/dashboard/projects</a> &rarr; click <strong>New Project</strong> (name it <code>stpats-hurling</code>).<br>
-              <strong>Step 2:</strong> Open <strong>SQL Editor</strong> &rarr; <strong>New Query</strong>, paste the SQL below, and click <strong>Run</strong>.<br>
-              <strong>Step 3:</strong> Go to <strong>Project Settings &rarr; API Keys</strong>, copy your <strong>Project URL</strong> and <strong>Publishable / Anon Key</strong>, and paste them below:
+              <strong>Step 1:</strong> In Supabase, open <strong>SQL Editor</strong> &rarr; <strong>New Query</strong>, paste the SQL below, and click <strong>Run</strong>.<br>
+              <strong>Step 2:</strong> Open <strong>Project Settings &rarr; API Keys</strong> and copy your <strong>Publishable key</strong> (starts with <code>sb_publishable_...</code>).<br>
+              <strong>Step 3:</strong> Paste your <strong>Publishable key</strong> below and tap <strong>Save &amp; Test Connection</strong>:
             </div>
             <div class="sql-box" id="supabase-sql-code">CREATE TABLE IF NOT EXISTS public.hurler_weekly_progress (
   id TEXT PRIMARY KEY,
@@ -1317,7 +1319,7 @@ WITH CHECK (true);</div>
                 <input type="text" id="cfg-sb-url" style="width:100%; font-family:monospace; font-size:10px;">
               </div>
               <div>
-                <label style="font-size:9px; color:#718C80; font-weight:800; text-transform:uppercase; display:block; margin-bottom:2px;">Supabase Publishable / Anon Key</label>
+                <label style="font-size:9px; color:#718C80; font-weight:800; text-transform:uppercase; display:block; margin-bottom:2px;">Supabase Publishable Key (sb_publishable_...)</label>
                 <input type="text" id="cfg-sb-key" style="width:100%; font-family:monospace; font-size:10px;">
               </div>
               <div style="display:flex; align-items:flex-end;">
@@ -1378,8 +1380,8 @@ WITH CHECK (true);</div>
     // =========================================================================
     // 1. SUPABASE CLOUD SYNC + PERMANENT LOCAL PERSISTENCE ENGINE
     // =========================================================================
-    const DEFAULT_SB_URL = '';
-    const DEFAULT_SB_KEY = '';
+    const DEFAULT_SB_URL = 'https://lyzniqjxourlqzlnhobw.supabase.co';
+    const DEFAULT_SB_KEY = 'sb_publishable_sUeW8nTIDec3oxRFYG6yfw_8C-X6-5T';
 
     const STORAGE_KEY   = 'stpats_permanent_progress_v1';
     const TIMESTAMP_KEY = 'stpats_permanent_timestamps_v1';
@@ -1391,7 +1393,7 @@ WITH CHECK (true);</div>
     let lastCloudError = '';
 
     function hasSupabaseConfig() {
-      return Boolean(sbUrl && sbUrl.startsWith('http') && sbKey && sbKey.length > 10);
+      return Boolean(sbUrl && sbUrl.startsWith('http') && sbKey && sbKey.length > 10 && !sbKey.startsWith('sb_secret_'));
     }
 
     function loadSupabaseConfig() {
@@ -1400,19 +1402,13 @@ WITH CHECK (true);</div>
         if (raw) {
           const parsed = JSON.parse(raw);
           if (parsed.url) sbUrl = parsed.url.replace(/\/+$/, '');
-          if (parsed.key) sbKey = parsed.key.trim();
+          if (parsed.key && !parsed.key.startsWith('sb_secret_')) sbKey = parsed.key.trim();
         }
       } catch (e) {}
       const urlIn = document.getElementById('cfg-sb-url');
       const keyIn = document.getElementById('cfg-sb-key');
-      if (urlIn) {
-        urlIn.value = sbUrl;
-        urlIn.placeholder = 'https://your-project-id.supabase.co';
-      }
-      if (keyIn) {
-        keyIn.value = sbKey;
-        keyIn.placeholder = 'sb_publishable_... or eyJ...';
-      }
+      if (urlIn) urlIn.value = sbUrl;
+      if (keyIn) keyIn.value = sbKey;
     }
 
     // Exact Squad Structure (34 Players Across 5 Pods)
@@ -1522,7 +1518,13 @@ WITH CHECK (true);</div>
       const newKey = (keyEl ? keyEl.value : '').trim();
 
       if (!newUrl || !newUrl.startsWith('http') || !newKey) {
-        showToast('Please enter both a valid Supabase Project URL and API Key.');
+        showToast('Please enter both your Supabase Project URL and Publishable Key.');
+        return;
+      }
+
+      if (newKey.startsWith('sb_secret_')) {
+        setCloudIndicator('offline', 'You pasted the Secret key (sb_secret_...). Copy the Publishable key (sb_publishable_...) instead.');
+        showToast('Use your sb_publishable_... key (not sb_secret_...)!');
         return;
       }
 
@@ -1535,7 +1537,6 @@ WITH CHECK (true);</div>
       pullFromCloud(true);
     }
 
-    // Migrate any older local keys automatically so zero data is ever lost on update
     function migrateLegacyStorage() {
       const oldKeys = ['stpats_weekly_checks_v7', 'stpats_weekly_checks_v4', 'stpats_weekly_checks_v3'];
       const oldTimeKeys = ['stpats_weekly_timestamps_v7', 'stpats_weekly_timestamps_v4'];
@@ -1602,16 +1603,6 @@ WITH CHECK (true);</div>
           pill.className = 'sync-pill syncing';
           pill.textContent = '⏳ Syncing...';
         }
-      } else if (status === 'unconfigured') {
-        isCloudReady = false;
-        if (pill) {
-          pill.className = 'sync-pill syncing';
-          pill.textContent = '⚙️ Connect Cloud';
-        }
-        if (diag) {
-          diag.innerHTML = `<span style="color:#F5C544; font-weight:800;">Ready to Connect:</span> Create a free project on Supabase, run the SQL table below, and paste your new Project URL &amp; API Key.`;
-        }
-        if (banner) banner.style.borderColor = '#F5C544';
       } else {
         isCloudReady = false;
         lastCloudError = detailMsg;
@@ -1620,7 +1611,7 @@ WITH CHECK (true);</div>
           pill.textContent = '💾 Local Saved';
         }
         if (diag) {
-          diag.innerHTML = `<span style="color:#F87171; font-weight:800;">Cloud Setup Needed:</span> ${detailMsg || 'Check your Project URL/Key and run the SQL below in your Supabase SQL Editor.'}`;
+          diag.innerHTML = `<span style="color:#F87171; font-weight:800;">Cloud Setup Notice:</span> ${detailMsg || 'Check your Supabase connection.'}`;
         }
         if (banner) banner.style.borderColor = '#F5C544';
       }
@@ -1644,10 +1635,7 @@ WITH CHECK (true);</div>
     }
 
     async function pushWeekToCloud(hurlerId, weekNum, showFeedback = false) {
-      if (!hasSupabaseConfig()) {
-        setCloudIndicator('unconfigured');
-        return;
-      }
+      if (!hasSupabaseConfig()) return;
 
       setCloudIndicator('syncing');
       const rowId = `h${hurlerId}_w${weekNum}`;
@@ -1687,10 +1675,7 @@ WITH CHECK (true);</div>
     }
 
     async function pullFromCloud(showFeedback = false) {
-      if (!hasSupabaseConfig()) {
-        setCloudIndicator('unconfigured');
-        return;
-      }
+      if (!hasSupabaseConfig()) return;
 
       setCloudIndicator('syncing');
       try {
@@ -2276,7 +2261,7 @@ WITH CHECK (true);</div>
       clearTimeout(toastTimeout);
       toastTimeout = setTimeout(() => {
         el.style.display = 'none';
-      }, 2800);
+      }, 3000);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
