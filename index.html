@@ -184,9 +184,8 @@
       padding: 2px 7px; border-radius: 99px;
       background: #064E3B; border: 1px solid #059669; color: #34D399;
     }
-    .sync-pill.local-only {
-      background: rgba(120, 53, 15, 0.45); border-color: #D97706; color: #FDE68A;
-    }
+    .sync-pill.syncing { background: rgba(120, 53, 15, 0.5); border-color: #F5C544; color: #F5C544; }
+    .sync-pill.offline { background: rgba(153, 27, 27, 0.4); border-color: #991B1B; color: #FCA5A5; }
 
     /* Table Styles */
     table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 8px; }
@@ -232,6 +231,13 @@
       font-size: 10px; font-weight: 900; padding: 2px 8px; border-radius: 4px; font-family: monospace; text-transform: uppercase;
     }
 
+    /* SQL Box */
+    .sql-box {
+      background: #040907; border: 1px solid #214F3D; border-radius: 8px;
+      padding: 10px; font-family: monospace; font-size: 10px; color: #A7F3D0;
+      white-space: pre-wrap; overflow-x: auto; margin-top: 8px; line-height: 1.4;
+    }
+
     /* Toast Notification */
     #toast-msg {
       position: fixed; bottom: 20px; right: 20px; z-index: 99;
@@ -255,7 +261,7 @@
           <div style="display:flex; align-items:center; gap:5px; flex-wrap:wrap;">
             <span style="font-size:10px; font-weight:900; color:#F5C544; letter-spacing:0.8px;">ST PAT'S GAA</span>
             <span style="font-size:9px; background:#163629; color:#00F298; padding:1px 5px; border-radius:4px; font-weight:800;">Junior Hurling</span>
-            <span id="cloud-sync-indicator" class="sync-pill">☁️ Syncing...</span>
+            <span id="cloud-sync-indicator" class="sync-pill">☁️ Cloud Sync</span>
           </div>
           <div style="font-size:12px; font-weight:800; color:#FFF;">High Performance Platform</div>
         </div>
@@ -386,7 +392,7 @@
           </div>
           <div style="font-size:11px; color:#718C80; margin-top:2px;">
             <span id="live-fraction-badge" style="font-family:monospace; font-weight:700; color:#FFF;">0 / 48 target sets</span> &bull; 
-            <span id="save-status-msg" style="color:#00F298; font-weight:700;">Auto-saves across devices</span>
+            <span id="save-status-msg" style="color:#00F298; font-weight:700;">Auto-syncs live across all devices</span>
           </div>
         </div>
         
@@ -654,7 +660,7 @@
       <section class="panel-glass flex-between" style="background:#07130E; border-color:#00F298;">
         <div>
           <strong style="color:#FFF;">Done with your workout?</strong>
-          <span style="font-size:11px; color:#718C80; display:block;">Tap "Check All" if you completed every set, or hit Save to sync across all devices.</span>
+          <span style="font-size:11px; color:#718C80; display:block;">All checked boxes save locally and sync automatically to the Coaches Desk.</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
           <button type="button" class="btn-check-all" onclick="checkAllActiveSession()">
@@ -1036,7 +1042,7 @@
         <div class="kpi-gauge-box">
           <div class="flex-between">
             <span style="font-size:9px; color:#718C80; font-weight:800; text-transform:uppercase;">Puck-Out Win %</span>
-            <span style="font-size:8px; background:#064E3B; color:#34D399; padding:1px 4px; border-radius:2px; font-mono font-weight:800;">&gt;60% Target</span>
+            <span style="font-size:8px; background:#064E3B; color:#34D399; padding:1px 4px; border-radius:2px; font-family:monospace; font-weight:800;">&gt;60% Target</span>
           </div>
           <span id="kpi-gauge-puck" style="font-size:24px; font-weight:900; color:#F5C544; font-family:monospace; display:block; margin:2px 0;">0%</span>
           <span id="kpi-gauge-puck-sub" style="font-size:10px; color:#718C80; font-family:monospace;">0 won / 0 total</span>
@@ -1045,7 +1051,7 @@
         <div class="kpi-gauge-box">
           <div class="flex-between">
             <span style="font-size:9px; color:#718C80; font-weight:800; text-transform:uppercase;">Shot Conversion</span>
-            <span style="font-size:8px; background:#064E3B; color:#34D399; padding:1px 4px; border-radius:2px; font-mono font-weight:800;">&gt;55% Target</span>
+            <span style="font-size:8px; background:#064E3B; color:#34D399; padding:1px 4px; border-radius:2px; font-family:monospace; font-weight:800;">&gt;55% Target</span>
           </div>
           <span id="kpi-gauge-shot" style="font-size:24px; font-weight:900; color:#00F298; font-family:monospace; display:block; margin:2px 0;">0%</span>
           <span id="kpi-gauge-shot-sub" style="font-size:10px; color:#718C80; font-family:monospace;">0 scores / 0 shots</span>
@@ -1054,7 +1060,7 @@
         <div class="kpi-gauge-box">
           <div class="flex-between">
             <span style="font-size:9px; color:#718C80; font-weight:800; text-transform:uppercase;">Hooks &amp; Blocks</span>
-            <span style="font-size:8px; background:#07130E; border:1px solid #163629; color:#FFF; padding:1px 4px; border-radius:2px; font-mono font-weight:800;">Work Rate</span>
+            <span style="font-size:8px; background:#07130E; border:1px solid #163629; color:#FFF; padding:1px 4px; border-radius:2px; font-family:monospace; font-weight:800;">Work Rate</span>
           </div>
           <span id="kpi-gauge-hook" style="font-size:24px; font-weight:900; color:#FFF; font-family:monospace; display:block; margin:2px 0;">0</span>
           <span style="font-size:10px; color:#718C80;">Dispossessions</span>
@@ -1063,7 +1069,7 @@
         <div class="kpi-gauge-box" style="border-color:#991B1B;">
           <div class="flex-between">
             <span style="font-size:9px; color:#F87171; font-weight:800; text-transform:uppercase;">Frees &lt;50m</span>
-            <span style="font-size:8px; background:rgba(153,27,27,0.4); color:#FCA5A5; padding:1px 4px; border-radius:2px; font-mono font-weight:800;">Danger Zone</span>
+            <span style="font-size:8px; background:rgba(153,27,27,0.4); color:#FCA5A5; padding:1px 4px; border-radius:2px; font-family:monospace; font-weight:800;">Danger Zone</span>
           </div>
           <span id="kpi-gauge-foul" style="font-size:24px; font-weight:900; color:#F87171; font-family:monospace; display:block; margin:2px 0;">0</span>
           <span id="kpi-gauge-foul-sub" style="font-size:10px; color:#F87171; font-family:monospace;">0 total match frees</span>
@@ -1239,42 +1245,87 @@
     <div id="portal-coach" class="hidden">
 
       <!-- PIN Gate -->
-      <section id="coach-lock-panel" class="panel-glass" style="max-width:320px; margin:24px auto; text-align:center;">
+      <section id="coach-lock-panel" class="panel-glass" style="max-width:340px; margin:24px auto; text-align:center;">
         <div style="font-size:28px; margin-bottom:6px;">🔒</div>
-        <div style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Coaches Desk Gate</div>
-        <div style="font-size:11px; color:#718C80; margin-bottom:12px;">Enter passcode to unlock squad audits.</div>
-        <input type="password" id="coach-pass-input" placeholder="Enter PIN" style="width:100%; text-align:center; font-family:monospace; margin-bottom:10px;">
-        <button onclick="unlockCoachDesk()" style="width:100%; background:#00F298; color:#040907; font-weight:900; padding:8px; border-radius:6px; border:none; text-transform:uppercase;">Unlock Desk</button>
+        <div style="font-size:14px; font-weight:900; text-transform:uppercase; color:#FFF;">Coaches Desk Gate</div>
+        <div style="font-size:11px; color:#718C80; margin:4px 0 12px 0;">Enter coaching passcode to audit squad completion.</div>
+        <input type="password" id="coach-pass-input" placeholder="Enter PIN" onkeydown="if(event.key==='Enter') unlockCoachDesk()" style="width:100%; text-align:center; font-family:monospace; margin-bottom:10px;">
+        <button type="button" onclick="unlockCoachDesk()" style="width:100%; background:#00F298; color:#040907; font-weight:900; padding:9px; border-radius:6px; border:none; text-transform:uppercase;">Unlock Desk</button>
         <p id="coach-auth-err" style="color:#F87171; font-size:11px; margin-top:8px;" class="hidden">Incorrect passcode</p>
       </section>
 
-      <!-- Unlocked Console -->
+      <!-- Unlocked Coach Desk -->
       <section id="coach-unlocked-panel" class="hidden">
-        
-        <!-- Header & Lock -->
+
         <div class="panel-glass flex-between">
           <div>
-            <div style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF;">Squad Work Completion Audit &bull; Live Multi-Device Sync</div>
-            <div style="font-size:11px; color:#718C80;">Live data synced across all players' phones and laptops per week.</div>
+            <div style="font-size:14px; font-weight:900; text-transform:uppercase; color:#FFF;">Coach Command Desk &amp; Weekly Cloud Audit</div>
+            <div style="font-size:11px; color:#718C80;">All 34 hurlers across Pods 1–5 &bull; Multi-device live sync via Supabase</div>
           </div>
-          <div style="display:flex; gap:6px; align-items:center;">
-            <button onclick="syncFromCloud(true)" style="background:#07130E; border:1px solid #00F298; color:#00F298; font-size:10px; font-weight:800; padding:5px 10px; border-radius:6px; text-transform:uppercase;">↻ Refresh Cloud</button>
-            <button class="btn-lock" onclick="lockCoachDesk()">Lock Desk</button>
+          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+            <button type="button" onclick="pullFromCloud(true)" style="background:#064E3B; border:1px solid #059669; color:#34D399; font-size:10px; font-weight:800; padding:6px 10px; border-radius:6px; text-transform:uppercase;">
+              🔄 Refresh Cloud Data
+            </button>
+            <button type="button" onclick="toggleCloudConfigPanel()" style="background:#07130E; border:1px solid #163629; color:#F5C544; font-size:10px; font-weight:800; padding:6px 10px; border-radius:6px; text-transform:uppercase;">
+              ⚙️ Supabase Setup
+            </button>
+            <button type="button" class="btn-lock" onclick="lockCoachDesk()">Lock Desk</button>
           </div>
         </div>
 
-        <!-- Cloud Sync Status Banner (Shows SQL snippet if table needs 1-time creation) -->
-        <div id="coach-cloud-setup-banner" class="panel-glass hidden" style="border-color:#F5C544; background:rgba(120, 53, 15, 0.25);">
+        <!-- Supabase Cloud Setup & Diagnostics Panel -->
+        <div id="cloud-setup-banner" class="panel-glass" style="border-color:#F5C544;">
           <div class="flex-between">
             <div>
-              <strong style="color:#F5C544; font-size:11px; text-transform:uppercase;">⚠️ One-Time Cloud Sync Table Needed in Supabase</strong>
-              <p style="font-size:11px; color:#CBD5E1; margin-top:2px;">
-                Local saving is active, but to let players' phones sync to your Coach Desk across devices, paste this SQL into your Supabase SQL Editor once:
+              <strong style="color:#F5C544; font-size:12px; text-transform:uppercase;">☁️ Supabase Cross-Device Sync Status &amp; Setup</strong>
+              <p id="cloud-diag-text" style="font-size:11px; color:#CBD5E1; margin-top:2px;">
+                Checking connection to Supabase...
               </p>
             </div>
-            <button onclick="copyCloudSyncSQL()" style="background:#F5C544; color:#040907; border:none; font-weight:900; font-size:10px; padding:6px 12px; border-radius:6px; text-transform:uppercase;">
-              Copy SQL Setup
+            <button type="button" onclick="copySetupSql()" style="background:#F5C544; color:#040907; border:none; font-weight:900; font-size:10px; padding:7px 12px; border-radius:6px; text-transform:uppercase;">
+              📋 Copy SQL Setup
             </button>
+          </div>
+
+          <div id="cloud-sql-details" style="margin-top:8px;">
+            <div style="font-size:10px; color:#94A3B8; line-height:1.5;">
+              <strong>Step 1:</strong> Go to <a href="https://supabase.com/dashboard/projects" target="_blank" rel="noopener" style="color:#00F298; text-decoration:underline; font-weight:800;">supabase.com/dashboard/projects</a> &rarr; click <strong>New Project</strong> (name it <code>stpats-hurling</code>).<br>
+              <strong>Step 2:</strong> Open <strong>SQL Editor</strong> &rarr; <strong>New Query</strong>, paste the SQL below, and click <strong>Run</strong>.<br>
+              <strong>Step 3:</strong> Go to <strong>Project Settings &rarr; API Keys</strong>, copy your <strong>Project URL</strong> and <strong>Publishable / Anon Key</strong>, and paste them below:
+            </div>
+            <div class="sql-box" id="supabase-sql-code">CREATE TABLE IF NOT EXISTS public.hurler_weekly_progress (
+  id TEXT PRIMARY KEY,
+  hurler_id INT NOT NULL,
+  week_num INT NOT NULL,
+  checks JSONB NOT NULL DEFAULT '{}'::jsonb,
+  saved_at TEXT,
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+ALTER TABLE public.hurler_weekly_progress ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public read write" ON public.hurler_weekly_progress;
+CREATE POLICY "Allow public read write"
+ON public.hurler_weekly_progress
+FOR ALL
+USING (true)
+WITH CHECK (true);</div>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:8px; margin-top:10px; padding-top:8px; border-top:1px solid #163629;">
+              <div>
+                <label style="font-size:9px; color:#718C80; font-weight:800; text-transform:uppercase; display:block; margin-bottom:2px;">Supabase Project URL</label>
+                <input type="text" id="cfg-sb-url" style="width:100%; font-family:monospace; font-size:10px;">
+              </div>
+              <div>
+                <label style="font-size:9px; color:#718C80; font-weight:800; text-transform:uppercase; display:block; margin-bottom:2px;">Supabase Publishable / Anon Key</label>
+                <input type="text" id="cfg-sb-key" style="width:100%; font-family:monospace; font-size:10px;">
+              </div>
+              <div style="display:flex; align-items:flex-end;">
+                <button type="button" onclick="updateSupabaseCredentials()" style="width:100%; background:#00F298; color:#040907; border:none; font-weight:900; font-size:10px; padding:7px 10px; border-radius:6px; text-transform:uppercase;">
+                  Save &amp; Test Connection
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1316,6 +1367,7 @@
             </tbody>
           </table>
         </div>
+
       </section>
 
     </div>
@@ -1324,18 +1376,44 @@
 
   <script>
     // =========================================================================
-    // 1. SUPABASE CLOUD SYNC CONFIG (CROSS-DEVICE & UPDATE-PROOF PERSISTENCE)
+    // 1. SUPABASE CLOUD SYNC + PERMANENT LOCAL PERSISTENCE ENGINE
     // =========================================================================
-    const SUPABASE_URL = "https://aefgmgonnrffdmwldkxy.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_ohTl_LUIbwMosMgr1bkLJw_00gvY";
-    const CLOUD_TABLE  = "hurler_weekly_progress";
+    const DEFAULT_SB_URL = '';
+    const DEFAULT_SB_KEY = '';
 
-    // Permanent, unchanging localStorage keys so app updates NEVER wipe progress
     const STORAGE_KEY   = 'stpats_permanent_progress_v1';
     const TIMESTAMP_KEY = 'stpats_permanent_timestamps_v1';
+    const SB_CFG_KEY    = 'stpats_sb_config_v1';
 
-    let isCloudConnected = false;
-    let pushDebounceTimer = null;
+    let sbUrl = DEFAULT_SB_URL;
+    let sbKey = DEFAULT_SB_KEY;
+    let isCloudReady = false;
+    let lastCloudError = '';
+
+    function hasSupabaseConfig() {
+      return Boolean(sbUrl && sbUrl.startsWith('http') && sbKey && sbKey.length > 10);
+    }
+
+    function loadSupabaseConfig() {
+      try {
+        const raw = localStorage.getItem(SB_CFG_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed.url) sbUrl = parsed.url.replace(/\/+$/, '');
+          if (parsed.key) sbKey = parsed.key.trim();
+        }
+      } catch (e) {}
+      const urlIn = document.getElementById('cfg-sb-url');
+      const keyIn = document.getElementById('cfg-sb-key');
+      if (urlIn) {
+        urlIn.value = sbUrl;
+        urlIn.placeholder = 'https://your-project-id.supabase.co';
+      }
+      if (keyIn) {
+        keyIn.value = sbKey;
+        keyIn.placeholder = 'sb_publishable_... or eyJ...';
+      }
+    }
 
     // Exact Squad Structure (34 Players Across 5 Pods)
     const SQUAD_DATA = [
@@ -1424,8 +1502,9 @@
 
     let hurlerCheckLogs = {};
     let hurlerTimestamps = {};
+    let cloudPushDebounceTimer = null;
 
-    // Migrate any older version keys automatically so zero data is ever lost on update
+    // Migrate any older local keys automatically so zero data is ever lost on update
     function migrateLegacyStorage() {
       const oldKeys = ['stpats_weekly_checks_v7', 'stpats_weekly_checks_v4', 'stpats_weekly_checks_v3'];
       const oldTimeKeys = ['stpats_weekly_timestamps_v7', 'stpats_weekly_timestamps_v4'];
@@ -1439,32 +1518,32 @@
               Object.assign(hurlerCheckLogs[pid], parsed[pid]);
             });
           }
-        } catch (e) {}
-      });
-      oldTimeKeys.forEach(k => {
-        try {
-          const raw = localStorage.getItem(k);
-          if (raw) {
-            const parsed = JSON.parse(raw);
-            Object.keys(parsed).forEach(pid => {
-              if (!hurlerTimestamps[pid]) hurlerTimestamps[pid] = {};
-              Object.assign(hurlerTimestamps[pid], parsed[pid]);
-            });
-          }
-        } catch (e) {}
-      });
-    }
-
-    function loadPersistedCheckLogs() {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) hurlerCheckLogs = JSON.parse(saved);
-        const savedTimes = localStorage.getItem(TIMESTAMP_KEY);
-        if (savedTimes) hurlerTimestamps = JSON.parse(savedTimes);
-        migrateLegacyStorage();
-        saveAllLocalData();
-      } catch (e) {
-        console.warn("Local storage load error", e);
+      } else if (status === 'syncing') {
+        if (pill) {
+          pill.className = 'sync-pill syncing';
+          pill.textContent = '⏳ Syncing...';
+        }
+      } else if (status === 'unconfigured') {
+        isCloudReady = false;
+        if (pill) {
+          pill.className = 'sync-pill syncing';
+          pill.textContent = '⚙️ Connect Cloud';
+        }
+        if (diag) {
+          diag.innerHTML = `<span style="color:#F5C544; font-weight:800;">Ready to Connect:</span> Create a free project on Supabase, run the SQL table below, and paste your new Project URL &amp; API Key.`;
+        }
+        if (banner) banner.style.borderColor = '#F5C544';
+      } else {
+        isCloudReady = false;
+        lastCloudError = detailMsg;
+        if (pill) {
+          pill.className = 'sync-pill offline';
+          pill.textContent = '💾 Local Saved';
+        }
+        if (diag) {
+          diag.innerHTML = `<span style="color:#F87171; font-weight:800;">Cloud Setup Needed:</span> ${detailMsg || 'Check your Project URL/Key and run the SQL below in your Supabase SQL Editor.'}`;
+        }
+        if (banner) banner.style.borderColor = '#F5C544';
       }
     }
 
@@ -1477,21 +1556,29 @@
       }
     }
 
-    // Fetch all saved records from Supabase Cloud so every device sees live updates
-    async function syncFromCloud(showNotification = false) {
-      const pill = document.getElementById('cloud-sync-indicator');
+    // Fetch all saved records from Supabase across all players & devices
+    async function pullFromCloud(showFeedback = false) {
+      if (!hasSupabaseConfig()) {
+        setCloudIndicator('unconfigured');
+        if (showFeedback) showToast('Paste your new Supabase Project URL and API Key first.');
+        return false;
+      }
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/${CLOUD_TABLE}?select=*`, {
+        setCloudIndicator('syncing');
+        const res = await fetch(`${sbUrl}/rest/v1/hurler_weekly_progress?select=*`, {
           method: 'GET',
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json'
-          }
+          headers: getSupabaseHeaders({ 'Content-Type': 'application/json' })
         });
 
         if (!res.ok) {
-          throw new Error(`HTTP ${res.status}`);
+          let errText = `HTTP ${res.status}`;
+          try {
+            const errJson = await res.json();
+            if (errJson && errJson.message) errText = errJson.message;
+          } catch (e) {}
+          setCloudIndicator('offline', errText);
+          if (showFeedback) showToast(`Cloud status: ${errText}`);
+          return false;
         }
 
         const rows = await res.json();
@@ -1499,12 +1586,13 @@
           rows.forEach(row => {
             const pid = row.hurler_id;
             const wk = row.week_num;
-            if (pid && wk && row.checks) {
+            if (pid && wk) {
               if (!hurlerCheckLogs[pid]) hurlerCheckLogs[pid] = {};
-              hurlerCheckLogs[pid][wk] = row.checks;
-              if (row.last_saved) {
+              hurlerCheckLogs[pid][wk] = row.checks || {};
+
+              if (row.saved_at) {
                 if (!hurlerTimestamps[pid]) hurlerTimestamps[pid] = {};
-                hurlerTimestamps[pid][wk] = row.last_saved;
+                hurlerTimestamps[pid][wk] = row.saved_at;
               }
             }
           });
@@ -1514,81 +1602,101 @@
           renderCoachAuditTable();
         }
 
-        isCloudConnected = true;
-        if (pill) {
-          pill.textContent = '☁️ Cloud Live';
-          pill.className = 'sync-pill';
-        }
-        const setupBanner = document.getElementById('coach-cloud-setup-banner');
-        if (setupBanner) setupBanner.classList.add('hidden');
-
-        if (showNotification) {
-          showToast('Synced latest progress from cloud across all devices!', 'success');
-        }
+        setCloudIndicator('live');
+        if (showFeedback) showToast('✓ Synced latest squad data from Supabase!');
+        return true;
       } catch (err) {
-        isCloudConnected = false;
-        if (pill) {
-          pill.textContent = '💾 Local Saved';
-          pill.className = 'sync-pill local-only';
-        }
-        const setupBanner = document.getElementById('coach-cloud-setup-banner');
-        if (setupBanner) setupBanner.classList.remove('hidden');
+        setCloudIndicator('offline', err.message || 'Network unavailable');
+        if (showFeedback) showToast('Could not reach Supabase — saved locally on device.');
+        return false;
       }
     }
 
-    // Push player's week checks to Supabase Cloud
-    async function pushToCloud(hurlerId, weekNum, checksObj, timestampStr) {
-      const rowId = `${hurlerId}_w${weekNum}`;
+    // Upsert a single player's week record to Supabase
+    async function pushPlayerWeekToCloud(hurlerId, weekNum, showToastOnSuccess = false) {
+      if (!hasSupabaseConfig()) {
+        setCloudIndicator('unconfigured');
+        if (showToastOnSuccess) {
+          showToast(`💾 Saved locally for ${getActiveHurlerName()} (connect Supabase in Coach Desk for multi-device sync).`);
+        }
+        return false;
+      }
+      const recordId = `p${hurlerId}_w${weekNum}`;
+      const checksPayload = (hurlerCheckLogs[hurlerId] && hurlerCheckLogs[hurlerId][weekNum]) || {};
+      const savedAtStr = (hurlerTimestamps[hurlerId] && hurlerTimestamps[hurlerId][weekNum]) || '';
+
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/${CLOUD_TABLE}`, {
+        setCloudIndicator('syncing');
+        const res = await fetch(`${sbUrl}/rest/v1/hurler_weekly_progress?on_conflict=id`, {
           method: 'POST',
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
+          headers: getSupabaseHeaders({
             'Content-Type': 'application/json',
-            'Prefer': 'resolution=merge-duplicates'
-          },
+            'Prefer': 'resolution=merge-duplicates,return=minimal'
+          }),
           body: JSON.stringify({
-            id: rowId,
+            id: recordId,
             hurler_id: hurlerId,
             week_num: weekNum,
-            checks: checksObj,
-            last_saved: timestampStr,
+            checks: checksPayload,
+            saved_at: savedAtStr,
             updated_at: new Date().toISOString()
           })
         });
 
-        if (res.ok) {
-          isCloudConnected = true;
-          const pill = document.getElementById('cloud-sync-indicator');
-          if (pill) {
-            pill.textContent = '☁️ Cloud Live';
-            pill.className = 'sync-pill';
+        if (!res.ok) {
+          let errText = `HTTP ${res.status}`;
+          try {
+            const errJson = await res.json();
+            if (errJson && errJson.message) errText = errJson.message;
+          } catch (e) {}
+          setCloudIndicator('offline', errText);
+          if (showToastOnSuccess) {
+            showToast(`Saved locally on device (Supabase table not ready yet).`);
           }
-          return true;
+          return false;
         }
-      } catch (e) {
-        console.warn("Cloud push fallback to localStorage", e);
+
+        setCloudIndicator('live');
+        if (showToastOnSuccess) {
+          showToast(`☁️ Saved & synced Week ${weekNum} for ${getActiveHurlerName()}!`);
+        }
+        return true;
+      } catch (err) {
+        setCloudIndicator('offline', err.message || 'Offline');
+        if (showToastOnSuccess) {
+          showToast(`Saved locally on device (offline).`);
+        }
+        return false;
       }
-      return false;
     }
 
-    function copyCloudSyncSQL() {
-      const sql = `CREATE TABLE IF NOT EXISTS public.hurler_weekly_progress (
-  id TEXT PRIMARY KEY,
-  hurler_id INT NOT NULL,
-  week_num INT NOT NULL,
-  checks JSONB DEFAULT '{}'::jsonb,
-  last_saved TEXT,
-  updated_at TIMESTAMPTZ DEFAULT now()
-);
-ALTER TABLE public.hurler_weekly_progress ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Allow public read write" ON public.hurler_weekly_progress FOR ALL USING (true) WITH CHECK (true);`;
+    function queueCloudSync(hurlerId, weekNum) {
+      clearTimeout(cloudPushDebounceTimer);
+      cloudPushDebounceTimer = setTimeout(() => {
+        pushPlayerWeekToCloud(hurlerId, weekNum, false);
+      }, 450);
+    }
 
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(sql);
+    function copySetupSql() {
+      const sqlEl = document.getElementById('supabase-sql-code');
+      if (!sqlEl) return;
+      const text = sqlEl.textContent;
+      try {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+        showToast('✓ SQL Setup copied! Paste into Supabase SQL Editor & click Run.');
+      } catch (e) {
+        showToast('Select and copy the SQL text box manually.');
       }
-      showToast('Copied SQL! Paste into Supabase SQL Editor to enable multi-phone sync.', 'success');
+    }
+
+    function toggleCloudConfigPanel() {
+      const details = document.getElementById('cloud-sql-details');
+      if (details) details.classList.toggle('hidden');
     }
 
     function getActiveHurlerName() {
@@ -1615,7 +1723,6 @@ CREATE POLICY "Allow public read write" ON public.hurler_weekly_progress FOR ALL
         label = `Wednesday Gym Donabate ${selectedGymSub} (20 sets)`;
       }
 
-      // Check if all in this session are already checked; if so, allow toggling off
       const allAlreadyChecked = targetIds.every(id => {
         const el = document.getElementById(id);
         return el && el.checked;
@@ -1627,20 +1734,19 @@ CREATE POLICY "Allow public read write" ON public.hurler_weekly_progress FOR ALL
         if (el) el.checked = newState;
       });
 
-      // Immediately save & sync to cloud
       savePlayerSessionProgress(false);
 
       if (newState) {
-        showToast(`✓ Checked all ${label} & saved for ${getActiveHurlerName()}!`, 'success');
+        showToast(`✓ Checked all ${label} & synced for ${getActiveHurlerName()}!`);
       } else {
-        showToast(`Cleared ${label} checks for ${getActiveHurlerName()}.`, 'info');
+        showToast(`Cleared ${label} checks for ${getActiveHurlerName()}.`);
       }
     }
 
     // =========================================================================
     // 3. SAVE PROGRESS & LIVE SYNC ENGINE
     // =========================================================================
-    async function savePlayerSessionProgress(showConfirmationToast = true) {
+    function savePlayerSessionProgress(showConfirmationToast = true) {
       if (!hurlerCheckLogs[activeHurlerId]) hurlerCheckLogs[activeHurlerId] = {};
       if (!hurlerCheckLogs[activeHurlerId][selectedWeek]) hurlerCheckLogs[activeHurlerId][selectedWeek] = {};
 
@@ -1657,31 +1763,23 @@ CREATE POLICY "Allow public read write" ON public.hurler_weekly_progress FOR ALL
       if (!hurlerTimestamps[activeHurlerId]) hurlerTimestamps[activeHurlerId] = {};
       hurlerTimestamps[activeHurlerId][selectedWeek] = fullTimestamp;
 
-      // Save locally first (instant & update-proof)
       saveAllLocalData();
       updateSessionProgressUI();
       renderCoachAuditTable();
 
-      // Push to cloud database for cross-device sync
-      const cloudOk = await pushToCloud(
-        activeHurlerId,
-        selectedWeek,
-        hurlerCheckLogs[activeHurlerId][selectedWeek],
-        fullTimestamp
-      );
+      // Push live to Supabase
+      pushPlayerWeekToCloud(activeHurlerId, selectedWeek, showConfirmationToast);
 
       const saveBtns = document.querySelectorAll('.btn-save-main');
       saveBtns.forEach(btn => {
-        btn.innerHTML = cloudOk ? '<span>☁️</span> Synced to Cloud!' : '<span>✓</span> Saved!';
+        btn.innerHTML = '<span>✓</span> Saved!';
         btn.style.background = '#F5C544';
         btn.style.color = '#040907';
       });
 
       const statusMsg = document.getElementById('save-status-msg');
       if (statusMsg) {
-        statusMsg.textContent = cloudOk
-          ? `Cloud synced: ${fullTimestamp}`
-          : `Saved on device: ${fullTimestamp}`;
+        statusMsg.textContent = `Last saved: ${fullTimestamp}`;
         statusMsg.style.color = '#00F298';
       }
 
@@ -1692,15 +1790,6 @@ CREATE POLICY "Allow public read write" ON public.hurler_weekly_progress FOR ALL
           btn.style.color = '';
         });
       }, 2200);
-
-      if (showConfirmationToast) {
-        showToast(
-          cloudOk
-            ? `Saved & synced Week ${selectedWeek} for ${getActiveHurlerName()} across all devices!`
-            : `Saved Week ${selectedWeek} for ${getActiveHurlerName()}!`,
-          'success'
-        );
-      }
     }
 
     function showToast(msg) {
@@ -1728,7 +1817,7 @@ CREATE POLICY "Allow public read write" ON public.hurler_weekly_progress FOR ALL
       document.getElementById('nav-coach').className = (portal === 'coach') ? 'nav-btn active' : 'nav-btn';
 
       if (portal === 'coach') {
-        syncFromCloud(false);
+        pullFromCloud(false);
         renderCoachAuditTable();
       }
     }
@@ -1818,29 +1907,13 @@ CREATE POLICY "Allow public read write" ON public.hurler_weekly_progress FOR ALL
       saveAllLocalData();
       updateSessionProgressUI();
       renderCoachAuditTable();
+      queueCloudSync(activeHurlerId, selectedWeek);
 
       const statusMsg = document.getElementById('save-status-msg');
       if (statusMsg) {
-        statusMsg.textContent = `Auto-saving (${fullTimestamp})...`;
-        statusMsg.style.color = '#F5C544';
+        statusMsg.textContent = `Saved: ${fullTimestamp}`;
+        statusMsg.style.color = '#00F298';
       }
-
-      // Debounced background cloud push so rapid tapping batches cleanly
-      clearTimeout(pushDebounceTimer);
-      pushDebounceTimer = setTimeout(async () => {
-        const ok = await pushToCloud(
-          activeHurlerId,
-          selectedWeek,
-          hurlerCheckLogs[activeHurlerId][selectedWeek],
-          fullTimestamp
-        );
-        if (statusMsg) {
-          statusMsg.textContent = ok
-            ? `Cloud synced: ${fullTimestamp}`
-            : `Saved on device: ${fullTimestamp}`;
-          statusMsg.style.color = '#00F298';
-        }
-      }, 450);
     }
 
     function loadCheckedBoxesForCurrentWeek() {
@@ -1957,7 +2030,7 @@ CREATE POLICY "Allow public read write" ON public.hurler_weekly_progress FOR ALL
         document.getElementById('coach-lock-panel').classList.add('hidden');
         document.getElementById('coach-unlocked-panel').classList.remove('hidden');
         document.getElementById('coach-auth-err').classList.add('hidden');
-        syncFromCloud(false);
+        pullFromCloud(false);
         renderCoachAuditTable();
       } else {
         document.getElementById('coach-auth-err').classList.remove('hidden');
@@ -2184,13 +2257,15 @@ CREATE POLICY "Allow public read write" ON public.hurler_weekly_progress FOR ALL
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      loadSupabaseConfig();
       loadPersistedCheckLogs();
       loadCheckedBoxesForCurrentWeek();
       updateSessionProgressUI();
       renderCoachAuditTable();
       calculateNutrition();
       renderMatchDisplay();
-      syncFromCloud(false);
+      pullFromCloud(false);
     });
   </script>
 </body>
+</html>
