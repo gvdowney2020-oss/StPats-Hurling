@@ -348,10 +348,11 @@
               <span id="timer-readout" class="timer-clock">00:00</span>
             </div>
             <div style="display:flex; gap:3px;">
+              <button class="timer-btn" onclick="startTimer(15)">15s</button>
               <button class="timer-btn" onclick="startTimer(20)">20s</button>
               <button class="timer-btn" onclick="startTimer(30)">30s</button>
               <button class="timer-btn" onclick="startTimer(40)">40s</button>
-              <button class="timer-btn" onclick="startTimer(45)">45s</button>
+              <button class="timer-btn" onclick="startTimer(120)">2m</button>
               <button class="timer-btn" onclick="resetTimer()" style="color:#F87171;">✕</button>
             </div>
           </div>
@@ -416,243 +417,157 @@
             <h3 id="sun-pitch-title" style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF; margin-top:4px;">Week 1 Double Running Prescriptions</h3>
           </div>
           <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size:10px; color:#00F298; font-family:monospace; font-weight:800;">28 Reps</span>
+            <span id="sun-reps-badge" style="font-size:10px; color:#00F298; font-family:monospace; font-weight:800;">28 Reps</span>
             <button type="button" class="btn-check-all" style="padding:5px 10px; font-size:10px;" onclick="checkAllSession('sun')">
               ✓ Check All Sunday
             </button>
           </div>
         </div>
 
-        <!-- Part 1: Tempos -->
-        <div class="drill-block">
-          <div class="flex-between">
-            <span class="drill-title">Part 1 — Tempos (20s on : 40s off) — 100m</span>
-            <span class="drill-badge">2 Sets of 6 Reps &bull; Aim: 100m in 20s</span>
-          </div>
-          <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Complete 100m in the 20s work window, followed by 40s walk/passive recovery.</p>
-          
-          <div style="font-size:10px; color:#718C80; font-weight:800; margin-top:6px;">Set 1:</div>
-          <div class="checkbox-chip-row">
-            <label><input type="checkbox" id="chk_t1_1" onchange="onCheckboxChange(this)"> R1</label>
-            <label><input type="checkbox" id="chk_t1_2" onchange="onCheckboxChange(this)"> R2</label>
-            <label><input type="checkbox" id="chk_t1_3" onchange="onCheckboxChange(this)"> R3</label>
-            <label><input type="checkbox" id="chk_t1_4" onchange="onCheckboxChange(this)"> R4</label>
-            <label><input type="checkbox" id="chk_t1_5" onchange="onCheckboxChange(this)"> R5</label>
-            <label><input type="checkbox" id="chk_t1_6" onchange="onCheckboxChange(this)"> R6</label>
-          </div>
-
-          <div style="font-size:10px; color:#718C80; font-weight:800; margin-top:6px;">Set 2:</div>
-          <div class="checkbox-chip-row">
-            <label><input type="checkbox" id="chk_t2_1" onchange="onCheckboxChange(this)"> R1</label>
-            <label><input type="checkbox" id="chk_t2_2" onchange="onCheckboxChange(this)"> R2</label>
-            <label><input type="checkbox" id="chk_t2_3" onchange="onCheckboxChange(this)"> R3</label>
-            <label><input type="checkbox" id="chk_t2_4" onchange="onCheckboxChange(this)"> R4</label>
-            <label><input type="checkbox" id="chk_t2_5" onchange="onCheckboxChange(this)"> R5</label>
-            <label><input type="checkbox" id="chk_t2_6" onchange="onCheckboxChange(this)"> R6</label>
-          </div>
-        </div>
-
-        <!-- Part 2: Capacity Runs -->
-        <div class="drill-block">
-          <div class="flex-between">
-            <span class="drill-title">Part 2 — Capacity Runs @ 75–80% Intensity</span>
-            <span class="drill-badge">2m on : 45s off &bull; 6 Reps</span>
-          </div>
-          <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Sustained aerobic capacity pacing held across the full 2-minute effort.</p>
-          <div class="checkbox-chip-row">
-            <label><input type="checkbox" id="chk_cap_1" onchange="onCheckboxChange(this)"> Rep 1</label>
-            <label><input type="checkbox" id="chk_cap_2" onchange="onCheckboxChange(this)"> Rep 2</label>
-            <label><input type="checkbox" id="chk_cap_3" onchange="onCheckboxChange(this)"> Rep 3</label>
-            <label><input type="checkbox" id="chk_cap_4" onchange="onCheckboxChange(this)"> Rep 4</label>
-            <label><input type="checkbox" id="chk_cap_5" onchange="onCheckboxChange(this)"> Rep 5</label>
-            <label><input type="checkbox" id="chk_cap_6" onchange="onCheckboxChange(this)"> Rep 6</label>
-          </div>
-        </div>
-
-        <!-- Part 3: 30:30 High Intensity -->
-        <div class="drill-block">
-          <div class="flex-between">
-            <span class="drill-title">Part 3 — High-Intensity Shuttles (30s on : 30s off)</span>
-            <span class="drill-badge" style="color:#F87171;">10 Reps @ High Intensity</span>
-          </div>
-          <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Repeated sprint tolerance and sharp 180° cuts simulating end-of-half fatigue.</p>
-          <div class="checkbox-chip-row">
-            <label><input type="checkbox" id="chk_hi_1" onchange="onCheckboxChange(this)"> R1</label>
-            <label><input type="checkbox" id="chk_hi_2" onchange="onCheckboxChange(this)"> R2</label>
-            <label><input type="checkbox" id="chk_hi_3" onchange="onCheckboxChange(this)"> R3</label>
-            <label><input type="checkbox" id="chk_hi_4" onchange="onCheckboxChange(this)"> R4</label>
-            <label><input type="checkbox" id="chk_hi_5" onchange="onCheckboxChange(this)"> R5</label>
-            <label><input type="checkbox" id="chk_hi_6" onchange="onCheckboxChange(this)"> R6</label>
-            <label><input type="checkbox" id="chk_hi_7" onchange="onCheckboxChange(this)"> R7</label>
-            <label><input type="checkbox" id="chk_hi_8" onchange="onCheckboxChange(this)"> R8</label>
-            <label><input type="checkbox" id="chk_hi_9" onchange="onCheckboxChange(this)"> R9</label>
-            <label><input type="checkbox" id="chk_hi_10" onchange="onCheckboxChange(this)"> R10</label>
-          </div>
-        </div>
-      </section>
-
-      <!-- WEDNESDAY GYM DRILLS (DONABATE 1.1 & 1.2 WITH EXACT WARM-UPS) -->
-      <section id="pane-wed" class="panel-glass hidden">
-        <div class="flex-between" style="border-bottom:1px solid #163629; padding-bottom:8px;">
-          <div>
-            <span style="font-size:9px; background:#00F298; color:#040907; padding:1px 5px; border-radius:4px; font-weight:900; text-transform:uppercase;">Wednesday Gym Session</span>
-            <h3 style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF; margin-top:4px;">Donabate Compound Armor &amp; Warm-Up Matrix</h3>
-          </div>
-          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-            <div style="display:flex; gap:4px; background:#07130E; padding:3px; border-radius:6px; border:1px solid #163629;">
-              <button id="gym-sub-11" onclick="switchGymSub('1.1')" style="background:#00F298; color:#040907; font-weight:800; font-size:10px; border:none; padding:4px 8px; border-radius:4px;">Donabate 1.1 (Squat/Bench)</button>
-              <button id="gym-sub-12" onclick="switchGymSub('1.2')" style="background:transparent; color:#718C80; font-weight:700; font-size:10px; border:none; padding:4px 8px; border-radius:4px;">Donabate 1.2 (RDL/OHP)</button>
-            </div>
-            <button type="button" class="btn-check-all" style="padding:5px 10px; font-size:10px;" onclick="checkAllSession('wed')">
-              ✓ Check All Gym
-            </button>
-          </div>
-        </div>
-
-        <!-- DONABATE 1.1 MATRIX -->
-        <div id="subpane-1-1">
-          
-          <!-- DONABATE 1.1 WARM-UP (PREHAB, CORE, PLYOS) -->
-          <div class="warmup-box">
-            <div class="warmup-header">
-              <span>⚡</span> Donabate 1.1 Warm-Up (Prehab &bull; Core &bull; Plyos)
-            </div>
-
-            <!-- Prehab -->
-            <div style="margin-top:6px;">
-              <span style="font-size:10px; font-weight:800; color:#F5C544; text-transform:uppercase;">1. Prehab (2 Sets Each):</span>
-              <div class="checkbox-chip-row">
-                <label><input type="checkbox" id="chk_w1_sq" onchange="onCheckboxChange(this)"> Rack Assisted Squat (5 reps &bull; 3311)</label>
-                <label><input type="checkbox" id="chk_w1_side" onchange="onCheckboxChange(this)"> Side Plank Leg Lift (10 e/s)</label>
-                <label><input type="checkbox" id="chk_w1_cop" onchange="onCheckboxChange(this)"> Short Lever Copenhagens (15s e/s)</label>
-                <label><input type="checkbox" id="chk_w1_split" onchange="onCheckboxChange(this)"> ISO Split Squat (15s e/s)</label>
-              </div>
-            </div>
-
-            <!-- Core -->
-            <div style="margin-top:8px;">
-              <span style="font-size:10px; font-weight:800; color:#38BDF8; text-transform:uppercase;">2. Core (2 Sets Each):</span>
-              <div class="checkbox-chip-row">
-                <label><input type="checkbox" id="chk_w1_bird" onchange="onCheckboxChange(this)"> ISO Bird Dog (6 e/s &bull; 2521)</label>
-                <label><input type="checkbox" id="chk_w1_suit" onchange="onCheckboxChange(this)"> Suitcase Carry (20m &bull; SS Load)</label>
-              </div>
-            </div>
-
-            <!-- Plyos -->
-            <div style="margin-top:8px;">
-              <span style="font-size:10px; font-weight:800; color:#00F298; text-transform:uppercase;">3. Plyometrics (Primer):</span>
-              <div class="checkbox-chip-row">
-                <label><input type="checkbox" id="chk_w1_mb" onchange="onCheckboxChange(this)"> MB Chest Throw</label>
-                <label><input type="checkbox" id="chk_w1_cmj" onchange="onCheckboxChange(this)"> Countermovement Jump (CMJ)</label>
-                <label><input type="checkbox" id="chk_w1_pogo" onchange="onCheckboxChange(this)"> Pogo Hops</label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Block 1 -->
+        <!-- WEEK 1 SUNDAY RUNNING -->
+        <div id="sun-week-1">
+          <!-- Part 1: Tempos -->
           <div class="drill-block">
             <div class="flex-between">
-              <span class="drill-title">Block 1: Barbell Back Squat</span>
-              <span class="drill-badge">3 sets x 8 reps @ 70–75% (2111 tempo)</span>
+              <span class="drill-title">Part 1 — Tempos (20s on : 40s off) — 100m</span>
+              <span class="drill-badge">2 Sets of 6 Reps &bull; Aim: 100m in 20s</span>
             </div>
-            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Superset with Single Arm DB Row (3 sets x 8 reps e/s @ 2111 tempo).</p>
+            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Complete 100m in the 20s work window, followed by 40s walk/passive recovery.</p>
+            
+            <div style="font-size:10px; color:#718C80; font-weight:800; margin-top:6px;">Set 1:</div>
             <div class="checkbox-chip-row">
-              <label><input type="checkbox" id="chk_g1_sq_1" onchange="onCheckboxChange(this)"> Squat S1</label>
-              <label><input type="checkbox" id="chk_g1_sq_2" onchange="onCheckboxChange(this)"> Squat S2</label>
-              <label><input type="checkbox" id="chk_g1_sq_3" onchange="onCheckboxChange(this)"> Squat S3</label>
-              <label><input type="checkbox" id="chk_g1_row_1" onchange="onCheckboxChange(this)"> DB Row S1</label>
-              <label><input type="checkbox" id="chk_g1_row_2" onchange="onCheckboxChange(this)"> DB Row S2</label>
-              <label><input type="checkbox" id="chk_g1_row_3" onchange="onCheckboxChange(this)"> DB Row S3</label>
+              <label><input type="checkbox" id="chk_t1_1" onchange="onCheckboxChange(this)"> R1</label>
+              <label><input type="checkbox" id="chk_t1_2" onchange="onCheckboxChange(this)"> R2</label>
+              <label><input type="checkbox" id="chk_t1_3" onchange="onCheckboxChange(this)"> R3</label>
+              <label><input type="checkbox" id="chk_t1_4" onchange="onCheckboxChange(this)"> R4</label>
+              <label><input type="checkbox" id="chk_t1_5" onchange="onCheckboxChange(this)"> R5</label>
+              <label><input type="checkbox" id="chk_t1_6" onchange="onCheckboxChange(this)"> R6</label>
+            </div>
+
+            <div style="font-size:10px; color:#718C80; font-weight:800; margin-top:6px;">Set 2:</div>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_t2_1" onchange="onCheckboxChange(this)"> R1</label>
+              <label><input type="checkbox" id="chk_t2_2" onchange="onCheckboxChange(this)"> R2</label>
+              <label><input type="checkbox" id="chk_t2_3" onchange="onCheckboxChange(this)"> R3</label>
+              <label><input type="checkbox" id="chk_t2_4" onchange="onCheckboxChange(this)"> R4</label>
+              <label><input type="checkbox" id="chk_t2_5" onchange="onCheckboxChange(this)"> R5</label>
+              <label><input type="checkbox" id="chk_t2_6" onchange="onCheckboxChange(this)"> R6</label>
             </div>
           </div>
 
-          <!-- Block 2 -->
+          <!-- Part 2: Capacity Runs -->
           <div class="drill-block">
             <div class="flex-between">
-              <span class="drill-title">Block 2: Barbell Bench Press</span>
-              <span class="drill-badge">3 sets x 8 reps (2111 tempo)</span>
+              <span class="drill-title">Part 2 — Capacity Runs @ 75–80% Intensity</span>
+              <span class="drill-badge">2m on : 45s off &bull; 6 Reps</span>
             </div>
-            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Superset with Single Leg Glute Bridge ISO (3x 5x5s e/s) and Lateral Lunges (3x10 e/s).</p>
+            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Sustained aerobic capacity pacing held across the full 2-minute effort.</p>
             <div class="checkbox-chip-row">
-              <label><input type="checkbox" id="chk_g1_bp_1" onchange="onCheckboxChange(this)"> Bench S1</label>
-              <label><input type="checkbox" id="chk_g1_bp_2" onchange="onCheckboxChange(this)"> Bench S2</label>
-              <label><input type="checkbox" id="chk_g1_bp_3" onchange="onCheckboxChange(this)"> Bench S3</label>
-              <label><input type="checkbox" id="chk_g1_gb" onchange="onCheckboxChange(this)"> Glute Bridge ISO</label>
-              <label><input type="checkbox" id="chk_g1_ll" onchange="onCheckboxChange(this)"> Lateral Lunges</label>
+              <label><input type="checkbox" id="chk_cap_1" onchange="onCheckboxChange(this)"> Rep 1</label>
+              <label><input type="checkbox" id="chk_cap_2" onchange="onCheckboxChange(this)"> Rep 2</label>
+              <label><input type="checkbox" id="chk_cap_3" onchange="onCheckboxChange(this)"> Rep 3</label>
+              <label><input type="checkbox" id="chk_cap_4" onchange="onCheckboxChange(this)"> Rep 4</label>
+              <label><input type="checkbox" id="chk_cap_5" onchange="onCheckboxChange(this)"> Rep 5</label>
+              <label><input type="checkbox" id="chk_cap_6" onchange="onCheckboxChange(this)"> Rep 6</label>
+            </div>
+          </div>
+
+          <!-- Part 3: 30:30 High Intensity -->
+          <div class="drill-block">
+            <div class="flex-between">
+              <span class="drill-title">Part 3 — High-Intensity Shuttles (30s on : 30s off)</span>
+              <span class="drill-badge" style="color:#F87171;">10 Reps @ High Intensity</span>
+            </div>
+            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Repeated sprint tolerance and sharp 180° cuts simulating end-of-half fatigue.</p>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_hi_1" onchange="onCheckboxChange(this)"> R1</label>
+              <label><input type="checkbox" id="chk_hi_2" onchange="onCheckboxChange(this)"> R2</label>
+              <label><input type="checkbox" id="chk_hi_3" onchange="onCheckboxChange(this)"> R3</label>
+              <label><input type="checkbox" id="chk_hi_4" onchange="onCheckboxChange(this)"> R4</label>
+              <label><input type="checkbox" id="chk_hi_5" onchange="onCheckboxChange(this)"> R5</label>
+              <label><input type="checkbox" id="chk_hi_6" onchange="onCheckboxChange(this)"> R6</label>
+              <label><input type="checkbox" id="chk_hi_7" onchange="onCheckboxChange(this)"> R7</label>
+              <label><input type="checkbox" id="chk_hi_8" onchange="onCheckboxChange(this)"> R8</label>
+              <label><input type="checkbox" id="chk_hi_9" onchange="onCheckboxChange(this)"> R9</label>
+              <label><input type="checkbox" id="chk_hi_10" onchange="onCheckboxChange(this)"> R10</label>
             </div>
           </div>
         </div>
 
-        <!-- DONABATE 1.2 MATRIX -->
-        <div id="subpane-1-2" class="hidden">
-          
-          <!-- DONABATE 1.2 WARM-UP (PREHAB, CORE, PLYOS) -->
-          <div class="warmup-box">
-            <div class="warmup-header">
-              <span>⚡</span> Donabate 1.2 Warm-Up (Prehab &bull; Core &bull; Plyos)
+        <!-- WEEK 2 SUNDAY RUNNING -->
+        <div id="sun-week-2" class="hidden">
+          <!-- Part 1: 40m Flyes x 6 -->
+          <div class="drill-block">
+            <div class="flex-between">
+              <span class="drill-title">Part 1 — 40m Flyes &times; 6</span>
+              <span class="drill-badge" style="color:#F87171;">6 Reps &bull; 2 Min Rest Between Each Sprint</span>
             </div>
-
-            <!-- Prehab -->
-            <div style="margin-top:6px;">
-              <span style="font-size:10px; font-weight:800; color:#F5C544; text-transform:uppercase;">1. Prehab (2 Sets Each):</span>
-              <div class="checkbox-chip-row">
-                <label><input type="checkbox" id="chk_w2_soleus" onchange="onCheckboxChange(this)"> Wall Sit Soleus ISO (20s)</label>
-                <label><input type="checkbox" id="chk_w2_thigh" onchange="onCheckboxChange(this)"> ISO Mid Thigh Pull (3x3s)</label>
-                <label><input type="checkbox" id="chk_w2_slr" onchange="onCheckboxChange(this)"> SL Raises (6 e/s)</label>
-                <label><input type="checkbox" id="chk_w2_hrpush" onchange="onCheckboxChange(this)"> HR Push Up (6 reps)</label>
-              </div>
-            </div>
-
-            <!-- Core -->
-            <div style="margin-top:8px;">
-              <span style="font-size:10px; font-weight:800; color:#38BDF8; text-transform:uppercase;">2. Core (2 Sets Each):</span>
-              <div class="checkbox-chip-row">
-                <label><input type="checkbox" id="chk_w2_wood" onchange="onCheckboxChange(this)"> HK Woodchop (10 e/s)</label>
-                <label><input type="checkbox" id="chk_w2_pull" onchange="onCheckboxChange(this)"> DB Pullthrough (8 e/s &bull; SS Load)</label>
-              </div>
-            </div>
-
-            <!-- Plyos -->
-            <div style="margin-top:8px;">
-              <span style="font-size:10px; font-weight:800; color:#00F298; text-transform:uppercase;">3. Plyometrics (Primer):</span>
-              <div class="checkbox-chip-row">
-                <label><input type="checkbox" id="chk_w2_kb" onchange="onCheckboxChange(this)"> KB Swing</label>
-                <label><input type="checkbox" id="chk_w2_depth" onchange="onCheckboxChange(this)"> Depth Drops</label>
-                <label><input type="checkbox" id="chk_w2_latb" onchange="onCheckboxChange(this)"> Reactive Lat Bound (5 e/s)</label>
-              </div>
+            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Build speed through the first 20m, aim to hit top speed from 20m to 40m. Full 2 min rest between sprints.</p>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_w2_fly_1" onchange="onCheckboxChange(this)"> R1</label>
+              <label><input type="checkbox" id="chk_w2_fly_2" onchange="onCheckboxChange(this)"> R2</label>
+              <label><input type="checkbox" id="chk_w2_fly_3" onchange="onCheckboxChange(this)"> R3</label>
+              <label><input type="checkbox" id="chk_w2_fly_4" onchange="onCheckboxChange(this)"> R4</label>
+              <label><input type="checkbox" id="chk_w2_fly_5" onchange="onCheckboxChange(this)"> R5</label>
+              <label><input type="checkbox" id="chk_w2_fly_6" onchange="onCheckboxChange(this)"> R6</label>
             </div>
           </div>
 
-          <!-- Block 1 -->
+          <!-- Part 2: MAS 65-75m -->
           <div class="drill-block">
             <div class="flex-between">
-              <span class="drill-title">Block 1: Barbell Romanian Deadlift (BB RDL)</span>
-              <span class="drill-badge">3 sets x 8 reps @ 70–75% (2111 tempo)</span>
+              <span class="drill-title">Part 2 — MAS (15s : 15s) — 65–75m</span>
+              <span class="drill-badge">2 Sets of 6 Reps &bull; 3 Mins Rest Between Sets</span>
             </div>
-            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Superset with DB Overhead Press (3 sets x 10 reps @ 2111 tempo).</p>
+            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Cover 65–75m in 15s work, followed by 15s rest. Take 3 minutes rest between Set 1 and Set 2.</p>
+
+            <div style="font-size:10px; color:#718C80; font-weight:800; margin-top:6px;">Set 1:</div>
             <div class="checkbox-chip-row">
-              <label><input type="checkbox" id="chk_g2_rdl_1" onchange="onCheckboxChange(this)"> BB RDL S1</label>
-              <label><input type="checkbox" id="chk_g2_rdl_2" onchange="onCheckboxChange(this)"> BB RDL S2</label>
-              <label><input type="checkbox" id="chk_g2_rdl_3" onchange="onCheckboxChange(this)"> BB RDL S3</label>
-              <label><input type="checkbox" id="chk_g2_ohp_1" onchange="onCheckboxChange(this)"> DB OHP S1</label>
-              <label><input type="checkbox" id="chk_g2_ohp_2" onchange="onCheckboxChange(this)"> DB OHP S2</label>
-              <label><input type="checkbox" id="chk_g2_ohp_3" onchange="onCheckboxChange(this)"> DB OHP S3</label>
+              <label><input type="checkbox" id="chk_w2_mas1_1" onchange="onCheckboxChange(this)"> R1</label>
+              <label><input type="checkbox" id="chk_w2_mas1_2" onchange="onCheckboxChange(this)"> R2</label>
+              <label><input type="checkbox" id="chk_w2_mas1_3" onchange="onCheckboxChange(this)"> R3</label>
+              <label><input type="checkbox" id="chk_w2_mas1_4" onchange="onCheckboxChange(this)"> R4</label>
+              <label><input type="checkbox" id="chk_w2_mas1_5" onchange="onCheckboxChange(this)"> R5</label>
+              <label><input type="checkbox" id="chk_w2_mas1_6" onchange="onCheckboxChange(this)"> R6</label>
+            </div>
+
+            <div style="font-size:10px; color:#718C80; font-weight:800; margin-top:6px;">Set 2 (after 3 min rest):</div>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_w2_mas2_1" onchange="onCheckboxChange(this)"> R1</label>
+              <label><input type="checkbox" id="chk_w2_mas2_2" onchange="onCheckboxChange(this)"> R2</label>
+              <label><input type="checkbox" id="chk_w2_mas2_3" onchange="onCheckboxChange(this)"> R3</label>
+              <label><input type="checkbox" id="chk_w2_mas2_4" onchange="onCheckboxChange(this)"> R4</label>
+              <label><input type="checkbox" id="chk_w2_mas2_5" onchange="onCheckboxChange(this)"> R5</label>
+              <label><input type="checkbox" id="chk_w2_mas2_6" onchange="onCheckboxChange(this)"> R6</label>
             </div>
           </div>
 
-          <!-- Block 2 -->
+          <!-- Part 3: Tempos 100m -->
           <div class="drill-block">
             <div class="flex-between">
-              <span class="drill-title">Block 2: Chin Up ISO &bull; DB Hack Squat &bull; Ham Curls</span>
-              <span class="drill-badge">3 Tri-Sets</span>
+              <span class="drill-title">Part 3 — Tempos (20s : 40s) — 100m</span>
+              <span class="drill-badge">2 Sets of 6 Reps</span>
             </div>
-            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Chin Up ISO (5x5s) paired with DB Hack Squat (8 reps @ 2020) and Banded Prone Ham Curls (10 reps @ 2111).</p>
+            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Complete 100m in the 20s work window, followed by 40s walk/passive recovery.</p>
+
+            <div style="font-size:10px; color:#718C80; font-weight:800; margin-top:6px;">Set 1:</div>
             <div class="checkbox-chip-row">
-              <label><input type="checkbox" id="chk_g2_chin" onchange="onCheckboxChange(this)"> Chin Up ISO</label>
-              <label><input type="checkbox" id="chk_g2_hack_1" onchange="onCheckboxChange(this)"> Hack Squat S1</label>
-              <label><input type="checkbox" id="chk_g2_hack_2" onchange="onCheckboxChange(this)"> Hack Squat S2</label>
-              <label><input type="checkbox" id="chk_g2_curl_1" onchange="onCheckboxChange(this)"> Ham Curl S1</label>
-              <label><input type="checkbox" id="chk_g2_curl_2" onchange="onCheckboxChange(this)"> Ham Curl S2</label>
+              <label><input type="checkbox" id="chk_w2_t1_1" onchange="onCheckboxChange(this)"> R1</label>
+              <label><input type="checkbox" id="chk_w2_t1_2" onchange="onCheckboxChange(this)"> R2</label>
+              <label><input type="checkbox" id="chk_w2_t1_3" onchange="onCheckboxChange(this)"> R3</label>
+              <label><input type="checkbox" id="chk_w2_t1_4" onchange="onCheckboxChange(this)"> R4</label>
+              <label><input type="checkbox" id="chk_w2_t1_5" onchange="onCheckboxChange(this)"> R5</label>
+              <label><input type="checkbox" id="chk_w2_t1_6" onchange="onCheckboxChange(this)"> R6</label>
+            </div>
+
+            <div style="font-size:10px; color:#718C80; font-weight:800; margin-top:6px;">Set 2:</div>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_w2_t2_1" onchange="onCheckboxChange(this)"> R1</label>
+              <label><input type="checkbox" id="chk_w2_t2_2" onchange="onCheckboxChange(this)"> R2</label>
+              <label><input type="checkbox" id="chk_w2_t2_3" onchange="onCheckboxChange(this)"> R3</label>
+              <label><input type="checkbox" id="chk_w2_t2_4" onchange="onCheckboxChange(this)"> R4</label>
+              <label><input type="checkbox" id="chk_w2_t2_5" onchange="onCheckboxChange(this)"> R5</label>
+              <label><input type="checkbox" id="chk_w2_t2_6" onchange="onCheckboxChange(this)"> R6</label>
             </div>
           </div>
         </div>
@@ -1357,7 +1272,7 @@ WITH CHECK (true);</div>
                 <th>Hurler &amp; Jersey</th>
                 <th>Pod</th>
                 <th>Status</th>
-                <th style="text-align:right;">Pitch (28)</th>
+                <th id="th-pitch-target" style="text-align:right;">Pitch (28)</th>
                 <th style="text-align:right;">Gym (20)</th>
                 <th style="text-align:right;">Total Sets</th>
                 <th style="text-align:right;">Week % Done</th>
@@ -1459,13 +1374,21 @@ WITH CHECK (true);</div>
     ];
 
     // Checkbox mapping for accurate weekly completion calculation
-    const SUNDAY_CHECKBOX_IDS = [
+    const SUNDAY_W1_CHECKBOX_IDS = [
       'chk_t1_1', 'chk_t1_2', 'chk_t1_3', 'chk_t1_4', 'chk_t1_5', 'chk_t1_6',
       'chk_t2_1', 'chk_t2_2', 'chk_t2_3', 'chk_t2_4', 'chk_t2_5', 'chk_t2_6',
       'chk_cap_1', 'chk_cap_2', 'chk_cap_3', 'chk_cap_4', 'chk_cap_5', 'chk_cap_6',
       'chk_hi_1', 'chk_hi_2', 'chk_hi_3', 'chk_hi_4', 'chk_hi_5', 'chk_hi_6',
       'chk_hi_7', 'chk_hi_8', 'chk_hi_9', 'chk_hi_10'
     ]; // 28 items
+
+    const SUNDAY_W2_CHECKBOX_IDS = [
+      'chk_w2_fly_1', 'chk_w2_fly_2', 'chk_w2_fly_3', 'chk_w2_fly_4', 'chk_w2_fly_5', 'chk_w2_fly_6',
+      'chk_w2_mas1_1', 'chk_w2_mas1_2', 'chk_w2_mas1_3', 'chk_w2_mas1_4', 'chk_w2_mas1_5', 'chk_w2_mas1_6',
+      'chk_w2_mas2_1', 'chk_w2_mas2_2', 'chk_w2_mas2_3', 'chk_w2_mas2_4', 'chk_w2_mas2_5', 'chk_w2_mas2_6',
+      'chk_w2_t1_1', 'chk_w2_t1_2', 'chk_w2_t1_3', 'chk_w2_t1_4', 'chk_w2_t1_5', 'chk_w2_t1_6',
+      'chk_w2_t2_1', 'chk_w2_t2_2', 'chk_w2_t2_3', 'chk_w2_t2_4', 'chk_w2_t2_5', 'chk_w2_t2_6'
+    ]; // 30 items
 
     const GYM_1_1_IDS = [
       'chk_w1_sq', 'chk_w1_side', 'chk_w1_cop', 'chk_w1_split',
@@ -1488,7 +1411,13 @@ WITH CHECK (true);</div>
       'chk_g2_curl_1', 'chk_g2_curl_2'
     ]; // 20 items
 
-    const TARGET_ITEMS_PER_WEEK = 48; // 28 Sunday + 20 Gym
+    function getSundayIdsForWeek(weekNum) {
+      return weekNum === 2 ? SUNDAY_W2_CHECKBOX_IDS : SUNDAY_W1_CHECKBOX_IDS;
+    }
+
+    function getTargetItemsForWeek(weekNum) {
+      return getSundayIdsForWeek(weekNum).length + 20;
+    }
 
     let activeHurlerId = 1;
     let selectedWeek = 1;
@@ -1758,6 +1687,20 @@ WITH CHECK (true);</div>
       const sunTitle = document.getElementById('sun-pitch-title');
       if (sunTitle) sunTitle.textContent = `Week ${selectedWeek} Double Running Prescriptions`;
 
+      const sunPane1 = document.getElementById('sun-week-1');
+      const sunPane2 = document.getElementById('sun-week-2');
+      const sunRepsBadge = document.getElementById('sun-reps-badge');
+
+      if (selectedWeek === 2) {
+        if (sunPane1) sunPane1.classList.add('hidden');
+        if (sunPane2) sunPane2.classList.remove('hidden');
+        if (sunRepsBadge) sunRepsBadge.textContent = '30 Reps';
+      } else {
+        if (sunPane2) sunPane2.classList.add('hidden');
+        if (sunPane1) sunPane1.classList.remove('hidden');
+        if (sunRepsBadge) sunRepsBadge.textContent = '28 Reps';
+      }
+
       document.querySelectorAll('.active-week-label').forEach(el => {
         el.textContent = String(selectedWeek);
       });
@@ -1837,7 +1780,7 @@ WITH CHECK (true);</div>
 
     function checkAllSession(sessionType) {
       const ids = sessionType === 'sun'
-        ? SUNDAY_CHECKBOX_IDS
+        ? getSundayIdsForWeek(selectedWeek)
         : (selectedGymSub === '1.2' ? GYM_1_2_IDS : GYM_1_1_IDS);
 
       ids.forEach(id => {
@@ -1900,8 +1843,12 @@ WITH CHECK (true);</div>
 
     function calculateHurlerWeekStats(hurlerId, weekNum) {
       const checks = (hurlerCheckLogs[hurlerId] && hurlerCheckLogs[hurlerId][weekNum]) || {};
+      const sunIds = getSundayIdsForWeek(weekNum);
+      const pitchTarget = sunIds.length;
+      const totalTarget = getTargetItemsForWeek(weekNum);
+
       let pitchDone = 0;
-      SUNDAY_CHECKBOX_IDS.forEach(id => {
+      sunIds.forEach(id => {
         if (checks[id]) pitchDone++;
       });
 
@@ -1917,9 +1864,18 @@ WITH CHECK (true);</div>
 
       const gymDone = Math.max(gym11Done, gym12Done);
       const totalDone = pitchDone + gymDone;
-      const pct = Math.min(100, Math.round((totalDone / TARGET_ITEMS_PER_WEEK) * 100));
+      const pct = Math.min(100, Math.round((totalDone / totalTarget) * 100));
 
-      return { pitchDone, gymDone, totalDone, pct };
+      return { pitchDone, pitchTarget, gymDone, totalDone, totalTarget, pct };
+    }
+
+    function updateSessionProgressUI() {
+      const stats = calculateHurlerWeekStats(activeHurlerId, selectedWeek);
+      const pctBadge = document.getElementById('live-progress-badge');
+      const fracBadge = document.getElementById('live-fraction-badge');
+
+      if (pctBadge) pctBadge.textContent = `${stats.pct}%`;
+      if (fracBadge) fracBadge.textContent = `${stats.totalDone} / ${stats.totalTarget} target sets`;
     }
 
     function updateSessionProgressUI() {
@@ -1978,9 +1934,14 @@ WITH CHECK (true);</div>
         const b = document.getElementById(`cwbtn-${i}`);
         if (b) b.className = (i === coachAuditWeek) ? 'week-btn active' : 'week-btn';
       }
+      const pitchTarget = getSundayIdsForWeek(coachAuditWeek).length;
+      const totalTarget = getTargetItemsForWeek(coachAuditWeek);
+      const thPitch = document.getElementById('th-pitch-target');
+      if (thPitch) thPitch.textContent = `Pitch (${pitchTarget})`;
+
       const summary = document.getElementById('coach-audit-week-summary');
       if (summary) {
-        summary.innerHTML = `Auditing Week ${coachAuditWeek} &bull; Target: ${TARGET_ITEMS_PER_WEEK} Sets (Pitch + Gym Warm-ups &amp; Lifts)`;
+        summary.innerHTML = `Auditing Week ${coachAuditWeek} &bull; Target: ${totalTarget} Sets (Pitch + Gym Warm-ups &amp; Lifts)`;
       }
       renderCoachAuditTable();
     }
@@ -2000,9 +1961,9 @@ WITH CHECK (true);</div>
           <td><strong>#${p.id} ${p.name}</strong></td>
           <td><span style="color:#00F298; font-family:monospace;">Pod ${p.pod}</span></td>
           <td><span class="status-badge badge-fit">FIT</span></td>
-          <td style="text-align:right; font-family:monospace;">${stats.pitchDone} / 28</td>
+          <td style="text-align:right; font-family:monospace;">${stats.pitchDone} / ${stats.pitchTarget}</td>
           <td style="text-align:right; font-family:monospace;">${stats.gymDone} / 20</td>
-          <td style="text-align:right; font-family:monospace; font-weight:700;">${stats.totalDone} / ${TARGET_ITEMS_PER_WEEK}</td>
+          <td style="text-align:right; font-family:monospace; font-weight:700;">${stats.totalDone} / ${stats.totalTarget}</td>
           <td style="text-align:right; font-family:monospace; font-weight:900; color:${pctColor};">${stats.pct}%</td>
           <td style="text-align:right; font-family:monospace; font-size:10px; color:#94A3B8;">${savedAt}</td>
         `;
