@@ -573,6 +573,141 @@
         </div>
       </section>
 
+      <!-- WEDNESDAY GYM DRILLS (DONABATE 1.1 & 1.2 WITH FULL WARM-UPS) -->
+      <section id="pane-wed" class="panel-glass hidden">
+        <div class="flex-between" style="border-bottom:1px solid #163629; padding-bottom:8px;">
+          <div>
+            <span style="font-size:9px; background:#00F298; color:#040907; padding:1px 5px; border-radius:4px; font-weight:900; text-transform:uppercase;">Wednesday Gym Session</span>
+            <h3 style="font-size:13px; font-weight:900; text-transform:uppercase; color:#FFF; margin-top:4px;">Donabate Gym Warm-Ups &amp; Compound Armor</h3>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+            <div style="display:flex; gap:4px; background:#07130E; padding:3px; border-radius:6px; border:1px solid #163629;">
+              <button type="button" id="gym-sub-11" onclick="switchGymSub('1.1')" style="background:#00F298; color:#040907; font-weight:800; font-size:10px; border:none; padding:4px 8px; border-radius:4px;">Donabate 1.1</button>
+              <button type="button" id="gym-sub-12" onclick="switchGymSub('1.2')" style="background:transparent; color:#718C80; font-weight:700; font-size:10px; border:none; padding:4px 8px; border-radius:4px;">Donabate 1.2</button>
+            </div>
+            <button type="button" class="btn-check-all" style="padding:5px 10px; font-size:10px;" onclick="checkAllSession('wed')">
+              ✓ Check All Gym
+            </button>
+          </div>
+        </div>
+
+        <!-- DONABATE 1.1 -->
+        <div id="subpane-1-1">
+          <div class="warmup-box">
+            <div class="warmup-header">🔥 Donabate 1.1 Warm-Up (Prehab &bull; Core &bull; Plyos)</div>
+            <div style="font-size:10px; color:#F5C544; font-weight:800; margin-top:4px;">Prehab (2 Sets Each):</div>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_w1_sq" onchange="onCheckboxChange(this)"> Rack Assisted Squat (5 reps @ 3311)</label>
+              <label><input type="checkbox" id="chk_w1_side" onchange="onCheckboxChange(this)"> Side Plank Leg Lift (10 e/s)</label>
+              <label><input type="checkbox" id="chk_w1_cop" onchange="onCheckboxChange(this)"> Short Lever Copenhagens (15s e/s)</label>
+              <label><input type="checkbox" id="chk_w1_split" onchange="onCheckboxChange(this)"> ISO Split Squat (15s e/s)</label>
+            </div>
+
+            <div style="font-size:10px; color:#F5C544; font-weight:800; margin-top:8px;">Core (2 Sets Each):</div>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_w1_bird" onchange="onCheckboxChange(this)"> ISO Bird Dog (6 e/s @ 2521)</label>
+              <label><input type="checkbox" id="chk_w1_suit" onchange="onCheckboxChange(this)"> Suitcase Carry (20m, SS)</label>
+            </div>
+
+            <div style="font-size:10px; color:#F5C544; font-weight:800; margin-top:8px;">Plyometrics:</div>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_w1_mb" onchange="onCheckboxChange(this)"> MB Chest Throw</label>
+              <label><input type="checkbox" id="chk_w1_cmj" onchange="onCheckboxChange(this)"> CMJ</label>
+              <label><input type="checkbox" id="chk_w1_pogo" onchange="onCheckboxChange(this)"> Pogo Hops</label>
+            </div>
+          </div>
+
+          <div class="drill-block">
+            <div class="flex-between">
+              <span class="drill-title">Block 1: Barbell Back Squat &amp; SA DB Row</span>
+              <span class="drill-badge">3 Sets &times; 8 Reps @ 70–75% (2111 Tempo)</span>
+            </div>
+            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">BB Back Squat (3x8 @ 70–75%, 2111) paired with Single Arm DB Row (3x8 e/s, SS, 2111).</p>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_g1_sq_1" onchange="onCheckboxChange(this)"> Squat S1</label>
+              <label><input type="checkbox" id="chk_g1_sq_2" onchange="onCheckboxChange(this)"> Squat S2</label>
+              <label><input type="checkbox" id="chk_g1_sq_3" onchange="onCheckboxChange(this)"> Squat S3</label>
+              <label><input type="checkbox" id="chk_g1_row_1" onchange="onCheckboxChange(this)"> DB Row S1</label>
+              <label><input type="checkbox" id="chk_g1_row_2" onchange="onCheckboxChange(this)"> DB Row S2</label>
+              <label><input type="checkbox" id="chk_g1_row_3" onchange="onCheckboxChange(this)"> DB Row S3</label>
+            </div>
+          </div>
+
+          <div class="drill-block">
+            <div class="flex-between">
+              <span class="drill-title">Block 2: BB Bench Press &bull; SL Glute Bridge ISO &bull; Lateral Lunge</span>
+              <span class="drill-badge">3 Tri-Sets</span>
+            </div>
+            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">BB Bench Press (3x8 @ 70–75%, 2111), SL Glute Bridge ISO (3x 5x5s e/s), Lateral Lunge (3x10 e/s, SS).</p>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_g1_bp_1" onchange="onCheckboxChange(this)"> Bench S1</label>
+              <label><input type="checkbox" id="chk_g1_bp_2" onchange="onCheckboxChange(this)"> Bench S2</label>
+              <label><input type="checkbox" id="chk_g1_bp_3" onchange="onCheckboxChange(this)"> Bench S3</label>
+              <label><input type="checkbox" id="chk_g1_gb" onchange="onCheckboxChange(this)"> SL Glute Bridge ISO (3x5x5s)</label>
+              <label><input type="checkbox" id="chk_g1_ll" onchange="onCheckboxChange(this)"> Lateral Lunge (3x10 e/s)</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- DONABATE 1.2 -->
+        <div id="subpane-1-2" class="hidden">
+          <div class="warmup-box">
+            <div class="warmup-header">🔥 Donabate 1.2 Warm-Up (Prehab &bull; Core &bull; Plyos)</div>
+            <div style="font-size:10px; color:#F5C544; font-weight:800; margin-top:4px;">Prehab (2 Sets Each):</div>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_w2_soleus" onchange="onCheckboxChange(this)"> Wall Sit Soleus ISO (20s)</label>
+              <label><input type="checkbox" id="chk_w2_thigh" onchange="onCheckboxChange(this)"> ISO Mid Thigh Pull (3x3s)</label>
+              <label><input type="checkbox" id="chk_w2_slr" onchange="onCheckboxChange(this)"> SL Raises (6 e/s)</label>
+              <label><input type="checkbox" id="chk_w2_hrpush" onchange="onCheckboxChange(this)"> HR Push Up (6 reps)</label>
+            </div>
+
+            <div style="font-size:10px; color:#F5C544; font-weight:800; margin-top:8px;">Core (2 Sets Each):</div>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_w2_wood" onchange="onCheckboxChange(this)"> HK Woodchop (10 e/s)</label>
+              <label><input type="checkbox" id="chk_w2_pull" onchange="onCheckboxChange(this)"> DB Pullthrough (8 e/s, SS)</label>
+            </div>
+
+            <div style="font-size:10px; color:#F5C544; font-weight:800; margin-top:8px;">Plyometrics:</div>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_w2_kb" onchange="onCheckboxChange(this)"> KB Swing</label>
+              <label><input type="checkbox" id="chk_w2_depth" onchange="onCheckboxChange(this)"> Depth Drops</label>
+              <label><input type="checkbox" id="chk_w2_latb" onchange="onCheckboxChange(this)"> Reactive Lat Bound (5 e/s)</label>
+            </div>
+          </div>
+
+          <div class="drill-block">
+            <div class="flex-between">
+              <span class="drill-title">Block 1: Barbell Romanian Deadlift (BB RDL) &amp; DB OHP</span>
+              <span class="drill-badge">3 Sets &times; 8–10 Reps (2111 Tempo)</span>
+            </div>
+            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">BB RDL (3x8 @ 70–75%, 2111) paired with Dumbbell Overhead Press (3x10, SS, 2111).</p>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_g2_rdl_1" onchange="onCheckboxChange(this)"> BB RDL S1</label>
+              <label><input type="checkbox" id="chk_g2_rdl_2" onchange="onCheckboxChange(this)"> BB RDL S2</label>
+              <label><input type="checkbox" id="chk_g2_rdl_3" onchange="onCheckboxChange(this)"> BB RDL S3</label>
+              <label><input type="checkbox" id="chk_g2_ohp_1" onchange="onCheckboxChange(this)"> DB OHP S1</label>
+              <label><input type="checkbox" id="chk_g2_ohp_2" onchange="onCheckboxChange(this)"> DB OHP S2</label>
+              <label><input type="checkbox" id="chk_g2_ohp_3" onchange="onCheckboxChange(this)"> DB OHP S3</label>
+            </div>
+          </div>
+
+          <div class="drill-block">
+            <div class="flex-between">
+              <span class="drill-title">Block 2: Chin Up ISO &bull; DB Hack Squat &bull; Banded Prone Ham Curls</span>
+              <span class="drill-badge">3 Tri-Sets</span>
+            </div>
+            <p style="font-size:11px; color:#94A3B8; margin-top:2px;">Chin Up ISO (3x 5x5s), DB Hack Squat (3x8, SS, 2020 tempo), Banded Prone Ham Curls (3x10, 2111 tempo).</p>
+            <div class="checkbox-chip-row">
+              <label><input type="checkbox" id="chk_g2_chin" onchange="onCheckboxChange(this)"> Chin Up ISO (3x5x5s)</label>
+              <label><input type="checkbox" id="chk_g2_hack_1" onchange="onCheckboxChange(this)"> DB Hack Squat S1</label>
+              <label><input type="checkbox" id="chk_g2_hack_2" onchange="onCheckboxChange(this)"> DB Hack Squat S2–3</label>
+              <label><input type="checkbox" id="chk_g2_curl_1" onchange="onCheckboxChange(this)"> Ham Curls S1</label>
+              <label><input type="checkbox" id="chk_g2_curl_2" onchange="onCheckboxChange(this)"> Ham Curls S2–3</label>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Bottom Save & Check All Action Bar -->
       <section class="panel-glass flex-between" style="background:#07130E; border-color:#00F298;">
         <div>
@@ -1878,15 +2013,6 @@ WITH CHECK (true);</div>
       if (fracBadge) fracBadge.textContent = `${stats.totalDone} / ${stats.totalTarget} target sets`;
     }
 
-    function updateSessionProgressUI() {
-      const stats = calculateHurlerWeekStats(activeHurlerId, selectedWeek);
-      const pctBadge = document.getElementById('live-progress-badge');
-      const fracBadge = document.getElementById('live-fraction-badge');
-
-      if (pctBadge) pctBadge.textContent = `${stats.pct}%`;
-      if (fracBadge) fracBadge.textContent = `${stats.totalDone} / ${TARGET_ITEMS_PER_WEEK} target sets`;
-    }
-
     // =========================================================================
     // 4. COACH DESK & AUDIT TABLE
     // =========================================================================
@@ -1958,14 +2084,14 @@ WITH CHECK (true);</div>
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>#${p.id} ${p.name}</strong></td>
-          <td><span style="color:#00F298; font-family:monospace;">Pod ${p.pod}</span></td>
-          <td><span class="status-badge badge-fit">FIT</span></td>
-          <td style="text-align:right; font-family:monospace;">${stats.pitchDone} / ${stats.pitchTarget}</td>
-          <td style="text-align:right; font-family:monospace;">${stats.gymDone} / 20</td>
-          <td style="text-align:right; font-family:monospace; font-weight:700;">${stats.totalDone} / ${stats.totalTarget}</td>
-          <td style="text-align:right; font-family:monospace; font-weight:900; color:${pctColor};">${stats.pct}%</td>
-          <td style="text-align:right; font-family:monospace; font-size:10px; color:#94A3B8;">${savedAt}</td>
+          <td style="white-space:nowrap;"><strong>#${p.id} ${p.name}</strong></td>
+          <td style="white-space:nowrap;"><span style="color:#00F298; font-family:monospace;">Pod ${p.pod}</span></td>
+          <td style="white-space:nowrap;"><span class="status-badge badge-fit">FIT</span></td>
+          <td style="text-align:right; font-family:monospace; white-space:nowrap;">${stats.pitchDone} / ${stats.pitchTarget}</td>
+          <td style="text-align:right; font-family:monospace; white-space:nowrap;">${stats.gymDone} / 20</td>
+          <td style="text-align:right; font-family:monospace; font-weight:700; white-space:nowrap;">${stats.totalDone} / ${stats.totalTarget}</td>
+          <td style="text-align:right; font-family:monospace; font-weight:900; color:${pctColor}; white-space:nowrap;">${stats.pct}%</td>
+          <td style="text-align:right; font-family:monospace; font-size:10px; color:#94A3B8; white-space:nowrap;">${savedAt}</td>
         `;
         tbody.appendChild(tr);
       });
